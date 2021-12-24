@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Form</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <meta name="description" content="Sign up form">
+        <meta name="keywords" content="HTML, CSS, JavaScript, Form, Sign up">
+        <meta name="author" content="Georgios Kokolakis">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="assets/js/index.js"></script>
+
+
+
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+        <script src="assets/js/index.js"></script>
+
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+
+    <body>
+
+        <div class="row  container-fluid mt-5 card-container  " id="page-container">
+            <div style="text-align: center; color: red" id="error"></div>
+
+            <nav class="navbar navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <button class="button" onclick="showLoginForm()">Login</button>
+                </a>
+
+                <a class="navbar-brand" href="#">
+                    <button class="button" id="register-but" onclick="showregisterForm()">register</button>
+                </a>
+                <a class="navbar-brand" href="#">
+                    <button class="button" onclick="logout()">logout</button>
+                </a>
+
+            </div>
+        </nav>
+
+
+
+        </div>
+        <div id="ajaxContent"></div>
+
+
+    </body>
+
+</html>
