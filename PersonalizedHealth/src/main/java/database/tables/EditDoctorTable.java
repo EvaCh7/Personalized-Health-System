@@ -90,7 +90,7 @@ public class EditDoctorTable {
     public ArrayList<Doctor> databaseToDoctors() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        ArrayList<Doctor> doctors=new ArrayList<Doctor>();
+        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM doctors");
@@ -124,6 +124,39 @@ public class EditDoctorTable {
             System.err.println(e.getMessage());
         }
         return null;
+    }
+
+    public static void certifyDoctor(int id) throws SQLException, ClassNotFoundException {
+        try {
+            Connection con = DB_Connection.getConnection();
+            Statement stmt = con.createStatement();
+
+            String insertQuery = "UPDATE doctors SET certified=1 WHERE doctor_id = '" + id + "'";
+            stmt.executeUpdate(insertQuery);
+
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(EditSimpleUserTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void deleteDoctorFromDB(String username) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String deleteQuery = "DELETE FROM doctors WHERE username='" + username + "'";
+            stmt.executeUpdate(deleteQuery);
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        stmt.close();
+        con.close();
+
     }
 
     public void createDoctorTable() throws SQLException, ClassNotFoundException {
@@ -205,7 +238,8 @@ public class EditDoctorTable {
             stmt.close();
 
         } catch (SQLException ex) {
-            Logger.getLogger(EditDoctorTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditDoctorTable.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

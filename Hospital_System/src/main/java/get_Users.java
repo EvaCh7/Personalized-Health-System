@@ -1,5 +1,8 @@
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import database.tables.EditDoctorTable;
 import database.tables.EditSimpleUserTable;
 import java.io.IOException;
@@ -50,24 +53,25 @@ public class get_Users extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            JSONArray resJson = new JSONArray();
+            JsonArray json_array = new JsonArray();
+
             ArrayList<Doctor> res_doc = EditDoctorTable.databaseToDoctors();
+            for (Doctor doc : res_doc) {
+                String json_str = EditDoctorTable.doctorToJSON(doc);
+                JsonObject user_json = JsonParser.parseString(json_str).getAsJsonObject();
+                json_array.add(user_json);
+            }
+            System.out.println(json_array);
             ArrayList<SimpleUser> res_user = EditSimpleUserTable.databaseToUser();
 
-            Gson gson = new Gson();
+            for (SimpleUser us : res_user) {
+                String json_str = EditSimpleUserTable.simpleUserToJSON(us);
+                JsonObject user_json = JsonParser.parseString(json_str).getAsJsonObject();
+                json_array.add(user_json);
+            }
+            response.setStatus(HttpServletResponse.SC_OK);
 
-            for (int i = 0; i < res_doc.size(); i++) {
-                String json_doc = EditDoctorTable.doctorToJSON(res_doc.get(i));
-                resJson.add(json_doc);
-            }
-            for (int i = 0; i < res_user.size(); i++) {
-                String json_user = EditSimpleUserTable.simpleUserToJSON(res_user.get(i));
-                resJson.add(json_user);
-            }
-            
-            String array = resJson.toString();
-//            array = array.replace("\\", "");
-            response.getWriter().write(array);
+            response.getWriter().write(json_array.toString());
         } catch (SQLException ex) {
             Logger.getLogger(get_Users.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

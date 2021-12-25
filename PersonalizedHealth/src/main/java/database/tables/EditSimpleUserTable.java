@@ -180,6 +180,24 @@ public class EditSimpleUserTable {
         }
     }
 
+    public static void deleteUserFromDB(String username) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String deleteQuery = "DELETE FROM users WHERE username='" + username + "'";
+            stmt.executeUpdate(deleteQuery);
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        stmt.close();
+        con.close();
+
+    }
+
     public void updateUser(SimpleUser user) throws SQLException, ClassNotFoundException {
         try {
             String insertQuery = "UPDATE users SET  "

@@ -10,6 +10,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.tables.EditBloodTestTable;
+import database.tables.EditDoctorTable;
+import database.tables.EditSimpleUserTable;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -288,6 +290,23 @@ public class Examinations {
     }
 
     @PUT
+    @Path("/Certify/{doctor_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateCertifiedDoc(@PathParam("doctor_id") int doctor_id)
+            throws SQLException, ClassNotFoundException {
+        try {
+            EditDoctorTable.certifyDoctor(doctor_id);
+            return Response.status(Response.Status.OK).type("application/json").entity("{\"success\":\"Quantity Updated\"}").build();
+        } catch (SQLException ex) {
+            Logger.getLogger(Examinations.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Examinations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Response.status(Response.Status.NOT_FOUND).type("application/json").entity("{\"error\":\"Doctor Does not Exist\"}").build();
+
+    }
+
+    @PUT
     @Path("/bloodTest/{bloodTestID}/{measure}/{value}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateMeasure(
@@ -324,7 +343,7 @@ public class Examinations {
         status = Response.Status.NOT_ACCEPTABLE;
         res = "{error: some error occured}";
         try {
-            blood_test_table.updateBloodTest(blood_test_id, value,measure);
+            blood_test_table.updateBloodTest(blood_test_id, value, measure);
             status = Response.Status.OK;
             res = "{ok: succesfuly updated the blood test}";
             return Response.status(status).type("application/json").entity(res).build();
@@ -338,6 +357,23 @@ public class Examinations {
 
         }
 
+    }
+
+    @DELETE
+    @Path("/UserDeletion/{username}/{isDoctor}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@PathParam("username") String username, @PathParam("isDoctor") String isDoctor) throws SQLException, ClassNotFoundException {
+        Response.Status status = Response.Status.OK;
+
+        if (isDoctor.equals("no")) {
+            EditSimpleUserTable.deleteUserFromDB(username);
+            return Response.status(status).type("application/json").entity("{\"success\":\"User Deleted\"}").build();
+        } else if (isDoctor.equals("yes")) {
+            EditDoctorTable.deleteDoctorFromDB(username);
+            return Response.status(status).type("application/json").entity("{\"success\":\"Doctor Deleted\"}").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).type("application/json").entity("{\"error\":\"User does not Exist\"}").build();
+        }
     }
 
     @DELETE
