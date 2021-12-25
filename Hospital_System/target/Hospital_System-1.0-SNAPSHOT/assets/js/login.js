@@ -10,14 +10,21 @@ function send_login() {
     return false
 
 }
+
 function call_back_login() {
+    var username = $("#username").val();
+    var password = $("#pswd").val();
+
     console.log("succesful login")
     $("#ajaxContent").html("Successful Login");
     $("#error").html('')
-    $("#ajaxContent").load("user.html")
-
-
+    if (username === "admin" && password === "admin12*") {
+        $("#ajaxContent").load("admin.html")
+    } else {
+        $("#ajaxContent").load("user.html")
+    }
 }
+
 function call_back_error_login() {
     console.log("failed to login")
     $("#error").html("Wrong Credentials");

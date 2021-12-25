@@ -1,0 +1,52 @@
+<html lang="en">
+
+    <head>
+        <title>Admin Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <meta name="description" content="Sign up form">
+        <meta name="keywords" content="HTML, CSS, JavaScript, Form, Sign up">
+        <meta name="author" content="Georgios Kokolakis">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="assets/js/admin.js"></script>
+
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+
+    <body>
+        <div class="container-fluid " >    
+            <button type="button" onclick="get_uncertified_doctors();" id="uncert_docs_but">Show Uncertified Doctors</button>
+            <div class="row" id="uncert_docs" style="display: none">
+                <div style="overflow-x:auto">
+                    <table  class="table table-dark" id="uncert_docs_table">
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Address</th>
+                            <th>Info</th>
+                            <th>Specialty</th>
+                        </tr>
+                    </table>
+
+                    <label>Certify doctor with id: </label> 
+                    <input type="number" id="certThisDoc">
+                    <button id="certifyButton" onclick="certifyDocFunc">Click to certify</button>
+                </div>
+            </div>
+            <button type="button" onclick="get_all_users();" id="all_users_but">Show All Users</button>
+            <div class="row" id="all_users" style="display: none">
+                <div style="overflow-x:auto">
+                    <table  class="table table-dark" id="all_users_table">
+                        <tr>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Birth Date</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div> 
+    </body>
+</html>

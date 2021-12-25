@@ -36,6 +36,14 @@
         <servlet-name>certified_doctors</servlet-name>
         <servlet-class>certified_doctors</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>uncertified_doctors</servlet-name>
+        <servlet-class>uncertified_doctors</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>get_Users</servlet-name>
+        <servlet-class>get_Users</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -71,6 +79,14 @@
     <servlet-mapping>
         <servlet-name>certified_doctors</servlet-name>
         <url-pattern>/certified_doctors</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>uncertified_doctors</servlet-name>
+        <url-pattern>/uncertified_doctors</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>get_Users</servlet-name>
+        <url-pattern>/get_Users</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

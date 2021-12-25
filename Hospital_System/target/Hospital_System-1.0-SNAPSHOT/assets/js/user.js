@@ -3,8 +3,10 @@ function update_data(e) {
     var gender
     if ($('#man').is(':checked')) {
         gender = "male"
-    } else {
+    } else if ($('#woman').is(':checked')) {
         gender = "female"
+    } else {
+        gender = "other"
     }
     var blood_donor
     if ($('#blood-giver').is(':checked')) {
@@ -169,11 +171,14 @@ function get_certified_doctors()
             load_doc_data_to_table(json);
         }
     });
-
     xhr.open('GET', 'certified_doctors', true);
     xhr.setRequestHeader("Content-type", "application/json");
+    console.log(data);
+
     xhr.send(data);
 }
+
+
 function load_doc_data_to_table(json)
 {
     var table = document.getElementById('cert-doc-table');
@@ -192,11 +197,5 @@ function load_doc_data_to_table(json)
         cell[5].innerHTML = json[i].city;
         cell[6].innerHTML = json[i].doctor_info;
         cell[7].innerHTML = json[i].specialty;
-
-
-
-
-
-
     }
 }

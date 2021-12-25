@@ -41,8 +41,10 @@ function get_gender()
     var gender
     if ($('#man').is(':checked')) {
         gender = "male"
-    } else {
+    } else if($('#woman').is(':checked')){
         gender = "female"
+    } else {
+        gender = "other"
     }
     return gender
 }
