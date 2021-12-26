@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mainClasses.Randevouz;
@@ -35,11 +36,33 @@ public class EditSimpleUserTable {
         return user;
     }
 
-    public String simpleUserToJSON(SimpleUser user) {
+    public static String simpleUserToJSON(SimpleUser user) {
         Gson gson = new Gson();
 
         String json = gson.toJson(user, SimpleUser.class);
         return json;
+    }
+
+    public static ArrayList<SimpleUser> databaseToUser() throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<SimpleUser> users = new ArrayList<SimpleUser>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM users");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                SimpleUser doc = gson.fromJson(json, SimpleUser.class);
+                users.add(doc);
+            }
+            return users;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     public void updateSimpleUser(String username, double weight) throws SQLException, ClassNotFoundException {

@@ -1,30 +1,29 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+function showLoginForm() {
+    console.log("login page load")
+    $("#ajaxContent").load("login.html");
+    //  $("#page-container").addClass("d-none")
 
 
-function new_blood_test()
-{
-    $("#content").load("new_blood_test.html");
-}
-function get_blood_tests()
-{
-    $("#content").load("get_blood_tests.html");
 
 }
-function get_measure()
-{
-    $("#content").load("get_blood_test_measure.html");
+
+
+
+function showregisterForm() {
+    $("#ajaxContent").load("register.html");
+    //   $("#page-container").addClass("d-none")
 
 }
-function  update_blood_test()
-{
-    $("#content").load("update_blood_test.html");
-}
-function delete_blood_test()
-{
-    $("#content").load("delete_blood_test.html");
-
+function logout() {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            $("#ajaxContent").html("Successful Logout");
+        } else if (xhr.status !== 200) {
+            alert('Request failed. Returned status of ' + xhr.status);
+        }
+    };
+    xhr.open('POST', 'logout');
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send();
 }

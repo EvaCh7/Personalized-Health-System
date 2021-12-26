@@ -36,7 +36,7 @@ public class EditDoctorTable {
         return doc;
     }
 
-    public String doctorToJSON(Doctor doc) {
+    public static String doctorToJSON(Doctor doc) {
         Gson gson = new Gson();
 
         String json = gson.toJson(doc, Doctor.class);
@@ -68,7 +68,7 @@ public class EditDoctorTable {
         }
     }
 
-    public Doctor databaseToDoctor(String username, String password) throws SQLException, ClassNotFoundException {
+    public static Doctor databaseToDoctor(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
@@ -87,7 +87,7 @@ public class EditDoctorTable {
         return null;
     }
 
-    public ArrayList<Doctor> databaseToDoctors() throws SQLException, ClassNotFoundException {
+    public static  ArrayList<Doctor> databaseToDoctors() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Doctor> doctors = new ArrayList<Doctor>();
