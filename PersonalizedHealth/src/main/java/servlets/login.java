@@ -5,13 +5,11 @@ package servlets;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import database.tables.EditDoctorTable;
 import database.tables.EditSimpleUserTable;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import mainClasses.Doctor;
 import mainClasses.Utils;
 
 /**
@@ -44,7 +43,8 @@ public class login extends HttpServlet {
         if (session.getAttribute("loggedIn") != null) {
             response.setStatus(200);
 
-            response.getWriter().write(session.getAttribute("loggedIn").toString());
+            String json = "{ \"username\":\"" + session.getAttribute("loggedIn").toString() + "\", \"type\":\"" + session.getAttribute("type").toString() + "\"}";
+            response.getWriter().write(json);
         } else {
             response.setStatus(403);
         }
@@ -70,20 +70,45 @@ public class login extends HttpServlet {
         String username = user_json.get("username").getAsString();
         String password = user_json.get("password").getAsString();
         HttpSession session = request.getSession(true);
+        Doctor dc;
+        EditDoctorTable doctor_table_utils = new EditDoctorTable();
         try {
             if (simple_user_utils.databaseToSimpleUser(username, password) != null) {
                 session.setAttribute("loggedIn", username);
                 session.setAttribute("password", password);
+                if (username.equals("admin")) {
+                    session.setAttribute("type", "admin");
 
-                response.setStatus(200);
-                return;
+                } else {
+                    session.setAttribute("type", "user");
+
+                }
+
+            } else if ((dc = EditDoctorTable.databaseToDoctor(username, password)) != null) {
+                if (dc.getCertified() == 1) {
+                    session.setAttribute("type", "doctor");
+
+                } else {
+                    session.setAttribute("type", "uncertified_doctor");
+
+                }
+                session.setAttribute("loggedIn", username);
+                session.setAttribute("password", password);
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+            response.setStatus(403);
+            return;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+            response.setStatus(403);
+            return;
         }
-        response.setStatus(403);
+
+        String json = "{\"type\":\"" + session.getAttribute("type").toString() + "\"}";
+        response.setStatus(200);
+        response.getWriter().write(json);
 
     }
 

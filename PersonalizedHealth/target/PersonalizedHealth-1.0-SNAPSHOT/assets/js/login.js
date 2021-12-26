@@ -11,17 +11,22 @@ function send_login() {
 
 }
 
-function call_back_login() {
-    var username = $("#username").val();
-    var password = $("#pswd").val();
+function call_back_login(response) {
 
+    json = JSON.parse(response)
+    console.log(json)
     console.log("succesful login")
-    $("#ajaxContent").html("Successful Login");
+
     $("#error").html('')
-    if (username === "admin" && password === "admin12*") {
+    if (json.type === "admin") {
         $("#ajaxContent").load("admin.html")
-    } else {
+    } else if (json.type === "user") {
         $("#ajaxContent").load("user.html")
+    } else if (json.type === "doctor") {
+        $("#ajaxContent").load("doctor.html")
+    } else if (json.type = "uncertified_doctor")
+    {
+        $("#ajaxContent").html("admin needs to certifie you")
     }
 }
 
@@ -39,8 +44,22 @@ function isLoggedIn() {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            $("#ajaxContent").html("Welcome again " + xhr.responseText);
-            $("#ajaxContent").load("user.html")
+            json = JSON.parse(xhr.responseText)
+            console.log(json)
+            $("#ajaxContent").html("Welcome again " + json.username);
+
+
+
+            if (json.type === "admin") {
+                $("#ajaxContent").load("admin.html")
+            } else if (json.type === "user") {
+                $("#ajaxContent").load("user.html")
+            } else if (json.type === "doctor") {
+                $("#ajaxContent").load("doctor.html")
+            } else if (json.type = "uncertified_doctor")
+            {
+                $("#ajaxContent").html("admin needs to certifie you")
+            }
 
         } else if (xhr.status !== 200) {
         }

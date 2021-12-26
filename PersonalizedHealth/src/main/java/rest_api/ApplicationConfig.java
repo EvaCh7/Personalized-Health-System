@@ -30,6 +30,9 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(rest_api.Examinations.class);
+        resources.add(rest_api.Messages.class);
+        resources.add(rest_api.Randevouz.class);
+        resources.add(rest_api.Treatments.class);
     }
     
 }
