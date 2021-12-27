@@ -10,6 +10,7 @@
         <meta name="author" content="Georgios Kokolakis">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="assets/js/utils.js"></script>
+        <script src="assets/js/form_utils.js"></script>
         <script src="assets/js/requests_api.js"></script>
         <script src="assets/js/doctor.js"></script>
 
@@ -494,6 +495,56 @@
 
 
             </div>
+
+            <div class="container-fluid randevuz-container mt-5">
+
+                <div class="row"> 
+                    <div class="col-2">
+                        <button type="button" class="add-randevuz"> Add Randevuz</button>
+                    </div>
+                    <form id="add-randevuz-form">
+
+                        <input type="number" id="user_id" name="user_id" class="form-control" placeholder="User ID">
+
+                        <input type="number" id="doctor_id" name="doctor_id" class="form-control" placeholder="Doctor ID">
+
+                        <input type="number" id="price" name="price" class="form-control" placeholder="Price">
+                        <textarea class="form-control" id="doctor_info" name="doctor_info" placeholder="Doctor Info"
+                                  rows="3"></textarea>
+                        <textarea class="form-control" id="user_info" name="user_info" placeholder="User Info"
+                                  rows="3"></textarea>
+
+                        <input type="date" id="date_time" name="date_time" class="form-control" value="2022-01-18"  required>
+
+
+                    </form>
+                </div>
+
+                <div class="row"> 
+                    <div class="col-2">
+                        <button type="button" class="delete-randevuz"> Delete Randevouz</button>
+                        <input type="number" id="randevouz_id" name="randevouz_id" class="form-control" placeholder="Randevouz ID">
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-2">
+
+                        <button onclick="spawn_randevouz()"  type="button" class="process-randevuz" > Process Randevouz</button>
+                    </div>
+                    <div class="col-10"></div>
+
+                    <form class="row" id ="process-randevouz-form">
+
+
+
+                    </form>
+                </div>
+
+
+
+
+            </div>
+
         </div>
 
 

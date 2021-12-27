@@ -47,6 +47,64 @@ function update_doctor_data(e) {
     sendXmlPostRequest("/PersonalizedHealth/doctor", data, call_back_update_data, call_back_error_update_data);
 }
 
+function create_randevouz_element(rand_obj)
+{
+    var element = `<div class="col-2">
+
+                            <input type="number" id="randevouz_id value="` + rand_obj.randevouz_id + ` name="randevouz_id" class="form-control" placeholder="Randevouz ID">
+                        </div>
+
+                        <div class="col-1">
+                            <input type="number" id="user_id" name="user_id value="` + rand_obj.user_id + ` class="form-control" placeholder="User ID">
+                        </div>
+                        <div class="col-1">
+
+                            <input type="number" id="doctor_id" name="doctor_id value="` + rand_obj.doctor_id + ` class="form-control" placeholder="Doc ID">
+                        </div>
+                        <div class="col-2">
+
+                            <input type="number" id="price" name="price value="` + rand_obj.price + ` class="form-control" placeholder="Price">
+                        </div>
+
+                        <div class="col-2">
+
+                            <textarea class="form-control" id="doctor_info" name="doctor_info value="` + rand_obj.doctor_info + ` placeholder="Doctor Info"
+
+                                      rows="3"></textarea>
+                        </div>
+
+                        <div class="col-2">
+
+                            <textarea class="form-control" id="user_info" name="user_info value="` + rand_obj.user_info + ` placeholder="User Info"
+
+                                      rows="3"></textarea>
+                        </div>
+
+                        <div class="col-2">
+
+                            <input type="date" id="date_time" name="date_time" class="form-control" value=` + rand_obj.date_time + `  required>
+                        </div>`
+    return element
+}
+
+function spawn_randevouz()
+{
+    var element = document.getElementById("process-randevouz-form")
+    console.log("lalalla2")
+    var la = {
+        randevouz_id: 3
+
+    }
+    for (i = 0; i < 3; i++)
+    {
+        element += create_randevouz_element(la)
+
+    }
+
+
+
+}
+
 
 function get_doctor_specialty()
 {
