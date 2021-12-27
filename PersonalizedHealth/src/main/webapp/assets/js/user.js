@@ -79,9 +79,11 @@ function fill_user_info(responseData) {
     $("#telephone").val(responseData.telephone)
     $("#height").val(responseData.height)
     $("#weight").val(responseData.weight)
-    var select_blood = '#blood-type option[value=\"' + responseData.bloodtype + '\"]'
-    console.log(select_blood)
-    $(select_blood).attr('selected', 'selected');
+    $("#blood-type").val(responseData.bloodtype)
+
+//    var select_blood = '#blood-type option[value=\"' + responseData.bloodtype + '\"]'
+//    console.log(select_blood)
+//    $(select_blood).attr('selected', 'selected');
 }
 function get_data() {
     var xhr = new XMLHttpRequest();
@@ -198,4 +200,22 @@ function load_doc_data_to_table(json)
         cell[6].innerHTML = json[i].doctor_info;
         cell[7].innerHTML = json[i].specialty;
     }
+    document.getElementById("cert-docs").disabled = true;
+}
+
+function add_exams() {
+    var result = $("#content").load("new_blood_test.html",
+            function () {
+                var amka = document.getElementById("amka").value;
+                document.getElementById("amka_rest").value = amka;
+            });
+}
+
+
+function all_exams() {
+    var result = $("#content").load("get_blood_tests.html",
+            function () {
+                var amka = document.getElementById("amka").value;
+                document.getElementById("amka_rest").value = amka;
+            });
 }

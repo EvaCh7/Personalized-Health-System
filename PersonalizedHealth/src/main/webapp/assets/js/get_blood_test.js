@@ -20,10 +20,10 @@ function lala(data, key, value)
 function get_blood_tests()
 {
 
-    var amka = $("#amka").val()
+    var amka = $("#amka_rest").val()
     var url = "examinations/bloodTests/" + amka
-    var from_date = $("#from-date").val();
-    var to_date = $("#to-date").val();
+    var from_date = $("#fromDate").val();
+    var to_date = $("#toDate").val();
     if (from_date != "")
     {
         url += "?fromDate=" + from_date
