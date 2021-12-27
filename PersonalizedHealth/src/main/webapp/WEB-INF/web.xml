@@ -44,6 +44,10 @@
         <servlet-name>uncertified_doctors</servlet-name>
         <servlet-class>servlets.uncertified_doctors</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>doctor</servlet-name>
+        <servlet-class>servlets.doctor</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>uncertified_doctors</servlet-name>
         <url-pattern>/uncertified_doctors</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>doctor</servlet-name>
+        <url-pattern>/doctor</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -105,8 +105,12 @@ public class login extends HttpServlet {
             response.setStatus(403);
             return;
         }
+        String json = "{\"error\":\"no type\"}";
+        if (session.getAttribute("type") != null) {
+            json = "{\"type\":\"" + session.getAttribute("type").toString() + "\"}";
+        }
 
-        String json = "{\"type\":\"" + session.getAttribute("type").toString() + "\"}";
+        System.out.println(json);
         response.setStatus(200);
         response.getWriter().write(json);
 

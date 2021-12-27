@@ -50,6 +50,43 @@ public class EditDoctorTable {
         stmt.executeUpdate(update);
     }
 
+    public void updateDoctorInfo(Doctor doc) throws SQLException, ClassNotFoundException {
+        try {
+            String insertQuery = "UPDATE doctors SET  "
+                    + " email='" + doc.getEmail() + "',"
+                    + "password='" + doc.getPassword() + "',"
+                    + "firstname='" + doc.getFirstname() + "',"
+                    + "lastname='" + doc.getLastname() + "',"
+                    + "birthdate='" + doc.getBirthdate() + "',"
+                    + "gender='" + doc.getGender() + "',"
+                    + "country='" + doc.getCountry() + "',"
+                    + "city='" + doc.getCity() + "',"
+                    + "address='" + doc.getAddress() + "',"
+                    + "lat='" + doc.getLat() + "',"
+                    + "lon='" + doc.getLon() + "',"
+                    + "telephone='" + doc.getTelephone() + "',"
+                    + "height='" + doc.getHeight() + "',"
+                    + "weight='" + doc.getWeight() + "',"
+                    + "blooddonor='" + doc.isBloodDonor() + "',"
+                    + "bloodtype='" + doc.getBloodtype() + "',"
+                    + "doctor_info='" + doc.getDoctor_info()+ "',"
+                    + "specialty='" + doc.getSpecialty() + "'"
+                    + " WHERE username=\"" + doc.getUsername() + "\"";
+            //stmt.execute(table);
+            System.out.println(insertQuery);
+            Connection con = DB_Connection.getConnection();
+
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(insertQuery);
+            System.out.println("# The Doctor was successfully updated in the database.");
+
+            /* Get the member id from the database and set it to the member */
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(EditSimpleUserTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void printDoctorDetails(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -87,7 +124,7 @@ public class EditDoctorTable {
         return null;
     }
 
-    public static  ArrayList<Doctor> databaseToDoctors() throws SQLException, ClassNotFoundException {
+    public static ArrayList<Doctor> databaseToDoctors() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Doctor> doctors = new ArrayList<Doctor>();

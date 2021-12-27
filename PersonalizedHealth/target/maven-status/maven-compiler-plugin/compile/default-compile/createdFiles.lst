@@ -1,12 +1,14 @@
 servlets\get_Users.class
 rest_api\Examinations.class
 servlets\uncertified_doctors.class
+rest_api\Randevouz.class
 database\tables\EditBloodTestTable.class
 servlets\user.class
 servlets\check_username.class
 mainClasses\User.class
 mainClasses\Utils.class
 mainClasses\BloodTest.class
+rest_api\Messages.class
 rest_api\ApplicationConfig.class
 database\tables\EditMessageTable.class
 rest_api\Examinations$found_measurement.class
@@ -15,6 +17,7 @@ servlets\logout.class
 database\tables\EditDoctorTable.class
 servlets\login.class
 mainClasses\Doctor.class
+rest_api\Treatments.class
 database\tables\EditRandevouzTable.class
 servlets\test.class
 mainClasses\Treatment.class
@@ -27,4 +30,5 @@ servlets\check_email.class
 mainClasses\SimpleUser.class
 database\tables\EditTreatmentTable.class
 mainClasses\Randevouz.class
+servlets\doctor.class
 servlets\register.class

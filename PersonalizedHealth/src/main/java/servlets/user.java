@@ -5,7 +5,6 @@ package servlets;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -83,6 +82,8 @@ public class user extends HttpServlet {
         SimpleUser user = simple_user_obj.jsonToSimpleUser(json_str);
         try {
             simple_user_obj.updateUser(user);
+            HttpSession session = request.getSession();
+            session.setAttribute("password", user.getPassword());
 
         } catch (SQLException ex) {
             Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, ex);
