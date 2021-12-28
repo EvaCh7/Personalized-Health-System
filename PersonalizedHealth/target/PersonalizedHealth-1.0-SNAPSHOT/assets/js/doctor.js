@@ -104,8 +104,53 @@ function spawn_randevouz()
 
 
 }
+var show_add_randev_form = true
+function show_add_randevouz()
+{
+    if (show_add_randev_form)
+    {
+        $("#add-randevuz-form").removeClass("d-none")
+        show_add_randev_form = false
+    } else {
+        $("#add-randevuz-form").addClass("d-none")
+        show_add_randev_form = true
+    }
+}
+var show_delete_randev_form = true
+function show_delete_randevouz()
+{
+    if (show_delete_randev_form)
+    {
+        $("#delete-randevouz-form").removeClass("d-none")
+        show_delete_randev_form = false
+    } else {
+        $("#delete-randevouz-form").addClass("d-none")
+        show_delete_randev_form = true
+    }
+}
+function delete_randevouz()
+{
+    var id = $("#randevouz_id").val()
+    var url = "examinations/randevouz/cancelRandevouz" + "/" + id
+    sendXmlDeleteRequest(url, call_back_cancel_randevouz, call_back_error_cancer_randevouz)
+}
+function call_back_cancel_randevouz(_response)
+{
+    var json = JSON.parse(_response)
+    console.log(json.response)
 
+}
+function call_back_error_cancer_randevouz(_response)
+{
+    var json = JSON.parse(_response)
+    console.log(json.response)
 
+}
+
+function send_new_randevouz()
+{
+
+}
 function get_doctor_specialty()
 {
     return  $("#dc-speciality").val()

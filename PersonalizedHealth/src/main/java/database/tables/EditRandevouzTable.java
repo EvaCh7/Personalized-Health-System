@@ -21,22 +21,20 @@ import java.util.logging.Logger;
  */
 public class EditRandevouzTable {
 
-   
-    public void addRandevouzFromJSON(String json) throws ClassNotFoundException{
-         Randevouz r=jsonToRandevouz(json);
-         createNewRandevouz(r);
+    public boolean addRandevouzFromJSON(String json) throws ClassNotFoundException {
+        Randevouz r = jsonToRandevouz(json);
+        return createNewRandevouz(r);
     }
-    
-    
-     public Randevouz databaseToRandevouz(int id) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
+
+    public Randevouz databaseToRandevouz(int id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM randevouz WHERE randevouz_id= '" + id + "'");
             rs.next();
-            String json=DB_Connection.getResultsToJSON(rs);
+            String json = DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             Randevouz bt = gson.fromJson(json, Randevouz.class);
             return bt;
@@ -46,45 +44,38 @@ public class EditRandevouzTable {
         }
         return null;
     }
-    
-    
-    
 
-      
-     public Randevouz jsonToRandevouz(String json) {
+    public Randevouz jsonToRandevouz(String json) {
         Gson gson = new Gson();
         Randevouz r = gson.fromJson(json, Randevouz.class);
         return r;
     }
-     
-         
-      public String randevouzToJSON(Randevouz r) {
+
+    public String randevouzToJSON(Randevouz r) {
         Gson gson = new Gson();
 
         String json = gson.toJson(r, Randevouz.class);
         return json;
     }
 
-
     public void updateRandevouz(int randevouzID, int userID, String info, String status) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String updateQuery = "UPDATE randevouz SET user_id='" + userID + "',status='" + status +"',user_info='" + info + "' WHERE randevouz_id = '" + randevouzID + "'";
+        String updateQuery = "UPDATE randevouz SET user_id='" + userID + "',status='" + status + "',user_info='" + info + "' WHERE randevouz_id = '" + randevouzID + "'";
         stmt.executeUpdate(updateQuery);
         stmt.close();
         con.close();
     }
 
-    public void deleteRandevouz(int randevouzID) throws SQLException, ClassNotFoundException{
+    public boolean deleteRandevouz(int randevouzID) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         String deleteQuery = "DELETE FROM randevouz WHERE randevouz_id='" + randevouzID + "'";
-        stmt.executeUpdate(deleteQuery);
+        int deleted = stmt.executeUpdate(deleteQuery);
         stmt.close();
         con.close();
+        return deleted != 0;
     }
-
-
 
     public void createRandevouzTable() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
@@ -111,7 +102,8 @@ public class EditRandevouzTable {
      *
      * @throws ClassNotFoundException
      */
-    public void createNewRandevouz(Randevouz rand) throws ClassNotFoundException {
+    public boolean createNewRandevouz(Randevouz rand) throws ClassNotFoundException {
+        int result = 0;
         try {
             Connection con = DB_Connection.getConnection();
 
@@ -130,7 +122,7 @@ public class EditRandevouzTable {
                     + ")";
             //stmt.execute(table);
 
-            stmt.executeUpdate(insertQuery);
+            result = stmt.executeUpdate(insertQuery);
             System.out.println("# The randevouz was successfully added in the database.");
 
             /* Get the member id from the database and set it to the member */
@@ -139,5 +131,6 @@ public class EditRandevouzTable {
         } catch (SQLException ex) {
             Logger.getLogger(EditRandevouzTable.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return result != 0;
     }
 }

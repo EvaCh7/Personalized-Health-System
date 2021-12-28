@@ -500,9 +500,12 @@
 
                 <div class="row"> 
                     <div class="col-2">
-                        <button type="button" class="add-randevuz"> Add Randevuz</button>
+                        <button    type="button"  class="add-randevuz" onclick="show_add_randevouz()"> Add Randevuz</button>
                     </div>
-                    <form id="add-randevuz-form">
+                    <div class="col-2">
+                        <button    type="button"  class="add-randevuz" onclick="send_new_randevouz()"> Store Randevouz</button>
+                    </div>
+                    <form id="add-randevuz-form" class="d-none">
 
                         <input type="number" id="user_id" name="user_id" class="form-control" placeholder="User ID">
 
@@ -519,13 +522,20 @@
 
                     </form>
                 </div>
-
-                <div class="row"> 
+                <div class="row">
                     <div class="col-2">
-                        <button type="button" class="delete-randevuz"> Delete Randevouz</button>
-                        <input type="number" id="randevouz_id" name="randevouz_id" class="form-control" placeholder="Randevouz ID">
+                        <button type="button" class="delete-randevuz" onclick="show_delete_randevouz()"> Delete Randevouz</button>
+                    </div>
+
+                    <div class="col-2">
+                        <button    type="button"  class="add-randevuz" onclick="delete_randevouz()"> Apply Deletion</button>
                     </div>
                 </div>
+
+                <form class="row d-none" id ="delete-randevouz-form">
+
+                    <input type="number" id="randevouz_id" name="randevouz_id" class="form-control" placeholder="Randevouz ID">
+                </form>
                 <div class="row"> 
                     <div class="col-2">
 
