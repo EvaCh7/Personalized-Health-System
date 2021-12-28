@@ -41,7 +41,7 @@ function get_gender()
     var gender
     if ($('#man').is(':checked')) {
         gender = "male"
-    } else if($('#woman').is(':checked')){
+    } else if ($('#woman').is(':checked')) {
         gender = "female"
     } else {
         gender = "other"
@@ -74,5 +74,25 @@ function get_doctor_info()
         return  $("#doctor-text-area").val()
     }
     return null;
+
+}
+function fill_empty_with_null(data, key, value)
+{
+    if (value == "")
+    {
+        data[key] = null;
+    } else
+    {
+        data[key] = value
+    }
+}
+function get_form_data_to_json(form_id)
+{
+    let myForm = document.getElementById(form_id);
+    const formData = new FormData(myForm);
+    const data = {};
+    
+    formData.forEach((value, key) => (fill_empty_with_null(data, key, value)));
+    return data;
 
 }

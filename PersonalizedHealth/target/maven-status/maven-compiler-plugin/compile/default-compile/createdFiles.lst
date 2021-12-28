@@ -1,7 +1,6 @@
 servlets\get_Users.class
 rest_api\Examinations.class
 servlets\uncertified_doctors.class
-rest_api\Randevouz.class
 database\tables\EditBloodTestTable.class
 servlets\user.class
 servlets\check_username.class
@@ -26,6 +25,7 @@ database\tables\EditSimpleUserTable.class
 servlets\check_amka.class
 database\init\DB_Connection.class
 mainClasses\Message.class
+rest_api\Randevouzs.class
 servlets\check_email.class
 mainClasses\SimpleUser.class
 database\tables\EditTreatmentTable.class

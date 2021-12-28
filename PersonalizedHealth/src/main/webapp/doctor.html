@@ -507,18 +507,18 @@
                     </div>
                     <form id="add-randevuz-form" class="d-none">
 
-                        <input type="number" id="user_id" name="user_id" class="form-control" placeholder="User ID">
+                        <input type="hidden" id="user_id" name="user_id" class="form-control" >
 
-                        <input type="number" id="doctor_id" name="doctor_id" class="form-control" placeholder="Doctor ID">
+                        <input type="hidden" id="doctor_id" name="doctor_id" class="form-control" >
 
                         <input type="number" id="price" name="price" class="form-control" placeholder="Price">
                         <textarea class="form-control" id="doctor_info" name="doctor_info" placeholder="Doctor Info"
                                   rows="3"></textarea>
-                        <textarea class="form-control" id="user_info" name="user_info" placeholder="User Info"
-                                  rows="3"></textarea>
+                        <input type="hidden" class="form-control" id="user_info" name="user_info">
 
-                        <input type="date" id="date_time" name="date_time" class="form-control" value="2022-01-18"  required>
+                        <input type="text" id="date_time" name="date_time" class="form-control" value="2022-01-18 20:00:00"  required>
 
+                        <div id="add_rand_response"></div>
 
                     </form>
                 </div>

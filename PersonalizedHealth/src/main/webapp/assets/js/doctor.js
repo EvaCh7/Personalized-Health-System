@@ -49,61 +49,81 @@ function update_doctor_data(e) {
 
 function create_randevouz_element(rand_obj)
 {
-    var element = `<div class="col-2">
+    var element = `
 
-                            <input type="number" id="randevouz_id value="` + rand_obj.randevouz_id + ` name="randevouz_id" class="form-control" placeholder="Randevouz ID">
+                                                <div class=" mt-5 container form-card row">
+
+                        <div class="col-1">
+
+                            <input type="number" id="randevouz_id" value=` + rand_obj.randevouz_id + ` name="randevouz_id" class="form-control" placeholder="Randevouz ID">
                         </div>
 
                         <div class="col-1">
-                            <input type="number" id="user_id" name="user_id value="` + rand_obj.user_id + ` class="form-control" placeholder="User ID">
+                            <input type="number" id="user_id" name="user_id" value=` + rand_obj.user_id + ` class="form-control" placeholder="User ID">
                         </div>
                         <div class="col-1">
 
-                            <input type="number" id="doctor_id" name="doctor_id value="` + rand_obj.doctor_id + ` class="form-control" placeholder="Doc ID">
+                            <input type="number" id="doctor_id" name="doctor_id" value="` + rand_obj.doctor_id + `"class="form-control" placeholder="Doc ID">
                         </div>
                         <div class="col-2">
 
-                            <input type="number" id="price" name="price value="` + rand_obj.price + ` class="form-control" placeholder="Price">
-                        </div>
-
-                        <div class="col-2">
-
-                            <textarea class="form-control" id="doctor_info" name="doctor_info value="` + rand_obj.doctor_info + ` placeholder="Doctor Info"
-
-                                      rows="3"></textarea>
+                            <input type="number" id="price" name="price" value=` + rand_obj.price + ` class="form-control" placeholder="Price">
                         </div>
 
                         <div class="col-2">
 
-                            <textarea class="form-control" id="user_info" name="user_info value="` + rand_obj.user_info + ` placeholder="User Info"
+                            <textarea class="form-control" id="doctor_info" name="doctor_info"  placeholder="Doctor Info"
 
-                                      rows="3"></textarea>
-                        </div>
+                                      rows="3">` + rand_obj.doctor_info + `</textarea>                     </div>
 
-                        <div class="col-2">
+                    <div class="col-2">
+    
 
-                            <input type="date" id="date_time" name="date_time" class="form-control" value=` + rand_obj.date_time + `  required>
-                        </div>`
+    <textarea class="form-control" id="user_info" name="user_info" placeholder="User Info"
+
+              rows="3">` + rand_obj.user_info + `</textarea>
+</div>
+
+                    <div class="col-2">
+
+    <input type="text" id="date_time" name="date_time" class="form-control" value="` + rand_obj.date_time + `"  required>
+</div> </div>
+
+`
     return element
 }
 
 function spawn_randevouz()
+
 {
-    var element = document.getElementById("process-randevouz-form")
-    console.log("lalalla2")
-    var la = {
-        randevouz_id: 3
-
-    }
-    for (i = 0; i < 3; i++)
-    {
-        element += create_randevouz_element(la)
-
-    }
+    url = "examinations/randevouz/getRandevouz" + "/" + doctorData.doctor_id
+    console.log(url)
+    sendXmlGetRequest(url, null, call_back_get_randevouz, call_back_error_get_randevouz)
 
 
 
 }
+
+function call_back_get_randevouz(response)
+{
+    var json = JSON.parse(response)
+
+    for (let x in json) {
+        console.log(json[x])
+        var prev_html = $("#process-randevouz-form").html()
+        prev_html += create_randevouz_element(json[x])
+        $("#process-randevouz-form").html(prev_html)
+    }
+
+}
+
+function call_back_error_get_randevouz(response)
+{
+
+
+
+}
+
 var show_add_randev_form = true
 function show_add_randevouz()
 {
@@ -116,6 +136,7 @@ function show_add_randevouz()
         show_add_randev_form = true
     }
 }
+
 var show_delete_randev_form = true
 function show_delete_randevouz()
 {
@@ -128,18 +149,21 @@ function show_delete_randevouz()
         show_delete_randev_form = true
     }
 }
+
 function delete_randevouz()
 {
     var id = $("#randevouz_id").val()
     var url = "examinations/randevouz/cancelRandevouz" + "/" + id
     sendXmlDeleteRequest(url, call_back_cancel_randevouz, call_back_error_cancer_randevouz)
 }
+
 function call_back_cancel_randevouz(_response)
 {
     var json = JSON.parse(_response)
     console.log(json.response)
 
 }
+
 function call_back_error_cancer_randevouz(_response)
 {
     var json = JSON.parse(_response)
@@ -147,30 +171,61 @@ function call_back_error_cancer_randevouz(_response)
 
 }
 
+
 function send_new_randevouz()
 {
+    data = get_form_data_to_json("add-randevuz-form")
+    data["status"] = "free"
+    console.log(doctorData)
+    data["doctor_id"] = doctorData.doctor_id
+    console.log(data)
+    sendXmlPostRequest("examinations/randevouz/addRandevouz", data, call_back_new_randev, call_back_error_new_randev)
+
 
 }
+
+function call_back_new_randev(response)
+{
+    var response = JSON.parse(response)
+    console.log(response)
+
+    $("#add_rand_response").html(response.response)
+}
+
+function call_back_error_new_randev(response)
+{
+    var response = JSON.parse(response)
+
+    console.log(response)
+    $("#add_rand_response").html(response.response)
+
+
+}
+
 function get_doctor_specialty()
 {
     return  $("#dc-speciality").val()
 }
+
 function get_doctor_info()
 {
 
     return  $("#doctor-text-area").val()
 
 }
+
 function call_back_update_data(response)
 {
     get_doctor_data()
     $("#after_register").html("data updated succesfully")
     console.log(response)
 }
+
 function call_back_error_update_data(response)
 {
     $("#error").html("error occured " + response)
 }
+
 function fill_doctor_info(responseData) {
     console.log(responseData)
     $("#dc-speciality").val(responseData.specialty).change()
@@ -201,12 +256,16 @@ function fill_doctor_info(responseData) {
     $("#weight").val(responseData.weight)
     $("#blood-type").val(responseData.bloodtype).change()
 }
-function get_doctor_data() {
+
+let doctorData;
+function get_doctor_data()
+{
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const responseData = JSON.parse(xhr.responseText);
             fill_doctor_info(responseData)
+            doctorData = responseData
         } else if (xhr.status !== 200) {
         }
     };
@@ -214,6 +273,7 @@ function get_doctor_data() {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send();
 }
+
 $(document).ready(function () {
     get_doctor_data();
     $("#bmi").click(calculate_and_display_bmi)
@@ -227,6 +287,7 @@ $(document).ready(function () {
 });
 
 function calculate_and_display_bmi()
+
 {
     const data = null;
 
@@ -249,6 +310,7 @@ function calculate_and_display_bmi()
 
     xhr.send(data);
 }
+
 
 function calculate_and_display_ideal_weight() {
     const data = null;
@@ -275,3 +337,4 @@ function calculate_and_display_ideal_weight() {
 
     xhr.send(data);
 }
+
