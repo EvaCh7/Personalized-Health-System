@@ -10,37 +10,54 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function lala(data, key, value)
-{
-    if (value !== "")
-    {
-        data[key] = value
+function createTableFromJSON(data, i) {
+    var html = "<h4>BloodTest " + i + "</h4><table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><th>Category</th><th>Value</th></tr>";
+    for (const x in data) {
+        var category = x;
+        var value = data[x];
+        html += "<tr><td>" + category + "</td><td>" + value + "</td></tr>";
     }
+    html += "</table><br>";
+    return html;
 }
+
 function get_blood_tests()
 {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const obj = JSON.parse(xhr.responseText);
+            var i = 1;
+            var count = Object.keys(obj).length;
+            document.getElementById("msg").innerHTML = "<h3>" + count + " Exams</h3>";
+            for (id in obj) {
+                document.getElementById("msg").innerHTML += createTableFromJSON(obj[id], i);
+                i++;
 
-    var amka = $("#amka_rest").val()
-    var url = "examinations/bloodTests/" + amka
-    var from_date = $("#fromDate").val();
-    var to_date = $("#toDate").val();
-    if (from_date != "")
-    {
-        url += "?fromDate=" + from_date
+            }
+
+        } else if (xhr.status !== 200) {
+            document.getElementById('msg')
+                    .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
+                    + JSON.stringify(xhr.responseText);
+
+        }
+    };
+
+    var amka = document.getElementById("amka_rest").value;
+    var URL = "http://localhost:8080/PersonalizedHealth/examinations/bloodTests/" + amka;
+    var fD = document.getElementById("fromDate").value;
+    var tD = document.getElementById("toDate").value;
+
+    if (fD !== "" && tD === "") {
+        URL += "?fromDate=" + fD;
+    } else if (fD === "" && tD !== "") {
+        URL += "?toDate=" + tD;
+    } else if (fD !== "" && tD !== "") {
+        URL += "?fromDate=" + fD + "&toDate=" + tD;
     }
-    if (from_date != "" && to_date != "")
-    {
-        url += "&toDate=" + to_date
-
-    }
-
-    sendXmlGetRequest(url, callback, callback_error)
-}
-function callback(response)
-{
-    $("#content").html(response)
-}
-function callback_error(response)
-{
-    $("#error").html(response)
+    xhr.open("GET", URL);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
 }

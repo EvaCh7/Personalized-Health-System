@@ -5,6 +5,7 @@
  */
 package rest_api;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -40,6 +41,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.Response.status;
 import mainClasses.BloodTest;
+import org.json.simple.JSONArray;
 
 /**
  * REST Web Service
@@ -62,20 +64,20 @@ public class Examinations {
     public Examinations() {
     }
 
-    public boolean isValidDate(String dateStr) {
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
-        try {
-            sdf.parse(dateStr);
-        } catch (org.apache.http.ParseException e) {
-            return false;
-        } catch (ParseException ex) {
-            return false;
-
-        }
-
-        return true;
-    }
+//    public boolean isValidDate(String dateStr) {
+//        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        sdf.setLenient(false);
+//        try {
+//            sdf.parse(dateStr);
+//        } catch (org.apache.http.ParseException e) {
+//            return false;
+//        } catch (ParseException ex) {
+//            return false;
+//
+//        }
+//
+//        return true;
+//    }
 
     /**
      * Retrieves representation of an instance of rest_api.Examinations
@@ -83,62 +85,64 @@ public class Examinations {
      * @return an instance of java.lang.String
      */
     @GET
-    @Path("/bloodTests/{AMKA}")
+    @Path("/bloodTests/{amka}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBloodTests(
-            @PathParam("AMKA") String amka,
-            @QueryParam("fromDate") String from,
-            @QueryParam("toDate") String to) throws SQLException, ParseException, ClassNotFoundException {
-        System.out.println("omggggggggggggggggggggggg");
-        EditBloodTestTable blood_test_obj = new EditBloodTestTable();
-        String json_resp = "";
-        JsonArray json_array = new JsonArray();
-        System.out.println(amka + " " + from + " " + to);
-        if (isValidDate(from) && isValidDate(to)) {
+            @PathParam("amka") String amka,
+            @QueryParam("fromDate") String fromDate,
+            @QueryParam("toDate") String toDate) throws SQLException, ParseException, ClassNotFoundException {
+        Response.Status status = Response.Status.OK;
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date startDate = formatter.parse(from);
-            java.util.Date endDate = formatter.parse(to);
-            Calendar start = Calendar.getInstance();
-            start.setTime(startDate);
-            Calendar end = Calendar.getInstance();
-            end.setTime(endDate);
-            if (startDate.after(endDate)) {
-                json_resp = "{ \"error\":\"start date must be before end date\"}";
-                Response.Status status = Response.Status.NOT_ACCEPTABLE;
-                return Response.status(status).type("application/json").entity(json_resp).build();
-            }
-
-            for (java.util.Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
-                String pattern = "yyyy-MM-dd";
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                String datee = simpleDateFormat.format(date);
-
-                try {
-
-                    BloodTest bt = blood_test_obj.databaseToBloodTest(amka, datee);
-                    if (bt != null) {
-
-                        json_resp = blood_test_obj.bloodTestToJSON(bt);
-                        JsonParser parser = new JsonParser();
-                        JsonObject blood_test_json = parser.parse(json_resp).getAsJsonObject();
-                        json_array.add(blood_test_json);
-                    }
-
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Examinations.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        } else {
-            System.out.println("not a valid date");
-            json_array = blood_test_obj.BloodTestToJsonArray(amka);
-
+        JSONArray resJson = new JSONArray();
+        ArrayList<BloodTest> res = EditBloodTestTable.databaseToBloodTestArray(amka);
+        if (res.isEmpty()) {
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
         }
 
-        System.out.println(json_array);
+        Gson gson = new Gson();
 
-        Response.Status status = Response.Status.ACCEPTED;
-        return Response.status(status).type("application/json").entity(json_array.toString()).build();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditBloodTestTable.bloodTestToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            java.util.Date given_date = formatter.parse(jo.get("test_date").getAsString());
+            java.util.Date from_date = null, to_date = null;
+
+            if (fromDate != null && toDate == null) {
+                from_date = formatter.parse(fromDate);
+                if (given_date.after(from_date)) {
+                    resJson.add(jo);
+                } else {
+                    Response.status(Response.Status.BAD_REQUEST).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
+                }
+            } else if (fromDate == null && toDate != null) {
+                to_date = formatter.parse(toDate);
+                if (given_date.before(to_date)) {
+                    resJson.add(jo);
+                } else {
+                    Response.status(Response.Status.BAD_REQUEST).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
+                }
+            } else if (fromDate != null && toDate != null) {
+                from_date = formatter.parse(fromDate);
+                to_date = formatter.parse(toDate);
+
+                if (from_date.after(to_date)) {
+                    System.out.println("error");
+                    Response.status(Response.Status.BAD_REQUEST).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
+                } else {
+                    if (given_date.after(from_date) && given_date.before(to_date)) {
+                        resJson.add(jo);
+                    }
+                }
+            } else if (fromDate == null && toDate == null) {
+                resJson.add(jo);
+            }
+        }
+
+        String json = new Gson().toJson(resJson);
+        return Response.status(status).type("application/json").entity(json).build();
     }
 
     @POST
