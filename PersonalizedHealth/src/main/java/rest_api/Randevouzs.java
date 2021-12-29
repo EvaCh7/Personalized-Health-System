@@ -10,7 +10,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import database.tables.EditRandevouzTable;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +47,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import mainClasses.Randevouz;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * REST Web Service
@@ -109,12 +122,9 @@ public class Randevouzs {
         for (JsonElement jso : js_array) {
             JsonObject js = jso.getAsJsonObject();
             try {
-                JsonElement _js = js.get("user_info");
-                String str = "null";
-                if (!_js.isJsonNull()) {
-                    str = _js.getAsString();
-                }
-                rand_obj.updateRandevouz(js.get("randevouz_id").getAsInt(), js.get("user_id").getAsInt(),str, js.get("status").getAsString());
+                System.out.println("randevouz: " + js.get("randevouz_id").getAsInt() + " user id: " + js.get("user_id").getAsInt() + js.get("user_info").getAsString());
+                System.out.println(js.get("status").getAsString());
+                rand_obj.updateRandevouz(js.get("randevouz_id").getAsInt(), js.get("user_id").getAsInt(), js.get("user_info").getAsString(), js.get("status").getAsString());
                 response = "{\"response\": \"randevouzs updated succesfully\" }";
 
                 status = Response.Status.OK;
@@ -200,26 +210,172 @@ public class Randevouzs {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRandevouz(
-            @PathParam("id") int id
+            @PathParam("id") int id,
+            @QueryParam("date") String selected_date
     ) {
 
         String response = "{\"response\": \"error invalid ID or Server error\" }";
         Response.Status status;
+        if (selected_date == null) {
 
+            try {
+                status = Response.Status.OK;
+                JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
+                System.out.println(array.toString());
+
+                return Response.status(status).type("application/json").entity(array.toString()).build();
+            } catch (SQLException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            status = Response.Status.BAD_REQUEST;
+
+            return Response.status(status).type("application/json").entity(response).build();
+        } else { //date given as input
+
+            try {
+                status = Response.Status.OK;
+                JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
+                JsonArray array_return = new JsonArray();
+                for (JsonElement js : array) {
+                    JsonObject _js = js.getAsJsonObject();
+                    if (getDate(_js.get("date_time").getAsString()).equals(selected_date)) {
+                        array_return.add(_js);
+                    }
+                }
+
+                return Response.status(status).type("application/json").entity(array_return.toString()).build();
+            } catch (SQLException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            status = Response.Status.BAD_REQUEST;
+
+            return Response.status(status).type("application/json").entity(response).build();
+        }
+
+    }
+
+    private void addTableData(PdfPTable table, JsonArray array) {
+        String str = "";
+        for (int i = 0; i < array.size(); ++i) {
+
+            Iterator<String> iterator = array.get(i).getAsJsonObject().keySet().iterator();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                str = array.get(i).getAsJsonObject().get(key).getAsString();
+                PdfPCell header = new PdfPCell();
+                header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                header.setBorderWidth(2);
+                header.setPhrase(new Phrase(str));
+                table.addCell(header);
+
+            }
+        }
+    }
+
+    private void addTableHeader(PdfPTable table, JsonArray array) {
+        String str = "";
+        Iterator<String> iterator = array.get(0).getAsJsonObject().keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            str = key;
+            PdfPCell header = new PdfPCell();
+            header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            header.setBorderWidth(2);
+            header.setPhrase(new Phrase(str));
+            table.addCell(header);
+
+        }
+
+    }
+
+    private void JsonArrayToPDF(JsonArray array, String fileName) {
+        Document document = new Document();
         try {
-            status = Response.Status.OK;
-            JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
-            System.out.println(array.toString());
-
-            return Response.status(status).type("application/json").entity(array.toString()).build();
-        } catch (SQLException ex) {
+            PdfWriter.getInstance(document, new FileOutputStream(fileName));
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (DocumentException ex) {
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
         }
-        status = Response.Status.BAD_REQUEST;
 
-        return Response.status(status).type("application/json").entity(response).build();
+        document.open();
+        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        PdfPTable table = new PdfPTable(array.get(0).getAsJsonObject().size());
+        addTableHeader(table, array);
+        addTableData(table, array);
+
+        try {
+            document.add(table);
+        } catch (DocumentException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        document.close();
+        //Chunk chunk = new Chunk(str, font);
+        /*
+        try {
+            document.add(chunk);
+        } catch (DocumentException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        document.close();
+    }
+
+    @Path("/getRandevouzPDF/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRandevouzPDF(
+            @PathParam("id") int id,
+            @QueryParam("date") String selected_date
+    ) {
+
+        String response = "{\"response\": \"error invalid ID or Server error\" }";
+        Response.Status status;
+        if (selected_date == null) {
+
+            try {
+                status = Response.Status.OK;
+                JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
+                JsonArrayToPDF(array, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
+                System.out.println(array.toString());
+
+                return Response.status(status).type("application/json").entity(array.toString()).build();
+            } catch (SQLException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            status = Response.Status.BAD_REQUEST;
+
+            return Response.status(status).type("application/json").entity(response).build();
+        } else { //date given as input
+
+            try {
+                status = Response.Status.OK;
+                JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
+                JsonArray array_return = new JsonArray();
+                for (JsonElement js : array) {
+                    JsonObject _js = js.getAsJsonObject();
+                    if (getDate(_js.get("date_time").getAsString()).equals(selected_date)) {
+                        array_return.add(_js);
+                    }
+                }
+                JsonArrayToPDF(array_return, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
+
+                return Response.status(status).type("application/json").entity(array_return.toString()).build();
+            } catch (SQLException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            status = Response.Status.BAD_REQUEST;
+
+            return Response.status(status).type("application/json").entity(response).build();
+        }
+
     }
 
     @Path("/cancelRandevouz/{id}")

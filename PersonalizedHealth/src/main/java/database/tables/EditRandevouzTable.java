@@ -29,6 +29,27 @@ public class EditRandevouzTable {
         return createNewRandevouz(r);
     }
 
+    public static JsonArray getDoctorRandevouzByDate(int id, String _date) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        JsonArray js_arr = new JsonArray();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id=" + id + " AND date_time=\'" + _date + "\'");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                JsonElement js = gson.fromJson(json, JsonElement.class);
+                js_arr.add(js);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return js_arr;
+    }
+
     public static JsonArray getDoctosrandevouz(int id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -109,6 +130,7 @@ public class EditRandevouzTable {
         Statement stmt = con.createStatement();
         String updateQuery = "UPDATE randevouz SET user_id='" + userID + "',status='" + status + "',user_info='" + info + "' WHERE randevouz_id = '" + randevouzID + "'";
         stmt.executeUpdate(updateQuery);
+        System.out.println(updateQuery);
         stmt.close();
         con.close();
     }

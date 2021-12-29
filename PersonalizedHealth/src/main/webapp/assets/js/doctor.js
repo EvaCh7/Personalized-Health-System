@@ -82,19 +82,29 @@ function create_randevouz_element(rand_obj)
 
                     <div class="col-2">
 
-    <input type="text" id="date_time" name="date_time" class="form-control" value="` + rand_obj.date_time + `"  required>
+    <input type="text" id="date_time" name="date_time" class="form-control" value="` + rand_obj.date_time + `"  required disabled>
 </div> </div>
 
 `
     return element
 }
-
+var bit = false
 function spawn_randevouz()
-
 {
-    url = "examinations/randevouz/getRandevouz" + "/" + doctorData.doctor_id
-    console.log(url)
-    sendXmlGetRequest(url, call_back_get_randevouz, call_back_error_get_randevouz)
+    if (bit) {
+        $("#process-randevouz-form").html('')
+        bit = false
+
+    } else {
+        console.log("oaoa22")
+        $("#process-randevouz-form").html('')
+        var date = $("#process-date").val()
+        url = "examinations/randevouz/getRandevouz" + "/" + doctorData.doctor_id + "?date=" + date
+        console.log(url)
+        sendXmlGetRequest(url, call_back_get_randevouz, call_back_error_get_randevouz)
+        bit = true
+
+    }
 
 
 
@@ -201,6 +211,20 @@ function delete_randevouz()
     var id = $("#randevouz_id").val()
     var url = "examinations/randevouz/cancelRandevouz" + "/" + id
     sendXmlDeleteRequest(url, call_back_cancel_randevouz, call_back_error_cancer_randevouz)
+}
+function download_randevouz() {
+    var date = $("#process-date").val()
+    url = "examinations/randevouz/getRandevouzPDF" + "/" + doctorData.doctor_id + "?date=" + date
+    sendXmlGetRequest(url, call_back_download_randevouz, call_back_error_download_randevouz)
+
+}
+function call_back_download_randevouz(response) {
+    console.log(js_array.response)
+
+}
+function call_back_error_download_randevouz(response) {
+    js_array = JSON.parse(response)
+    console.log(js_array.response)
 }
 
 function call_back_cancel_randevouz(_response)
