@@ -42,13 +42,32 @@ public class EditTreatmentTable {
         return tr;
     }
     
-    public Treatment databaseToTreatment(int id) throws SQLException, ClassNotFoundException{
+    public static Treatment databaseToTreatment(int id) throws SQLException, ClassNotFoundException{
          Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM treatment WHERE treatment_id= '" + id + "'");
+            rs.next();
+            String json=DB_Connection.getResultsToJSON(rs);
+            Gson gson = new Gson();
+            Treatment tr  = gson.fromJson(json, Treatment.class);
+            return tr;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    public static Treatment databaseToTreatmentBT(int id) throws SQLException, ClassNotFoundException{
+         Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM treatment WHERE bloodtest_id= '" + id + "'");
             rs.next();
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();

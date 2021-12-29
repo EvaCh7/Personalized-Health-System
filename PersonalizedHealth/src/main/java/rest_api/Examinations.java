@@ -34,6 +34,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -42,6 +44,7 @@ import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.Response.status;
 import mainClasses.BloodTest;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * REST Web Service
@@ -78,7 +81,6 @@ public class Examinations {
 //
 //        return true;
 //    }
-
     /**
      * Retrieves representation of an instance of rest_api.Examinations
      *
@@ -87,14 +89,12 @@ public class Examinations {
     @GET
     @Path("/bloodTests/{amka}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBloodTests(
-            @PathParam("amka") String amka,
-            @QueryParam("fromDate") String fromDate,
-            @QueryParam("toDate") String toDate) throws SQLException, ParseException, ClassNotFoundException {
+    public Response getBloodTests(@PathParam("amka") String amka, @QueryParam("fromDate") String fromDate, @QueryParam("toDate") String toDate)
+            throws SQLException, ParseException, ClassNotFoundException {
         Response.Status status = Response.Status.OK;
 
         JSONArray resJson = new JSONArray();
-        ArrayList<BloodTest> res = EditBloodTestTable.databaseToBloodTestArray(amka);
+        ArrayList<BloodTest> res = EditBloodTestTable.getAllBloodTests(amka);
         if (res.isEmpty()) {
             return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
         }
@@ -140,7 +140,40 @@ public class Examinations {
                 resJson.add(jo);
             }
         }
+        String json = new Gson().toJson(resJson);
+        return Response.status(status).type("application/json").entity(json).build();
+    }
 
+    @GET
+    @Path("/compareExams/{amka}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response compareExams(@PathParam("amka") String amka)
+            throws SQLException, ClassNotFoundException {
+        Response.Status status = Response.Status.OK;
+
+        JSONArray resJson = new JSONArray();
+        ArrayList<BloodTest> res = EditBloodTestTable.getBTsByDate(amka);
+        if (res.isEmpty()) {
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+        }
+
+        List<String> dateArray = new ArrayList<String>();
+        Gson gson = new Gson();
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditBloodTestTable.bloodTestToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            dateArray.add(jo.get("test_date").toString().replace("\"", ""));
+        }
+
+        Collections.sort(dateArray);
+
+        for (int i = 0; i < dateArray.size(); i++) {
+            BloodTest bt = EditBloodTestTable.databaseToBloodTest(amka, dateArray.get(i));
+            resJson.add(bt);
+        }
+        
         String json = new Gson().toJson(resJson);
         return Response.status(status).type("application/json").entity(json).build();
     }
@@ -415,10 +448,5 @@ public class Examinations {
         return Response.status(status).type("application/json").entity(res).build();
 
     }
-    
-    
-    
-    
-    
 
 }

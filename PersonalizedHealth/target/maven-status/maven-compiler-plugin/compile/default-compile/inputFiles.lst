@@ -1,33 +1,33 @@
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\uncertified_doctors.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\BloodTest.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\register.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\doctor.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\user.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\check_amka.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\init\DB_Connection.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\tables\EditTreatmentTable.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\User.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\certified_doctors.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\tables\EditSimpleUserTable.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\login.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\SimpleUser.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\get_Users.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\test.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\tables\EditDoctorTable.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\rest_api\Randevouzs.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\rest_api\ApplicationConfig.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\tables\EditBloodTestTable.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\rest_api\Messages.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\check_username.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\tables\EditMessageTable.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\Doctor.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\Treatment.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\rest_api\Examinations.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\logout.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\Utils.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\rest_api\Treatments.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\Message.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\servlets\check_email.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\init\InitDatabase.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\database\tables\EditRandevouzTable.java
-C:\Users\kokol\Documents\GitHub\Personalized-Health\PersonalizedHealth\src\main\java\mainClasses\Randevouz.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\certified_doctors.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\rest_api\ApplicationConfig.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\tables\EditMessageTable.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\Treatment.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\test.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\tables\EditBloodTestTable.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\check_amka.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\init\InitDatabase.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\tables\EditTreatmentTable.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\User.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\rest_api\Randevouzs.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\check_username.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\register.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\init\DB_Connection.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\rest_api\Messages.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\logout.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\Message.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\get_Users.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\rest_api\Treatments.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\check_email.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\Randevouz.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\SimpleUser.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\tables\EditDoctorTable.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\BloodTest.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\login.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\Doctor.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\doctor.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\tables\EditRandevouzTable.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\rest_api\Examinations.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\uncertified_doctors.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\mainClasses\Utils.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\servlets\user.java
+C:\Users\ORamaVR Test PC\Desktop\CSD\359\Project\PersonalizedHealthSystem\PersonalizedHealth\src\main\java\database\tables\EditSimpleUserTable.java

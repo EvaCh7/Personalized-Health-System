@@ -94,8 +94,10 @@ public class login extends HttpServlet {
                 }
                 session.setAttribute("loggedIn", username);
                 session.setAttribute("password", password);
+            } else {
+                session.setAttribute("type", "doesn't exist");
+                return;
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
             response.setStatus(403);

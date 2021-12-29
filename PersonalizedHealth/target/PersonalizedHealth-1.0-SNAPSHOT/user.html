@@ -13,7 +13,8 @@
         <script src="assets/js/form_utils.js"></script>
         <script src="assets/js/requests_api.js"></script>
         <script src="assets/js/user.js"></script>
-
+        <script src="assets/js/get_blood_test.js"></script>
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -505,20 +506,47 @@
             </table>
             <div id="display_docs"></div>
         </div> 
+        <form class="userForm" name="userForm" id="userForm">
 
-        <!-- add exams section -->
-        <div class="container-fluid " > 
-            <div class="col-sm-6">           
-                <button type="button" onclick="add_exams();" id="add_exams_but" style="disabled: false">Add Exams</button>
-            </div>
-            <div class="col-sm-6">           
-                <button type="button" onclick="all_exams();" id="all_exams_but" style="disabled: false">See All Exams</button>
-            </div>
-            <div id="content">
+            <!-- add exams section -->
 
+            <div class="row" > 
+                <div class="col-sm-3">           
+                    <button type="button" onclick="add_exams();" id="add_exams_but">Add Exams</button>
+                </div>
+                <div class="col-sm-3">           
+                    <button type="button" onclick="all_exams();" id="all_exams_but">See All Exams</button>
+                </div>
+                <div class="col-sm-3">
+                    <button type="button" onclick="compare_exams();" id="comp_exams_but" >Compare Exams</button>
+                </div>
+                <div class="col-sm-3">
+                    <select name="measurement" id="measurement">
+                        <option value="blood_sugar">Blood Sugar</option>
+                        <option value="cholesterol">Cholesterol</option>
+                        <option value="iron">Iron</option>
+                        <option value="vitamin_d3">Vitamin D3</option>
+                        <option value="vitamin_b12">Vitamin B12</option>
+                    </select>
+                    <button type="button" onclick="drawChartFunc()" id="draw_chart_but">Compare Exams with Chart</button>
+                </div>
             </div>
-        </div>
 
+            <div class="row">
+                <div class="col-sm-6">
+                    <div id="content"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="chart_3d" style="width: auto; height: auto;"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <button type="button" onclick="show_therapies()" id="show_ther_but">Show Therapies</button>
+                </div>
+                <div class="col-sm-9" id="therapy_div"></div>
+            </div>
+        </form>
     </body>
 
 </html>
