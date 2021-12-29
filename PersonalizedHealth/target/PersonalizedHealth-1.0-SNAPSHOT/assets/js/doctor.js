@@ -61,27 +61,23 @@ function create_randevouz_element(rand_obj)
                         <div class="col-1">
                             <input type="number" id="user_id" name="user_id" value=` + rand_obj.user_id + ` class="form-control" placeholder="User ID">
                         </div>
-                        <div class="col-1">
-
-                            <input type="number" id="doctor_id" name="doctor_id" value="` + rand_obj.doctor_id + `"class="form-control" placeholder="Doc ID">
-                        </div>
-                        <div class="col-2">
-
-                            <input type="number" id="price" name="price" value=` + rand_obj.price + ` class="form-control" placeholder="Price">
-                        </div>
-
-                        <div class="col-2">
-
-                            <textarea class="form-control" id="doctor_info" name="doctor_info"  placeholder="Doctor Info"
-
-                                      rows="3">` + rand_obj.doctor_info + `</textarea>                     </div>
+                     
+                 
+                    
 
                     <div class="col-2">
     
 
-    <textarea class="form-control" id="user_info" name="user_info" placeholder="User Info"
+    <input type="text" class="form-control" id="user_info" name="user_info" placeholder="User Info"
 
-              rows="3">` + rand_obj.user_info + `</textarea>
+               value="` + rand_obj.user_info + `"   >  
+</div>
+      <div class="col-2">
+    
+
+    <input type="text" class="form-control" id="status" name="status" placeholder="status"  value="`
+
+            + rand_obj.status + `"   >  
 </div>
 
                     <div class="col-2">
@@ -98,7 +94,7 @@ function spawn_randevouz()
 {
     url = "examinations/randevouz/getRandevouz" + "/" + doctorData.doctor_id
     console.log(url)
-    sendXmlGetRequest(url, null, call_back_get_randevouz, call_back_error_get_randevouz)
+    sendXmlGetRequest(url, call_back_get_randevouz, call_back_error_get_randevouz)
 
 
 
@@ -107,20 +103,70 @@ function spawn_randevouz()
 function call_back_get_randevouz(response)
 {
     var json = JSON.parse(response)
-
+    console.log(json)
     for (let x in json) {
-        console.log(json[x])
         var prev_html = $("#process-randevouz-form").html()
         prev_html += create_randevouz_element(json[x])
         $("#process-randevouz-form").html(prev_html)
     }
 
+    get_form_data_to_json_array("process-randevouz-form")
+    array.push(data)
+
 }
 
+function save_randevouz() {
+    url = "examinations/randevouz/updateRandevouz"
+    data = {}
+    array = []
+    get_form_data_to_json_array("process-randevouz-form")
+
+    array.push(data)
+    console.log(JSON.stringify(array))
+
+    sendXmlPutRequestJsonData(url, array, call_back_save_randevouz, call_back_error_save_randevouz)
+
+}
+function call_back_save_randevouz(response) {
+    js = JSON.parse(response)
+    console.log(js.response)
+
+}
+function call_back_error_save_randevouz(response) {
+    js = JSON.parse(response)
+    console.log(js.response)
+
+}
+function fill_array(key, value)
+{
+    if (key in data) {
+        console.log(key)
+        array.push(data)
+        data = {}
+    }
+    if (value == "")
+    {
+        data[key] = null;
+    } else
+    {
+        data[key] = value
+    }
+}
+let array = new Array();
+let data = {};
+
+function get_form_data_to_json_array(form_id)
+{
+    let myForm = document.getElementById(form_id);
+    const formData = new FormData(myForm);
+
+    formData.forEach((value, key) => (fill_array(key, value)));
+
+}
 function call_back_error_get_randevouz(response)
 {
 
-
+    console.log("error", response)
 
 }
 

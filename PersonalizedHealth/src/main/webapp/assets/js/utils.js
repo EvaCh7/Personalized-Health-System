@@ -83,6 +83,7 @@ function fill_empty_with_null(data, key, value)
         data[key] = null;
     } else
     {
+        console.log(key)
         data[key] = value
     }
 }

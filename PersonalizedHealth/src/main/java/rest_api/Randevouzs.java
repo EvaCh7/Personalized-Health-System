@@ -7,6 +7,7 @@ package rest_api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.tables.EditRandevouzTable;
@@ -52,18 +53,6 @@ public class Randevouzs {
     public Randevouzs() {
     }
 
-    /**
-     * Retrieves representation of an instance of rest_api.Randevouz
-     *
-     * @return an instance of java.lang.String
-     */
-    @Path("/json")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        return "lalalala";
-    }
-
     public static boolean isFutureDate(String pDateString) {
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(pDateString);
@@ -103,11 +92,49 @@ public class Randevouzs {
         return false;
     }
 
+    @Path("/updateRandevouz")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateRandevouz(String json) {
+
+        String response = "{\"response\": \"error didn't add new randevouz\" }";
+        Response.Status status;
+        status = Response.Status.BAD_REQUEST;
+
+        Gson gson = new Gson();
+        JsonArray js_array = gson.fromJson(json, JsonArray.class);
+        EditRandevouzTable rand_obj = new EditRandevouzTable();
+
+        for (JsonElement jso : js_array) {
+            JsonObject js = jso.getAsJsonObject();
+            try {
+                JsonElement _js = js.get("user_info");
+                String str = "null";
+                if (!_js.isJsonNull()) {
+                    str = _js.getAsString();
+                }
+                rand_obj.updateRandevouz(js.get("randevouz_id").getAsInt(), js.get("user_id").getAsInt(),str, js.get("status").getAsString());
+                response = "{\"response\": \"randevouzs updated succesfully\" }";
+
+                status = Response.Status.OK;
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return Response.status(status).type("application/json").entity(response).build();
+
+    }
+
     @Path("/addRandevouz/")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addRandevouz(String json) {
+    public Response addRandevouz(String json
+    ) {
 
         String response = "{\"response\": \"error didn't add new randevouz\" }";
         Response.Status status;
@@ -173,14 +200,17 @@ public class Randevouzs {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRandevouz(
-            @PathParam("id") int id) {
+            @PathParam("id") int id
+    ) {
 
         String response = "{\"response\": \"error invalid ID or Server error\" }";
         Response.Status status;
 
         try {
-            status = Response.Status.ACCEPTED;
+            status = Response.Status.OK;
             JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
+            System.out.println(array.toString());
+
             return Response.status(status).type("application/json").entity(array.toString()).build();
         } catch (SQLException ex) {
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
@@ -197,7 +227,8 @@ public class Randevouzs {
     @Produces(MediaType.APPLICATION_JSON)
 
     public Response CancelRandevouz(
-            @PathParam("id") int id) {
+            @PathParam("id") int id
+    ) {
         String response = "{\"response\": \"error cancel wasn't succesful\" }";
         Response.Status status;
         EditRandevouzTable rand_utils = new EditRandevouzTable();
@@ -228,6 +259,7 @@ public class Randevouzs {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
+    public void putJson(String content
+    ) {
     }
 }
