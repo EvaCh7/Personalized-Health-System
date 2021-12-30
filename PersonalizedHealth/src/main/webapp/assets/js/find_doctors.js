@@ -32,18 +32,31 @@ function see_doctors() {
         xhr.setRequestHeader("x-rapidapi-key", "2b32ebee9emsh8012dc2806237ecp1e91f7jsn49cbb5a1c2b6");
 
         xhr.send(data);
+    } else if (option === "price_rank") {
+        var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/rankedRandevouz";
+        sendXmlGetRequest(URL, print_ranked_byprice, error);
     }
 
 }
 
 function print_docs(response) {
     var jsonArray = JSON.parse(response);
-    jsonArray.sort(GetSortOrder("distance"));
-    console.log(jsonArray);
+    jsonArray.sort(GetSortOrder("Distance(in kilometers)"));
     var i = 1;
-    var count = Object.keys(jsonArray).length;
+    document.getElementById("print_docs").innerHTML = "";
     for (id in jsonArray) {
-        document.getElementById("print_docs").innerHTML += createTreatmentTable(jsonArray[id], i);
+        document.getElementById("print_docs").innerHTML += createTable(jsonArray[id], i);
+        i++;
+    }
+}
+
+function print_ranked_byprice(response) {
+    var jsonArray = JSON.parse(response);
+    jsonArray.sort(GetSortOrder("Price"));
+    var i = 1;
+    document.getElementById("print_docs").innerHTML = "";
+    for (id in jsonArray) {
+        document.getElementById("print_docs").innerHTML += createTable(jsonArray[id], i);
         i++;
     }
 }

@@ -75,7 +75,7 @@ public class DoctorsLoc {
         // calculate the result
         return (c * r);
     }
-    
+
     @GET
     @Path("/findDocLoc/{lat}/{lon}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -98,8 +98,9 @@ public class DoctorsLoc {
             double distance_calc = distance(lat, lat_doc, lon, lon_doc);
 
             JSONObject item = new JSONObject();
-            item.put("distance", distance_calc);
-            item.put("doctor_id", jo.get("doctor_id").getAsInt());
+            item.put("Distance(in kilometers)", distance_calc);
+            item.put("First Name", jo.get("firstname").getAsString());
+            item.put("Last Name", jo.get("lastname").getAsString());
 
             resJson.add(item);
         }

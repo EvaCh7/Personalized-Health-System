@@ -104,7 +104,7 @@ public class EditDoctorTable {
             System.err.println(e.getMessage());
         }
     }
-
+    
     public static Doctor databaseToDoctor(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -112,6 +112,25 @@ public class EditDoctorTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM doctors WHERE username = '" + username + "' AND password='" + password + "'");
+            rs.next();
+            String json = DB_Connection.getResultsToJSON(rs);
+            Gson gson = new Gson();
+            Doctor doc = gson.fromJson(json, Doctor.class);
+            return doc;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static Doctor getDoctorInfo(int id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT firstname, lastname FROM doctors WHERE doctor_id = '" + id + "'");
             rs.next();
             String json = DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();

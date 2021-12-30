@@ -42,7 +42,7 @@ function get_blood_tests()
             var count = Object.keys(obj).length;
             document.getElementById("msg").innerHTML = "<h3>" + count + " Exams</h3>";
             for (id in obj) {
-                document.getElementById("msg").innerHTML = createTableFromJSON(obj[id], i);
+                document.getElementById("msg").innerHTML += createTableFromJSON(obj[id], i);
                 i++;
 
             }

@@ -139,7 +139,7 @@ public class EditRandevouzTable {
         return r;
     }
 
-    public String randevouzToJSON(Randevouz r) {
+    public static String randevouzToJSON(Randevouz r) {
         Gson gson = new Gson();
 
         String json = gson.toJson(r, Randevouz.class);
@@ -164,6 +164,28 @@ public class EditRandevouzTable {
         stmt.close();
         con.close();
         return deleted != 0;
+    }
+    
+    public static ArrayList<Randevouz> databaseToRandevouzArray() throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM randevouz");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Randevouz rand = gson.fromJson(json, Randevouz.class);
+                randevouz.add(rand);
+            }
+            return randevouz;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     public boolean deleteRandevouz(int randevouzID) throws SQLException, ClassNotFoundException {
