@@ -1,3 +1,4 @@
+var lat, lon;
 
 function update_data(e) {
     var gender
@@ -28,14 +29,13 @@ function update_data(e) {
         country: $("#country").val(),
         city: $("#city").val(),
         address: $("#address").val(),
-        lat: lat,
-        lon: lon,
         telephone: $("#telephone").val(),
+        lat: $("#lat").val(),
+        lon: $("#lon").val(),
         height: $("#height").val(),
         weight: $("#weight").val(),
         blooddonor: blood_donor,
-        bloodtype: $("#blood-type").val(),
-
+        bloodtype: $("#blood-type").val()
     };
     e.preventDefault();
 
@@ -77,6 +77,8 @@ function fill_user_info(responseData) {
     $("#city").val(responseData.city)
     $("#address").val(responseData.address)
     $("#telephone").val(responseData.telephone)
+    $("#lat").val(responseData.lat)
+    $("#lon").val(responseData.lon)
     $("#height").val(responseData.height)
     $("#weight").val(responseData.weight)
     $("#blood-type").val(responseData.bloodtype)
@@ -203,19 +205,41 @@ function load_doc_data_to_table(json)
     document.getElementById("cert-docs").disabled = true;
 }
 
+var counter_add = 0, counter_all = 0;
+
 function add_exams() {
-    var result = $("#content").load("new_blood_test.html",
-            function () {
-                var amka = document.getElementById("amka").value;
-                document.getElementById("amka_rest").value = amka;
-            });
+    if (counter_add === 0) {
+        var result = $("#content").load("new_blood_test.html",
+                function () {
+                    counter_add++;
+
+                    var amka = document.getElementById("amka").value;
+                    document.getElementById("amka_rest").value = amka;
+                });
+    } else if (counter_add % 2 !== 0) {
+        counter_add++;
+        $("#myForm").addClass("d-none");
+    } else if (counter_add % 2 === 0 && counter_add !== 0) {
+        counter_add++;
+        $("#myForm").removeClass("d-none");
+    }
 }
 
 
 function all_exams() {
-    var result = $("#content").load("get_blood_tests.html",
-            function () {
-                var amka = document.getElementById("amka").value;
-                document.getElementById("amka_rest").value = amka;
-            });
+    if (counter_all === 0) {
+        var result = $("#content").load("get_blood_tests.html",
+                function () {
+                    counter_all++;
+
+                    var amka = document.getElementById("amka").value;
+                    document.getElementById("amka_rest").value = amka;
+                });
+    } else if (counter_all % 2 !== 0) {
+        counter_all++;
+        $("#myForm").addClass("d-none");
+    } else if (counter_all % 2 === 0 && counter_all !== 0) {
+        counter_all++;
+        $("#myForm").removeClass("d-none");
+    }
 }

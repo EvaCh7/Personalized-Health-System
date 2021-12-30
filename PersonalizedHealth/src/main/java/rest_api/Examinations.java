@@ -366,23 +366,6 @@ public class Examinations {
     }
 
     @PUT
-    @Path("/Certify/{doctor_id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateCertifiedDoc(@PathParam("doctor_id") int doctor_id)
-            throws SQLException, ClassNotFoundException {
-        try {
-            EditDoctorTable.certifyDoctor(doctor_id);
-            return Response.status(Response.Status.OK).type("application/json").entity("{\"success\":\"Quantity Updated\"}").build();
-        } catch (SQLException ex) {
-            Logger.getLogger(Examinations.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Examinations.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return Response.status(Response.Status.NOT_FOUND).type("application/json").entity("{\"error\":\"Doctor Does not Exist\"}").build();
-
-    }
-
-    @PUT
     @Path("/bloodTest/{bloodTestID}/{measure}/{value}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateMeasure(

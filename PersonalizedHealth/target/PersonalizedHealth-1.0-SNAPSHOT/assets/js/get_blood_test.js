@@ -42,7 +42,7 @@ function get_blood_tests()
             var count = Object.keys(obj).length;
             document.getElementById("msg").innerHTML = "<h3>" + count + " Exams</h3>";
             for (id in obj) {
-                document.getElementById("msg").innerHTML += createTableFromJSON(obj[id], i);
+                document.getElementById("msg").innerHTML = createTableFromJSON(obj[id], i);
                 i++;
 
             }
@@ -80,7 +80,7 @@ function compare_exams()
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const obj = JSON.parse(xhr.responseText);
-            document.getElementById("content").innerHTML += createCompareTable(obj);
+            document.getElementById("content").innerHTML = createCompareTable(obj);
 
         } else if (xhr.status !== 200) {
             document.getElementById('content').innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
@@ -197,7 +197,7 @@ function show_therapies() {
             var i = 1;
             var count = Object.keys(obj).length;
             for (id in obj) {
-                document.getElementById("therapy_div").innerHTML += createTreatmentTable(obj[id], i);
+                document.getElementById("therapy_div").innerHTML = createTreatmentTable(obj[id], i);
                 i++;
             }
 
