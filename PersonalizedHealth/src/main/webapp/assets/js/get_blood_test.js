@@ -96,7 +96,8 @@ function compare_exams()
     xhr.send();
 }
 
-function createCompareTable(data) {
+function 
+createCompareTable(data) {
     var html = "<br><table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><td>Date</td>";
 
     for (var i = 0; i < Object.keys(data).length; i++) {

@@ -10,71 +10,66 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function createTableFromJSON(data, i) {
-    var html = "<h4>BloodTest " + i + "</h4><table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><th>Category</th><th>Value</th></tr>";
-    for (const x in data) {
-        var category = x;
-        var value = data[x];
-        html += "<tr><td>" + category + "</td><td>" + value + "</td></tr>";
-    }
-    html += "</table><br>";
-    return html;
-}
 
-function createTreatmentTable(data, i) {
-    var html = "<table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><th>Category</th><th>Value</th></tr>";
-    for (const x in data) {
-        var category = x;
-        var value = data[x];
-        html += "<tr><td>" + category + "</td><td>" + value + "</td></tr>";
-    }
-    html += "</table><br>";
-    return html;
-}
 
-function get_blood_tests()
+
+function create_table_from_json_array(json, table_id)
 {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            const obj = JSON.parse(xhr.responseText);
-            var i = 1;
-            var count = Object.keys(obj).length;
-            document.getElementById("msg").innerHTML = "<h3>" + count + " Exams</h3>";
-            for (id in obj) {
-                document.getElementById("msg").innerHTML += createTableFromJSON(obj[id], i);
-                i++;
-
-            }
-
-        } else if (xhr.status !== 200) {
-            document.getElementById('msg')
-                    .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
-                    + JSON.stringify(xhr.responseText);
+    var table = document.getElementById(table_id);
+    var total = json.length;
+    var cell = new Array();
+    //add header
+    var header = table.createTHead();
+    var row = header.insertRow(0);
+    var count = 0
+    for (var js in json[0]) {
+        var cell = row.insertCell(count++);
+        cell.innerHTML = js
+    }
+    for (var i = 0; i < total; i++) {
+        var row = table.insertRow(i + 1);
+        for (var j = 0; j < Object.keys(json[0]).length; j++) {
+            cell[j] = row.insertCell(j);
 
         }
-    };
+        var index = 0
 
-    var amka = document.getElementById("amka_rest").value;
-    var URL = "http://localhost:8080/PersonalizedHealth/examinations/bloodTests/" + amka;
-    var fD = document.getElementById("fromDate").value;
-    var tD = document.getElementById("toDate").value;
+        for (var js in json[i]) {
+            cell[index++].innerHTML = json[i][js]
+        }
 
-    if (fD !== "" && tD === "") {
-        URL += "?fromDate=" + fD;
-    } else if (fD === "" && tD !== "") {
-        URL += "?toDate=" + tD;
-    } else if (fD !== "" && tD !== "") {
-        URL += "?fromDate=" + fD + "&toDate=" + tD;
     }
-    xhr.open("GET", URL);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send();
 }
+var show_done = true
+function show_done_randevouz() {
+    if (show_done) {
+        show_done = false;
+        var url = "examinations/randevouz/getDoneRandevouz/" + doctorData.doctor_id
+        sendXmlGetRequest(url, call_back_show_done_rand, call_back_error_show_done_rand)
+    } else {
+        $("#done-rand-table tr").remove();
 
+        show_done = true;
 
-function compare_exams()
+    }
+}
+function call_back_show_done_rand(response) {
+    json = JSON.parse(response)
+    console.log(json)
+    $("#done-rand-table").removeClass("d-none")
+    create_table_from_json_array(json, "done-rand-table")
+}
+function call_back_error_show_done_rand(response) {
+    json = JSON.parse(response)
+    console.log(json.response)
+}
+function compare() {
+    var user_id = $("#compare-user-id").val()
+    var doctor_id = doctorData.doctor_id
+    compare_exams(doctor_id, user_id)
+
+}
+function compare_exams(doctor_id, user_id)
 {
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
@@ -87,8 +82,7 @@ function compare_exams()
                     + JSON.stringify(xhr.responseText);
         }
     };
-    var amka = document.getElementById("amka").value;
-    var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareExams/" + amka;
+    var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareUsersDoneExams/" + doctor_id + "/" + user_id;
 
     xhr.open("GET", URL);
     xhr.setRequestHeader("Accept", "application/json");
@@ -96,8 +90,8 @@ function compare_exams()
     xhr.send();
 }
 
-function 
-createCompareTable(data) {
+function
+        createCompareTable(data) {
     var html = "<br><table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><td>Date</td>";
 
     for (var i = 0; i < Object.keys(data).length; i++) {
@@ -146,10 +140,13 @@ createCompareTable(data) {
     html += "</tr></table><br>";
     return html;
 }
-
-function drawChartFunc() {
-    var amka = document.getElementById("amka").value;
-    var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareExams/" + amka;
+function click_draw_chart() {
+    var user_id = $("#compare-user-id").val()
+    var doctor_id = doctorData.doctor_id
+    drawChartFunc(doctor_id, user_id)
+}
+function drawChartFunc(doctor_id, user_id) {
+    var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareUsersDoneExams/" + doctor_id + "/" + user_id;
     sendXmlGetRequest(URL, draw_chart, call_back_error);
 }
 
@@ -159,7 +156,7 @@ function draw_chart(response) {
     google.charts.load("current", {packages: ["corechart"]});
     google.charts.setOnLoadCallback(drawChart);
 
-    var meas = document.userForm.measurement.value;
+    var meas = $("#measurement").val();
     function drawChart() {
         var data = [];
         var Header = ['Date', 'Measure'];
@@ -176,44 +173,13 @@ function draw_chart(response) {
             title: 'Exams',
             is3D: true
         };
-
+        $("#chart_3d").html("");
         var chart = new google.visualization.BarChart(document.getElementById('chart_3d'));
         chart.draw(chartdata, options);
     }
 }
 
-function call_back_error()
+function call_back_error(response)
 {
-    var text = $("#error").html()
-    if (!text.includes(" register error"))
-        $("#error").html(text + " register error");
-}
-
-function show_therapies() {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            const obj = JSON.parse(xhr.responseText);
-            var i = 1;
-            var count = Object.keys(obj).length;
-            for (id in obj) {
-                document.getElementById("therapy_div").innerHTML += createTreatmentTable(obj[id], i);
-                i++;
-            }
-
-        } else if (xhr.status !== 200) {
-            document.getElementById('therapy_div')
-                    .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
-                    + JSON.stringify(xhr.responseText);
-
-        }
-    };
-
-    var amka = document.getElementById("amka").value;
-    var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showTreatments/" + amka;
-
-    xhr.open("GET", URL);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send();
+    console.log(response)
 }

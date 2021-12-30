@@ -9,12 +9,17 @@
         <meta name="keywords" content="HTML, CSS, JavaScript, Form, Sign up">
         <meta name="author" content="Georgios Kokolakis">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
         <script src="assets/js/utils.js"></script>
         <script src="assets/js/form_utils.js"></script>
         <script src="assets/js/requests_api.js"></script>
         <script src="assets/js/doctor.js"></script>
+        <script src="assets/js/doctor_patient_history_utils.js"></script>
+
 
 
 
@@ -566,6 +571,41 @@
                 </div>
 
 
+                <div class="col-2">
+                    <button onclick="show_done_randevouz()"  type="button" class="done-randevuz" > Show Done Randevouz</button>
+                </div>
+                <table class=" table table-dark d-none" id="done-rand-table"> </table>
+                <div class="col-2">
+                    <button onclick="show_done_randevouz()"  type="button" class="done-randevuz" > Show Done Randevouz</button>
+                </div>
+                <div class="col-sm-3">
+                    <button type="button" onclick="compare();" id="comp_exams_but" >Compare Exams</button>
+                    <input type="number" id="compare-user-id">
+                </div>
+                <div class="col-sm-3">
+                    <select name="measurement" id="measurement">
+                        <option value="blood_sugar">Blood Sugar</option>
+                        <option value="cholesterol">Cholesterol</option>
+                        <option value="iron">Iron</option>
+                        <option value="vitamin_d3">Vitamin D3</option>
+                        <option value="vitamin_b12">Vitamin B12</option>
+                    </select>
+                    <button type="button" onclick="click_draw_chart()" id="draw_chart_but">Compare Exams with Chart</button>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div id="content"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="chart_3d" style="width: auto; height: auto;"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <button type="button" onclick="show_therapies()" id="show_ther_but">Show Therapies</button>
+                    </div>
+                    <div class="col-sm-9" id="therapy_div"></div>
+                </div>
 
 
             </div>
