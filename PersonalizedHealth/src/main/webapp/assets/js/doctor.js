@@ -215,17 +215,28 @@ function delete_randevouz()
 function download_randevouz() {
     var date = $("#process-date").val()
     url = "examinations/randevouz/getRandevouzPDF" + "/" + doctorData.doctor_id + "?date=" + date
-    sendXmlGetRequest(url, call_back_download_randevouz, call_back_error_download_randevouz)
+    var request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.responseType = 'blob';
+
+    request.onreadystatechange = function () {
+        if (this.readyState === 4 && (this.status >= 200 && this.status < 300)) {
+            var a = document.createElement('a');
+            a.href = window.URL.createObjectURL(request.response);
+            // Give filename you wish to download
+            a.download = "randevouz.pdf"
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+        } else if (this.status !== 200) {
+            console.log(request.response.response)
+        }
+    };
+    request.send();
 
 }
-function call_back_download_randevouz(response) {
-    console.log(js_array.response)
 
-}
-function call_back_error_download_randevouz(response) {
-    js_array = JSON.parse(response)
-    console.log(js_array.response)
-}
 
 function call_back_cancel_randevouz(_response)
 {

@@ -70,7 +70,7 @@ public class EditMessageTable {
                 + "(message_id INTEGER not NULL AUTO_INCREMENT, "
                 + "doctor_id INTEGER not null,"
                 + "user_id INTEGER not null,"
-                + "date_time TIMESTAMP not NULL, "
+                + "date_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP not NULL, "
                 + "message VARCHAR(1000) not NULL, "
                 + "sender VARCHAR(15),"
                 + "blood_donation BOOLEAN,"

@@ -112,7 +112,7 @@ public class EditBloodTestTable {
         }
         return null;
     }
-    
+
     public static ArrayList<BloodTest> getBTsByDate(String amka) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -140,6 +140,7 @@ public class EditBloodTestTable {
         return null;
     }
 
+   
     public static BloodTest databaseToBloodTest(String amka, String date) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();

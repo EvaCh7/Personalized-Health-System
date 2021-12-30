@@ -12,7 +12,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.tables.EditBloodTestTable;
 import database.tables.EditDoctorTable;
+import database.tables.EditRandevouzTable;
 import database.tables.EditSimpleUserTable;
+import static database.tables.EditSimpleUserTable.databaseToUser;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -43,6 +45,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.Response.status;
 import mainClasses.BloodTest;
+import mainClasses.SimpleUser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -67,25 +70,6 @@ public class Examinations {
     public Examinations() {
     }
 
-//    public boolean isValidDate(String dateStr) {
-//        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        sdf.setLenient(false);
-//        try {
-//            sdf.parse(dateStr);
-//        } catch (org.apache.http.ParseException e) {
-//            return false;
-//        } catch (ParseException ex) {
-//            return false;
-//
-//        }
-//
-//        return true;
-//    }
-    /**
-     * Retrieves representation of an instance of rest_api.Examinations
-     *
-     * @return an instance of java.lang.String
-     */
     @GET
     @Path("/bloodTests/{amka}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -145,6 +129,61 @@ public class Examinations {
     }
 
     @GET
+    @Path("/compareUsersDoneExams/{doctor_id}/{user_id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response compareUsersDoneExams(@PathParam("doctor_id") int doctor_id, @PathParam("user_id") int user_id)
+            throws SQLException, ClassNotFoundException {
+        Response.Status status = Response.Status.OK;
+        JsonArray doc_done_rad = EditRandevouzTable.getDoctosDoneRandevouz(doctor_id);
+        boolean found = false;
+        for (JsonElement js : doc_done_rad) {
+            JsonObject obj = js.getAsJsonObject();
+            if (obj.get("user_id").getAsInt() == user_id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"given ID hasn't any done randevouz\"}").build();
+
+        }
+        JSONArray resJson = new JSONArray();
+        String amka = "";
+        ArrayList<SimpleUser> users = databaseToUser();
+        for (SimpleUser user : users) {
+            if (user.getUser_id() == user_id) {
+                amka = user.getAmka();
+                break;
+            }
+        }
+
+        ArrayList<BloodTest> res = EditBloodTestTable.getBTsByDate(amka);
+        if (res.isEmpty()) {
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+        }
+
+        List<String> dateArray = new ArrayList<String>();
+        Gson gson = new Gson();
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditBloodTestTable.bloodTestToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            dateArray.add(jo.get("test_date").toString().replace("\"", ""));
+        }
+
+        Collections.sort(dateArray);
+
+        for (int i = 0; i < dateArray.size(); i++) {
+            BloodTest bt = EditBloodTestTable.databaseToBloodTest(amka, dateArray.get(i));
+            resJson.add(bt);
+        }
+
+        String json = new Gson().toJson(resJson);
+        return Response.status(status).type("application/json").entity(json).build();
+    }
+
+    @GET
     @Path("/compareExams/{amka}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response compareExams(@PathParam("amka") String amka)
@@ -173,7 +212,7 @@ public class Examinations {
             BloodTest bt = EditBloodTestTable.databaseToBloodTest(amka, dateArray.get(i));
             resJson.add(bt);
         }
-        
+
         String json = new Gson().toJson(resJson);
         return Response.status(status).type("application/json").entity(json).build();
     }

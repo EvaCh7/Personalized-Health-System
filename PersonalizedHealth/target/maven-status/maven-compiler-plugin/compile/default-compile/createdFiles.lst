@@ -15,6 +15,7 @@ database\init\InitDatabase.class
 servlets\logout.class
 database\tables\EditDoctorTable.class
 servlets\login.class
+Utils\UtilsDate.class
 mainClasses\Doctor.class
 rest_api\Treatments.class
 database\tables\EditRandevouzTable.class

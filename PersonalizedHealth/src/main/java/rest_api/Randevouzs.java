@@ -5,6 +5,7 @@
  */
 package rest_api;
 
+import Utils.UtilsDate;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,6 +22,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import database.tables.EditRandevouzTable;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.SQLException;
@@ -64,40 +66,6 @@ public class Randevouzs {
      * Creates a new instance of Randevouz
      */
     public Randevouzs() {
-    }
-
-    public static boolean isFutureDate(String pDateString) {
-        try {
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(pDateString);
-            return new Date().before(date);
-        } catch (ParseException ex) {
-            Logger.getLogger(Randevouz.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-
-    private String getDate(String date_time) {
-        String[] str = date_time.split(" ");
-        return str[0];
-
-    }
-
-    private String getTime(String date_time) {
-        String[] str = date_time.split(" ");
-        return str[1];
-
-    }
-
-    public boolean isTimeBetween(String time, String from_time, String to_time) {
-        LocalTime from = LocalTime.parse(from_time);
-        LocalTime to = LocalTime.parse(to_time);
-        LocalTime _time = LocalTime.parse(time);
-        if (_time.isAfter(from) && _time.isBefore(to)) {
-            return true;
-
-        }
-        return false;
-
     }
 
     private boolean isRandevouzMoreThan30Minutes(String time) {
@@ -152,15 +120,15 @@ public class Randevouzs {
         Gson gson = new Gson();
         JsonObject js = gson.fromJson(json, JsonObject.class);
         String date_time = js.get("date_time").getAsString();
-        String date = getDate(date_time);
-        String _time = getTime(date_time);
+        String date = UtilsDate.getDate(date_time);
+        String _time = UtilsDate.getTime(date_time);
 
-        if (!isFutureDate(date)) {
+        if (!UtilsDate.isFutureDate(date)) {
             response = "{\"response\": \"error invalid date, not from future\" }";
             return Response.status(status).type("application/json").entity(response).build();
 
         }
-        if (!isTimeBetween(_time, "08:00:00", "20:30:01")) {
+        if (!UtilsDate.isTimeBetween(_time, "08:00:00", "20:30:01")) {
             response = "{\"response\": \"error invalid time, time must be between 08:00:00 && 20:30:00  \" }";
             return Response.status(status).type("application/json").entity(response).build();
 
@@ -172,7 +140,7 @@ public class Randevouzs {
             ArrayList<Randevouz> randev_list = EditRandevouzTable.getAllrandevouz();
 
             for (Randevouz randev : randev_list) {
-                LocalTime time2 = LocalTime.parse(getTime(randev.getDate_time()));
+                LocalTime time2 = LocalTime.parse(UtilsDate.getTime(randev.getDate_time()));
                 long hours = ChronoUnit.HOURS.between(time1, time2);
                 long minutes = ChronoUnit.MINUTES.between(time1, time2) % 60;
                 if (hours == 0 && minutes < 30) {
@@ -240,7 +208,7 @@ public class Randevouzs {
                 JsonArray array_return = new JsonArray();
                 for (JsonElement js : array) {
                     JsonObject _js = js.getAsJsonObject();
-                    if (getDate(_js.get("date_time").getAsString()).equals(selected_date)) {
+                    if (UtilsDate.getDate(_js.get("date_time").getAsString()).equals(selected_date)) {
                         array_return.add(_js);
                     }
                 }
@@ -292,7 +260,7 @@ public class Randevouzs {
 
     }
 
-    private void JsonArrayToPDF(JsonArray array, String fileName) {
+    private Document JsonArrayToPDF(JsonArray array, String fileName) {
         Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream(fileName));
@@ -314,14 +282,8 @@ public class Randevouzs {
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
         }
         document.close();
-        //Chunk chunk = new Chunk(str, font);
-        /*
-        try {
-            document.add(chunk);
-        } catch (DocumentException ex) {
-            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        document.close();
+        return document;
+
     }
 
     @Path("/getRandevouzPDF/{id}")
@@ -339,10 +301,12 @@ public class Randevouzs {
             try {
                 status = Response.Status.OK;
                 JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
-                JsonArrayToPDF(array, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
-                System.out.println(array.toString());
+                Document document = JsonArrayToPDF(array, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
+                File file = new File("C:\\Users\\kokol\\Documents\\randevouz.pdf");
+                return Response.ok(file, MediaType.APPLICATION_OCTET_STREAM)
+                        .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"") //optional
+                        .build();
 
-                return Response.status(status).type("application/json").entity(array.toString()).build();
             } catch (SQLException ex) {
                 Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
@@ -359,13 +323,15 @@ public class Randevouzs {
                 JsonArray array_return = new JsonArray();
                 for (JsonElement js : array) {
                     JsonObject _js = js.getAsJsonObject();
-                    if (getDate(_js.get("date_time").getAsString()).equals(selected_date)) {
+                    if (UtilsDate.getDate(_js.get("date_time").getAsString()).equals(selected_date)) {
                         array_return.add(_js);
                     }
                 }
-                JsonArrayToPDF(array_return, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
-
-                return Response.status(status).type("application/json").entity(array_return.toString()).build();
+                Document document = JsonArrayToPDF(array_return, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
+                File file = new File("C:\\Users\\kokol\\Documents\\randevouz.pdf");
+                return Response.ok(file, MediaType.APPLICATION_OCTET_STREAM)
+                        .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"") //optional
+                        .build();
             } catch (SQLException ex) {
                 Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
@@ -375,6 +341,31 @@ public class Randevouzs {
 
             return Response.status(status).type("application/json").entity(response).build();
         }
+
+    }
+
+    @Path("/getDoneRandevouz/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDoneRandevouz(
+            @PathParam("id") int id
+    ) {
+        String response = "{\"response\": \"error couldn't get done randevouz\" }";
+        Response.Status status;
+        status = Response.Status.BAD_REQUEST;
+
+        try {
+            status = Response.Status.OK;
+
+            JsonArray array = EditRandevouzTable.getDoctosDoneRandevouz(id);
+            return Response.status(status).type("application/json").entity(array.toString()).build();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Response.status(status).type("application/json").entity(response).build();
 
     }
 

@@ -50,6 +50,27 @@ public class EditRandevouzTable {
         return js_arr;
     }
 
+    public static JsonArray getDoctosDoneRandevouz(int id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        JsonArray js_arr = new JsonArray();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id=" + id + " AND status=\'done\'");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                JsonElement js = gson.fromJson(json, JsonElement.class);
+                js_arr.add(js);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return js_arr;
+    }
+
     public static JsonArray getDoctosrandevouz(int id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -162,7 +183,7 @@ public class EditRandevouzTable {
                 + "(randevouz_id INTEGER not NULL AUTO_INCREMENT, "
                 + " doctor_id INTEGER not NULL, "
                 + " user_id INTEGER not NULL, "
-                + " date_time TIMESTAMP not NULL, "
+                + " date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP not NULL, "
                 + " price INTEGER  not NULL, "
                 + " doctor_info VARCHAR(500),"
                 + " user_info VARCHAR(500),"
