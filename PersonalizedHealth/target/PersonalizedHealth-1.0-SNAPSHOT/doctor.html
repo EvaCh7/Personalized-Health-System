@@ -98,7 +98,7 @@
 
                         <div class="col-lg-5 col-md-6 col-sm-6 ">
 
-                            <input type="text" id="amka" class="form-control" pattern="[0-9]{11}" placeholder="Enter AMKA"
+                            <input type="text" id="doc-amka" class="form-control" pattern="[0-9]{11}" placeholder="Enter AMKA"
                                    disabled>
                         </div>
 
@@ -503,16 +503,14 @@
 
             </div>
 
-            <div class="container-fluid randevuz-container mt-5">
+            <div class="container-fluid randevuz-container mt-5 " style=" align-content: center;">
 
                 <div class="row"> 
                     <div class="col-2">
                         <button    type="button"  class="add-randevuz" onclick="show_add_randevouz()"> Add Randevuz</button>
                     </div>
-                    <div class="col-2">
-                        <button    type="button"  class="add-randevuz" onclick="send_new_randevouz()"> Store Randevouz</button>
-                    </div>
-                    <form id="add-randevuz-form" class="d-none">
+
+                    <form id="add-randevuz-form" class="d-none form-card card-container">
 
                         <input type="hidden" id="user_id" name="user_id" class="form-control" >
 
@@ -524,6 +522,9 @@
                         <input type="hidden" class="form-control" id="user_info" name="user_info">
 
                         <input type="text" id="date_time" name="date_time" class="form-control" value="2022-01-18 20:00:00"  required>
+                        <div class="col-2">
+                            <button    type="button"  class="add-randevuz" onclick="send_new_randevouz()"> Apply Store Randevouz</button>
+                        </div>
 
                         <div id="add_rand_response"></div>
 
@@ -531,86 +532,124 @@
                 </div>
                 <div class="row">
                     <div class="col-2">
-                        <button type="button" class="delete-randevuz" onclick="show_delete_randevouz()"> Delete Randevouz</button>
+                        <button type="button" class="delete-randevuz" onclick="show_delete_randevouz()"> Cancel Randevouz</button>
                     </div>
 
-                    <div class="col-2">
-                        <button    type="button"  class="add-randevuz" onclick="delete_randevouz()"> Apply Deletion</button>
-                    </div>
                 </div>
 
-                <form class="row d-none" id ="delete-randevouz-form">
+                <form class="row d-none form-card" id ="delete-randevouz-form">
 
                     <input type="number" id="randevouz_id" name="randevouz_id" class="form-control" placeholder="Randevouz ID">
+                    <div class="col-2">
+                        <button    type="button"  class="delete-randevuz" onclick="delete_randevouz()"> Apply Cancel Randevouz</button>
+                    </div>
+                    <div id="del_rand_response"></div>
                 </form>
                 <div class="row"> 
                     <div class="col-2">
-
-                        <button onclick="spawn_randevouz()"  type="button" class="process-randevuz" > Process Randevouz</button>
+                        <button onclick="spawn_process_date()"  type="button" class="process-randevuz" > Process Randevouz</button>
                     </div>
-                    <div class="col-4">
 
-                        <input type="date" id="process-date" value="2021-12-29" > 
-                    </div>
-                    <div class="col-2">
+                    <div class="row form-card">
+                        <div class="col-12"></div>
+                        <div class="col-4 d-none"  id="process-date-class">
+                            <div >Please Select the date that you want to process the randevouz</div>
 
-                        <button onclick="save_randevouz()"  type="button" class="process-randevuz" > Save Randevouz</button>
-                    </div>
-                    <div class="col-2">
+                            <input type="date"  onchange="spawn_randevouz();" id="process-date" value="2021-12-29" > 
+                        </div>
+                        <form class="row " id ="process-randevouz-form">
 
-                        <button onclick="download_randevouz()"  type="button" class="download-randevuz" > Download Randevouz</button>
+                        </form>
+                        <div class="col-2  d-none" id="save-rand-but">
+
+                            <button onclick="save_randevouz()"  type="button" class="process-randevuz" > Save Randevouz</button>
+                        </div>
+                        <div class="col-2  d-none"  id="download-rand-but">
+
+                            <button onclick="download_randevouz()"  type="button" class="download-randevuz" > Download Randevouz</button>
+                        </div>
+
                     </div>
                     <div id="dvTable"></div>
-                    <div class="col-10"></div>
-
-                    <form class="row" id ="process-randevouz-form">
 
 
-
-                    </form>
-                </div>
-
-
-                <div class="col-2">
-                    <button onclick="show_done_randevouz()"  type="button" class="done-randevuz" > Show Done Randevouz</button>
-                </div>
-                <table class=" table table-dark d-none" id="done-rand-table"> </table>
-                <div class="col-2">
-                    <button onclick="show_done_randevouz()"  type="button" class="done-randevuz" > Show Done Randevouz</button>
-                </div>
-                <div class="col-sm-3">
-                    <button type="button" onclick="compare();" id="comp_exams_but" >Compare Exams</button>
-                    <input type="number" id="compare-user-id">
-                </div>
-                <div class="col-sm-3">
-                    <select name="measurement" id="measurement">
-                        <option value="blood_sugar">Blood Sugar</option>
-                        <option value="cholesterol">Cholesterol</option>
-                        <option value="iron">Iron</option>
-                        <option value="vitamin_d3">Vitamin D3</option>
-                        <option value="vitamin_b12">Vitamin B12</option>
-                    </select>
-                    <button type="button" onclick="click_draw_chart()" id="draw_chart_but">Compare Exams with Chart</button>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div id="content"></div>
+                    <div class="col-2">
+                        <button onclick="show_done_randevouz()"  type="button" class="done-randevuz" > Show Done Randevouz</button>
                     </div>
-                    <div class="col-sm-6">
-                        <div id="chart_3d" style="width: auto; height: auto;"></div>
+                    <table class=" table table-dark d-none" id="done-rand-table"> </table>
+                    <div class="col-12"></div>
+                    <div class="col-sm-">
+                        <input type="number" id="compare-user-id" placeholder="Patient ID">
+                        <button type="button" onclick="compare();" id="comp_exams_but" >Compare Exams</button>
                     </div>
-                </div>
-                <div class="row">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div id="content"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="chart_3d" style="width: auto; height: auto;"></div>
+                        </div>
+                    </div>
                     <div class="col-sm-3">
-                        <button type="button" onclick="show_therapies()" id="show_ther_but">Show Therapies</button>
+                        <select name="measurement" id="measurement">
+                            <option value="blood_sugar">Blood Sugar</option>
+                            <option value="cholesterol">Cholesterol</option>
+                            <option value="iron">Iron</option>
+                            <option value="vitamin_d3">Vitamin D3</option>
+                            <option value="vitamin_b12">Vitamin B12</option>
+                        </select>
+                        <button type="button" onclick="click_draw_chart()" id="draw_chart_but">Compare Exams with Chart</button>
                     </div>
-                    <div class="col-sm-9" id="therapy_div"></div>
-                </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <button type="button" onclick="show_therapies()" id="show_ther_but">Show Therapies</button>
+                        </div>
+                        <div class="col-sm-9" id="therapy_div"></div>
+                    </div>
 
+
+                </div>
 
             </div>
+            <div class="container-fluid treatment-container mt-5 " style=" align-content: center;">
+                <button id="add-treatment" onclick="add_treatment()">add therapy</button>
+                <form class="row card-container form-card  d-none" id="add_treat">
+                    <div class="col-2">
+                        <input type="number" id="treat-add-id" name="user_id" placeholder="User ID"> 
+                    </div>
+                    <div class="col-2 ">
 
-        </div>
+                        <input type="date" id="treat-start-date" name="start_date" class="form-control" value="2021-11-01"
+                               required>
+
+                    </div>
+                    <div class="col-2 ">
+
+                        <input type="date" id="treat-end-date" class="form-control"  name="end_date" value="2022-01-01"
+                               required>
+
+                    </div>
+                    <div class="col-5 ">
+
+                        <input type="text" id="treat-text" class="form-control" name="treatment_text" placeholder="treatment instructions"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="col-12 "></div>
+                    <div class="col-2 ">
+
+                        <button onclick="send_and_store_treatment()"  type="button" class="add-treat-but-class" id="add-treatment-but">Apply add therapy</button>
+
+                    </div>
+                    <div id="add-treatment-response"></div>
+
+                </form>
+
+            </div>
 
 
 

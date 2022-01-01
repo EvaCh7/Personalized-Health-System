@@ -69,7 +69,7 @@ public class Examinations {
      */
     public Examinations() {
     }
-
+   
     @GET
     @Path("/bloodTests/{amka}")
     @Produces(MediaType.APPLICATION_JSON)

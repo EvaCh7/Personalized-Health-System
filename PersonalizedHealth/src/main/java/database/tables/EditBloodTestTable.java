@@ -90,6 +90,57 @@ public class EditBloodTestTable {
         return null;
     }
 
+    public static String getAmkaByUserId(int user_id) {
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(EditBloodTestTable.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EditBloodTestTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Statement stmt = null;
+        try {
+            stmt = con.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(EditBloodTestTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT amka FROM users WHERE user_id= '" + user_id + "'");
+            while (rs.next()) {
+                return rs.getString("amka");
+            }
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static ArrayList<BloodTest> getAllBloodTestsById(int user_id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<BloodTest> btl = new ArrayList<BloodTest>();
+        String amka = getAmkaByUserId(user_id);
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka= '" + amka + "'");
+            while (rs.next()) {
+
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                BloodTest bt = gson.fromJson(json, BloodTest.class);
+                btl.add(bt);
+            }
+            return btl;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     public static ArrayList<BloodTest> getAllBloodTests(String amka) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -140,7 +191,6 @@ public class EditBloodTestTable {
         return null;
     }
 
-   
     public static BloodTest databaseToBloodTest(String amka, String date) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();

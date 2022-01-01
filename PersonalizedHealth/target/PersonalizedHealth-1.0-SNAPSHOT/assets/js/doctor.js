@@ -26,7 +26,7 @@ function update_doctor_data(e) {
         lastname: $("#surname").val(),
         birthdate: $("#birth-date").val(),
         gender: gender,
-        amka: $("#amka").val(),
+        amka: $("#doc-amka").val(),
         country: $("#country").val(),
         city: $("#city").val(),
         address: $("#address").val(),
@@ -88,27 +88,41 @@ function create_randevouz_element(rand_obj)
 `
     return element
 }
-var bit = false
-function spawn_randevouz()
-{
-    if (bit) {
-        $("#process-randevouz-form").html('')
-        bit = false
+let proc_date_bit = true;
+function spawn_process_date() {
+    if (proc_date_bit) {
+        $("#process-date-class").removeClass("d-none")
+        proc_date_bit = false
+        console.log("xaxa")
+    } else
+    {
+        $("#process-date-class").addClass("d-none")
+        proc_date_bit = true
 
-    } else {
-        console.log("oaoa22")
         $("#process-randevouz-form").html('')
-        var date = $("#process-date").val()
-        url = "examinations/randevouz/getRandevouz" + "/" + doctorData.doctor_id + "?date=" + date
-        console.log(url)
-        sendXmlGetRequest(url, call_back_get_randevouz, call_back_error_get_randevouz)
-        bit = true
+        $("#save-rand-but").addClass("d-none")
+        $("#download-rand-but").addClass("d-none")
+
+
 
     }
+}
+function spawn_randevouz()
+{
 
+    $("#save-rand-but").removeClass("d-none")
+    $("#download-rand-but").removeClass("d-none")
 
+    $("#process-randevouz-form").html('')
+    var date = $("#process-date").val()
+    url = "examinations/randevouz/getRandevouz" + "/" + doctorData.doctor_id + "?date=" + date
+    console.log(url)
+    sendXmlGetRequest(url, call_back_get_randevouz, call_back_error_get_randevouz)
 
 }
+
+
+
 
 function call_back_get_randevouz(response)
 {
@@ -210,7 +224,7 @@ function delete_randevouz()
 {
     var id = $("#randevouz_id").val()
     var url = "examinations/randevouz/cancelRandevouz" + "/" + id
-    sendXmlDeleteRequest(url, call_back_cancel_randevouz, call_back_error_cancer_randevouz)
+    sendXmlDeleteRequest(url, call_back_cancel_randevouz, call_back_error_cancel_randevouz)
 }
 function download_randevouz() {
     var date = $("#process-date").val()
@@ -241,14 +255,15 @@ function download_randevouz() {
 function call_back_cancel_randevouz(_response)
 {
     var json = JSON.parse(_response)
-    console.log(json.response)
+    $("#del_rand_response").html(json.response)
 
 }
 
-function call_back_error_cancer_randevouz(_response)
+function call_back_error_cancel_randevouz(_response)
 {
     var json = JSON.parse(_response)
-    console.log(json.response)
+    $("#del_rand_response").html(json.response)
+
 
 }
 
@@ -259,7 +274,6 @@ function send_new_randevouz()
     data["status"] = "free"
     console.log(doctorData)
     data["doctor_id"] = doctorData.doctor_id
-    console.log(data)
     sendXmlPostRequest("examinations/randevouz/addRandevouz", data, call_back_new_randev, call_back_error_new_randev)
 
 
@@ -268,8 +282,7 @@ function send_new_randevouz()
 function call_back_new_randev(response)
 {
     var response = JSON.parse(response)
-    console.log(response)
-
+    console.log(response.response)
     $("#add_rand_response").html(response.response)
 }
 
@@ -277,7 +290,6 @@ function call_back_error_new_randev(response)
 {
     var response = JSON.parse(response)
 
-    console.log(response)
     $("#add_rand_response").html(response.response)
 
 

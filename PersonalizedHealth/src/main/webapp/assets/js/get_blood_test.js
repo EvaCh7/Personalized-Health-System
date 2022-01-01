@@ -190,6 +190,7 @@ function call_back_error()
 }
 
 function show_therapies() {
+    
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {

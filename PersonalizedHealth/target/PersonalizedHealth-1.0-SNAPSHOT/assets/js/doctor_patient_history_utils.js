@@ -63,10 +63,20 @@ function call_back_error_show_done_rand(response) {
     json = JSON.parse(response)
     console.log(json.response)
 }
+var compare_bit = true
 function compare() {
-    var user_id = $("#compare-user-id").val()
-    var doctor_id = doctorData.doctor_id
-    compare_exams(doctor_id, user_id)
+    if (compare_bit) {
+        var user_id = $("#compare-user-id").val()
+        var doctor_id = doctorData.doctor_id
+        compare_exams(doctor_id, user_id)
+        compare_bit = false
+    } else
+    {
+        document.getElementById("content").innerHTML = ""
+        compare_bit = true
+
+    }
+
 
 }
 function compare_exams(doctor_id, user_id)
@@ -140,10 +150,20 @@ function
     html += "</tr></table><br>";
     return html;
 }
+var draw_chart_bit = true
 function click_draw_chart() {
-    var user_id = $("#compare-user-id").val()
-    var doctor_id = doctorData.doctor_id
-    drawChartFunc(doctor_id, user_id)
+    if (draw_chart_bit) {
+
+        var user_id = $("#compare-user-id").val()
+        var doctor_id = doctorData.doctor_id
+        drawChartFunc(doctor_id, user_id)
+        draw_chart_bit = false
+
+    } else {
+        $("#chart_3d").html("");
+        draw_chart_bit = true
+    }
+
 }
 function drawChartFunc(doctor_id, user_id) {
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareUsersDoneExams/" + doctor_id + "/" + user_id;
@@ -182,4 +202,84 @@ function draw_chart(response) {
 function call_back_error(response)
 {
     console.log(response)
+}
+
+
+let show_therapies_bit = true
+function show_therapies() {
+    if (show_therapies_bit) {
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const obj = JSON.parse(xhr.responseText);
+                var i = 1;
+                var count = Object.keys(obj).length;
+                for (id in obj) {
+                    document.getElementById("therapy_div").innerHTML += createTreatmentTable(obj[id], i);
+                    i++;
+                }
+                show_therapies_bit = false
+
+
+            } else if (xhr.status !== 200) {
+                document.getElementById('therapy_div')
+                        .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
+                        + JSON.stringify(xhr.responseText);
+                show_therapies_bit = false
+
+            }
+        };
+
+        var user_id = $("#compare-user-id").val()
+
+        var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showTreatmentsDone/" + doctorData.doctor_id + "/" + user_id;
+
+        xhr.open("GET", URL);
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
+    } else {
+        show_therapies_bit = true
+        $("#therapy_div").html("")
+
+    }
+
+}
+function send_and_store_treatment() {
+    var data = get_form_data_to_json("add_treat")
+    data["doctor_id"] = doctorData.doctor_id
+    url = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/addTreatment"
+    sendXmlPostRequest(url, data, call_back_send_treatment, call_back_error_send_treatment)
+}
+function call_back_send_treatment(response) {
+    response = JSON.parse(response)
+    $("#add-treatment-response").html(response.response)
+}
+function call_back_error_send_treatment(response) {
+    response = JSON.parse(response)
+
+    $("#add-treatment-response").html(response.response)
+}
+function createTreatmentTable(data, i) {
+    var html = "<table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><th>Category</th><th>Value</th></tr>";
+    for (const x in data) {
+        var category = x;
+        var value = data[x];
+        html += "<tr><td>" + category + "</td><td>" + value + "</td></tr>";
+    }
+    html += "</table><br>";
+    return html;
+}
+var bit_add_tret = true
+function add_treatment() {
+    if (bit_add_tret) {
+        $("#add_treat").removeClass("d-none")
+        bit_add_tret = false
+    } else {
+        $("#add_treat").addClass("d-none")
+
+        bit_add_tret = true
+    }
+
 }

@@ -1,4 +1,5 @@
 
+
 function update_data(e) {
     var gender
     if ($('#man').is(':checked')) {

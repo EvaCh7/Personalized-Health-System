@@ -108,8 +108,10 @@ function check_if_password_80_percent_of_characters_are_different(password) {
 
 }
 function check_password_strength() {
+    if (!document.getElementById("pswd"))
+        return
     var pswd = document.getElementById("pswd").value
-    if (pswd.length == 0)
+    if (pswd == null || pswd === undefined || pswd.length == 0)
         return
     document.getElementById("pswd-strength").classList.remove("d-none")
 
@@ -131,9 +133,13 @@ function handle_doctor_radio_button() {
     }
 }
 function on_change() {
-    var amka = document.getElementById("amka").value
+    if (document.getElementById("amka"))
+    {
+        var amka = document.getElementById("amka").value
+        check_amka(amka, birth_date)
+
+    }
     var birth_date = document.getElementById("birth-date").value
-    check_amka(amka, birth_date)
     check_password_strength()
     check_if_passwords_equal();
 
@@ -141,7 +147,7 @@ function on_change() {
 
 
 function check_amka(amka, date) {
-    if (amka.length == 0) {
+    if (amka == null || amka.length == 0) {
         valid_amka = false
         return
     }
@@ -194,7 +200,7 @@ function callback_register(response)
 {
 
     $("#error").html(remove_str($("#error").html(), " register error"))
-     document.getElementById("register-form").style.display="none";
+    document.getElementById("register-form").style.display = "none";
     $("#after_register").html("register successful<br>" + response)
 
 }
