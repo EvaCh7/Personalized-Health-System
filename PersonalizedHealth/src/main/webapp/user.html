@@ -14,6 +14,8 @@
         <script src="assets/js/requests_api.js"></script>
         <script src="assets/js/user.js"></script>
         <script src="assets/js/get_blood_test.js"></script>
+        <script src="assets/js/find_doctors.js"></script>
+
         <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 
@@ -132,7 +134,39 @@
                                    required>
                         </div>
 
-                        <div class="col-lg-6 dropdown">
+                        <div class="col-sm-6 ">
+                            <div class="col-sm-3">
+                                <input type="number" id="lat" class="form-control" readonly>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="number" id="lon" class="form-control" readonly>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+
+                            <div class="form-check">
+                                <input class="form-check-input" id="man" type="radio" name="gender-radio" value>
+                                <label class="form-check-label" for="man">
+                                    Man
+                                </label>
+
+                            </div>
+                            <div class="form-check">
+
+                                <input class="form-check-input" id="woman" type="radio" name="gender-radio" value>
+                                <label class="form-check-label" for="woman">
+                                    Woman
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6 dropdown">
                             <select  id="blood-type"   required>
                                 <option value="">Blood Type</option>
                                 <option value="Α+">A+</option>
@@ -147,26 +181,6 @@
                             </select>
                         </div>
                     </div>
-
-
-                    <div class="col-6">
-
-                        <div class="form-check">
-                            <input class="form-check-input" id="man" type="radio" name="gender-radio" value>
-                            <label class="form-check-label" for="man">
-                                Man
-                            </label>
-
-                        </div>
-                        <div class="form-check">
-
-                            <input class="form-check-input" id="woman" type="radio" name="gender-radio" value>
-                            <label class="form-check-label" for="woman">
-                                Woman
-                            </label>
-                        </div>
-                    </div>
-
 
 
 
@@ -545,6 +559,20 @@
                     <button type="button" onclick="show_therapies()" id="show_ther_but">Show Therapies</button>
                 </div>
                 <div class="col-sm-9" id="therapy_div"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <select name="options" id="options">
+                        <option value="house_dist">Distance based on location</option>
+                        <option value="car_dist">Distance based on car distance</option>
+                        <option value="price_rank">Rank based on price</option>
+                    </select>
+                    <button type="button" onclick="see_doctors()" id="see_doctors_but">See Doctors</button>
+
+                </div>
+                <div class="col-sm-9" id="print_docs">
+                    
+                </div>
             </div>
         </form>
     </body>

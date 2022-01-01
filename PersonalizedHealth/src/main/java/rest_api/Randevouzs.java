@@ -21,6 +21,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import database.tables.EditDoctorTable;
 import database.tables.EditRandevouzTable;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,6 +51,10 @@ import javax.ws.rs.core.Response;
 import mainClasses.Randevouz;
 import java.util.*;
 import java.util.stream.Stream;
+import mainClasses.Doctor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import static rest_api.DoctorsLoc.distance;
 
 /**
  * REST Web Service
@@ -284,6 +289,42 @@ public class Randevouzs {
         document.close();
         return document;
 
+    }
+
+    @GET
+    @Path("/rankedRandevouz")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response rankedRandevouz()
+            throws SQLException, ParseException, ClassNotFoundException {
+        Response.Status status = Response.Status.OK;
+
+        JSONArray resJson = new JSONArray();
+        ArrayList<Randevouz> res = EditRandevouzTable.databaseToRandevouzArray();
+
+        if (res.isEmpty()) {
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+        }
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditRandevouzTable.randevouzToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            JSONObject item = new JSONObject();
+            Doctor doctorInfo = EditDoctorTable.getDoctorInfo(jo.get("doctor_id").getAsInt());
+            String name = EditDoctorTable.doctorToJSON(doctorInfo);
+            JsonObject jo_name = (JsonObject) jsonParser.parse(name);
+
+            System.out.println(name);
+            item.put("First name", jo_name.get("firstname").getAsString());
+            item.put("Last name", jo_name.get("lastname").getAsString());
+            item.put("Price", jo.get("price").getAsInt());
+            item.put("Doctor Info", jo.get("doctor_info").getAsString());
+
+            resJson.add(item);
+        }
+
+        String json = new Gson().toJson(resJson);
+        return Response.status(status).type("application/json").entity(json).build();
     }
 
     @Path("/getRandevouzPDF/{id}")

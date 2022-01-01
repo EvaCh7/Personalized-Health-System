@@ -20,6 +20,7 @@ mainClasses\Doctor.class
 rest_api\Treatments.class
 database\tables\EditRandevouzTable.class
 servlets\test.class
+rest_api\DoctorsLoc.class
 mainClasses\Treatment.class
 servlets\certified_doctors.class
 database\tables\EditSimpleUserTable.class
