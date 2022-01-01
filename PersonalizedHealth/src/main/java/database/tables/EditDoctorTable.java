@@ -69,7 +69,7 @@ public class EditDoctorTable {
                     + "weight='" + doc.getWeight() + "',"
                     + "blooddonor='" + doc.isBloodDonor() + "',"
                     + "bloodtype='" + doc.getBloodtype() + "',"
-                    + "doctor_info='" + doc.getDoctor_info()+ "',"
+                    + "doctor_info='" + doc.getDoctor_info() + "',"
                     + "specialty='" + doc.getSpecialty() + "'"
                     + " WHERE username=\"" + doc.getUsername() + "\"";
             //stmt.execute(table);
@@ -104,7 +104,7 @@ public class EditDoctorTable {
             System.err.println(e.getMessage());
         }
     }
-    
+
     public static Doctor databaseToDoctor(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -143,13 +143,13 @@ public class EditDoctorTable {
         return null;
     }
 
-    public static ArrayList<Doctor> databaseToDoctors() throws SQLException, ClassNotFoundException {
+    public static ArrayList<Doctor> databaseToDoctorArray() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Doctor> doctors = new ArrayList<Doctor>();
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM doctors");
+            rs = stmt.executeQuery("SELECT * FROM doctors WHERE certified = 1");
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();
