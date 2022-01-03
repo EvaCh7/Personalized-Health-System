@@ -685,6 +685,36 @@
                 </div>
 
             </div>
+            <div class="container-fluid blood-donation-container mt-5 " style=" align-content: center;">
+                <form class="row form-card" id="blood_donation_form">
+                    <div class="col-10 ">
+
+                        <input type="text" id="treat-text" class="form-control" name="blood_don_text" placeholder=" Doctor's Message"
+                               required>
+
+                    </div>
+                    <div class="col-2 dropdown">
+                        <select  id="blood-type"   required>
+                            <option value="">Blood Type</option>
+                            <option value="Α+">A+</option>
+                            <option value="Α-">A-</option>
+                            <option value="Β-">Β-</option>
+                            <option value="Β+">Β+</option>
+                            <option value="AΒ-">AΒ-</option>
+                            <option value="AΒ+">AΒ+</option>
+                            <option value="0-">0-</option>
+                            <option value="0+">0+</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+                    <div class="col-2 ">
+                        <div id="store-response"></div>
+
+                        <button onclick="store_messages()"  type="button" id="blood_donation_msg">Send Message</button>
+
+                    </div>
+                </form>
+            </div>
 
 
 
