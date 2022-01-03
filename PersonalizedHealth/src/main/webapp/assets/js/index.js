@@ -7,7 +7,10 @@ function showLoginForm() {
 
 }
 
+function ShowVisitorPage() {
+    $("#ajaxContent").load("visitor.html");
 
+}
 
 function showregisterForm() {
     $("#ajaxContent").load("register.html");

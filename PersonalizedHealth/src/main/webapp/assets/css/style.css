@@ -1,13 +1,13 @@
 .form-card {
-  background-color: rgb(51, 83, 109);
-  text-align: left;
-  border-radius: 5%;
+    background-color: rgb(51, 83, 109);
+    text-align: left;
+    border-radius: 5%;
 }
 
 html,
 body {
-  background-color: rgba(11, 29, 68, 0.993);
-  color: white;
+    background-color: rgba(11, 29, 68, 0.993);
+    color: white;
 }
 label
 {
@@ -20,9 +20,17 @@ label
 }
 
 table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 table tr {
-  border-bottom: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+footer {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:60px;   /* Height of the footer */
+    background-color: whitesmoke;
 }
