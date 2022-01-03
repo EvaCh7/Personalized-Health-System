@@ -83,7 +83,7 @@ public class DoctorsLoc {
             throws SQLException, ParseException, ClassNotFoundException {
         Response.Status status = Response.Status.OK;
         JSONArray resJson = new JSONArray();
-        ArrayList<Doctor> res = EditDoctorTable.databaseToDoctors();
+        ArrayList<Doctor> res = EditDoctorTable.databaseToDoctorArray();
 
         if (res.isEmpty()) {
             return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
@@ -99,6 +99,36 @@ public class DoctorsLoc {
 
             JSONObject item = new JSONObject();
             item.put("Distance(in kilometers)", distance_calc);
+            item.put("First Name", jo.get("firstname").getAsString());
+            item.put("Last Name", jo.get("lastname").getAsString());
+
+            resJson.add(item);
+        }
+
+        String json = new Gson().toJson(resJson);
+        return Response.status(status).type("application/json").entity(json).build();
+    }
+
+    @GET
+    @Path("/doctorsLatLon")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response doctorLatLon() throws SQLException, ParseException, ClassNotFoundException {
+        Response.Status status = Response.Status.OK;
+        JSONArray resJson = new JSONArray();
+        ArrayList<Doctor> res = EditDoctorTable.databaseToDoctorArray();
+
+        if (res.isEmpty()) {
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+        }
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditDoctorTable.doctorToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            JSONObject item = new JSONObject();
+
+            item.put("lat", jo.get("lat").getAsDouble());
+            item.put("lon", jo.get("lon").getAsDouble());
             item.put("First Name", jo.get("firstname").getAsString());
             item.put("Last Name", jo.get("lastname").getAsString());
 

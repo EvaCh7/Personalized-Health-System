@@ -57,7 +57,7 @@ public class get_Users extends HttpServlet {
         try {
             JsonArray json_array = new JsonArray();
 
-            ArrayList<Doctor> res_doc = EditDoctorTable.databaseToDoctors();
+            ArrayList<Doctor> res_doc = EditDoctorTable.databaseToDoctorArray();
             for (Doctor doc : res_doc) {
                 String json_str = EditDoctorTable.doctorToJSON(doc);
                 JsonObject user_json = JsonParser.parseString(json_str).getAsJsonObject();
