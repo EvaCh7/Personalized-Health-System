@@ -164,8 +164,8 @@ function call_back_error_save_randevouz(response) {
 function fill_array(key, value)
 {
     if (key in data) {
-        console.log(key)
         array.push(data)
+        console.log("inserted data:", data)
         data = {}
     }
     if (value == "")
@@ -181,10 +181,17 @@ let data = {};
 
 function get_form_data_to_json_array(form_id)
 {
+    data = {}
+    array = new Array();
     let myForm = document.getElementById(form_id);
     const formData = new FormData(myForm);
 
     formData.forEach((value, key) => (fill_array(key, value)));
+
+    array.push(data)
+    console.log("inserted data on end :", data)
+
+    return JSON.parse(JSON.stringify(array));
 
 }
 function call_back_error_get_randevouz(response)
@@ -340,7 +347,7 @@ function fill_doctor_info(responseData) {
         $("#no").prop("checked", true);
 
     $("#birth-date").val(responseData.birthdate)
-    $("#amka").val(responseData.amka)
+    $("#doc-amka").val(responseData.amka)
     $("#country").val(responseData.country)
     $("#city").val(responseData.city)
     $("#address").val(responseData.address)

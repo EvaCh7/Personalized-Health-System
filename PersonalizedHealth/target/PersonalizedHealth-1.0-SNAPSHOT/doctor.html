@@ -19,6 +19,8 @@
         <script src="assets/js/requests_api.js"></script>
         <script src="assets/js/doctor.js"></script>
         <script src="assets/js/doctor_patient_history_utils.js"></script>
+        <script src="assets/js/doctor_message_utils.js"></script>
+
 
 
 
@@ -650,7 +652,39 @@
                 </form>
 
             </div>
+            <div class="container-fluid message-container mt-5 " style=" align-content: center;">
+                <div class="row ">
 
+                    <div class="col-2 ">
+                        <button onclick="show_user_id_select()"  type="button"  id="show-messages-but">Show Messages</button>
+                    </div>
+                    <div class="col-2 d-none" id="user-id-messages">
+                        <input type="number" id="user_id_msg_but" onchange="spawn_messages_on_change()" name="user_id" placeholder="User ID"> 
+                    </div>
+                    <div class="col-10 "></div>
+                    <div class="col-6 " style="text-align: center">
+                        <div id="patient-msg-label" class="d-none" >Patient Messages</div>
+                        <div id="patient-messages"></div>
+                    </div>
+                    <div style="text-align: center" class="col-6 ">
+
+                        <div id="doctor-ans-label" class="d-none">Doctor Answer</div>
+                        <form id="doctor-answers">
+
+
+                        </form>
+
+                        <div class="col-2 ">
+                            <div id="store-response"></div>
+
+                            <button onclick="store_messages()"  type="button" class="d-none"  id="store-messages">Store Answers</button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
 
 

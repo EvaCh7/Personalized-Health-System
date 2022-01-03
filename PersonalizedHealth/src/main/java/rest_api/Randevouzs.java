@@ -179,6 +179,24 @@ public class Randevouzs {
 
     }
 
+    public static  boolean hasUserAndDocADoneRandevouz(int doctor_id, int user_id) {
+        try {
+            JsonArray array = EditRandevouzTable.getDoctosDoneRandevouz(doctor_id);
+            for (JsonElement js : array) {
+                JsonObject json = js.getAsJsonObject();
+                if (json.get("user_id").getAsInt() == user_id) {
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
     @Path("/getRandevouz/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
