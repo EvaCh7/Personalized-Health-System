@@ -64,9 +64,7 @@ function store_messages() {
         data = null;
     }
     //var data = $('form').serializeArray("doctor-answers")
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
     for (var index in data) {
 
         if (data[index]) {
@@ -76,7 +74,7 @@ function store_messages() {
             data[index]["sender"] = "doctor"
             data[index]["blood_donation"] = doctorData.blooddonor
             data[index]["bloodtype"] = doctorData.bloodtype
-            data[index]["date_time"] = (date + " " + time)
+            data[index]["date_time"] = get_date_time();
         }
 
 

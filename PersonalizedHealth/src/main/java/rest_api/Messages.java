@@ -12,7 +12,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.tables.EditMessageTable;
 import database.tables.EditRandevouzTable;
+import database.tables.EditSimpleUserTable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
@@ -27,7 +29,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import mainClasses.Message;
 import mainClasses.Randevouz;
+import mainClasses.SimpleUser;
 
 /**
  * REST Web Service
@@ -56,6 +60,49 @@ public class Messages {
     public String getJson() {
         //TODO return proper representation object
         throw new UnsupportedOperationException();
+    }
+
+    @Path("/sendMessageToBloodDonors")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sendMessageToBloodDonors(String json
+    ) {
+        String response = "{\"response\": \"error couldn't send the messages\" }";
+        Response.Status status;
+        status = Response.Status.BAD_GATEWAY;
+        JsonObject js = new Gson().fromJson(json, JsonObject.class);
+        String bloodType = js.get("bloodtype").getAsString();
+        String message = js.get("message").getAsString();
+        try {
+            ArrayList<SimpleUser> users = new EditSimpleUserTable().databaseToUser();
+            for (SimpleUser user : users) {
+                System.out.println(bloodType);
+                if (user.getBloodtype() != null && user.getBloodtype().equals(bloodType)) {
+                    Message msg = new Message();
+                    System.out.println("lalala2");
+
+                    msg.setBlood_donation(1);
+                    msg.setBloodtype(bloodType);
+                    msg.setDoctor_id(js.get("doctor_id").getAsInt());
+                    msg.setMessage(message);
+                    msg.setSender("doctor");
+                    msg.setUser_id(user.getUser_id());
+                    msg.setDate_time(js.get("date_time").getAsString());
+                    System.out.println("lalala3");
+
+                    new EditMessageTable().createNewMessage(msg);
+                }
+            }
+            response = "{\"response\": \" Messages sent succesfully\" }";
+            return Response.ok().type("application/json").entity(response).build();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Messages.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Messages.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Response.status(status).type("application/json").entity(response).build();
+
     }
 
     @Path("/AddDoctorAnswers")
@@ -89,7 +136,6 @@ public class Messages {
                 if (!js.isJsonNull()) {
                     JsonObject json_obj = new Gson().fromJson(js, JsonObject.class);
                     String _js = json_obj.toString();
-                    System.out.println("lalala" + _js);
                     new EditMessageTable().addMessageFromJSON(_js);
                 }
 
@@ -98,7 +144,6 @@ public class Messages {
             }
             ++i;
         }
-        System.out.println("omgg");
         response = "{\"response\": \"Answers Added Succesfully\" }";
         return Response.ok().type("application/json").entity(response).build();
 

@@ -20,6 +20,10 @@
         <script src="assets/js/doctor.js"></script>
         <script src="assets/js/doctor_patient_history_utils.js"></script>
         <script src="assets/js/doctor_message_utils.js"></script>
+        <script src="assets/js/doctor_blood_donation_utils.js"></script>
+        <script src="assets/js/date_utils.js"></script>
+
+
 
 
 
@@ -689,12 +693,12 @@
                 <form class="row form-card" id="blood_donation_form">
                     <div class="col-10 ">
 
-                        <input type="text" id="treat-text" class="form-control" name="blood_don_text" placeholder=" Doctor's Message"
+                        <input type="text" id="treat-text" class="form-control" name="message" placeholder=" Doctor's Message"
                                required>
 
                     </div>
                     <div class="col-2 dropdown">
-                        <select  id="blood-type"   required>
+                        <select  id="blood-type" name="bloodtype"   required>
                             <option value="">Blood Type</option>
                             <option value="Α+">A+</option>
                             <option value="Α-">A-</option>
@@ -708,9 +712,9 @@
                         </select>
                     </div>
                     <div class="col-2 ">
-                        <div id="store-response"></div>
+                        <div id="blod-don-msg-response"></div>
 
-                        <button onclick="store_messages()"  type="button" id="blood_donation_msg">Send Message</button>
+                        <button onclick="send_massive_msg()"  type="button" id="blood_donation_msg">Send Message</button>
 
                     </div>
                 </form>
