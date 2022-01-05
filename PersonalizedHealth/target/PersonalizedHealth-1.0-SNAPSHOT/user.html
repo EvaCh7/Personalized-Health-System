@@ -13,9 +13,12 @@
         <script src="assets/js/form_utils.js"></script>
         <script src="assets/js/requests_api.js"></script>
         <script src="assets/js/user.js"></script>
+        <script src="assets/js/doctor.js"></script>
+        <script src="assets/js/date_utils.js"></script>
         <script src="assets/js/get_blood_test.js"></script>
         <script src="assets/js/find_doctors.js"></script>
         <script src="assets/js/user_randevouz.js"></script>
+        <script src="assets/js/user_message_utils.js"></script>
 
 
         <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -176,8 +179,8 @@
 
                         </div>
                         <div class="col-sm-6 dropdown">
-                            <select  id="blood-type"   required>
-                                <option value="">Blood Type</option>
+                            <select  id="blood-type"  name="bloodtype" required>
+                                <option value="" disabled>Blood Type</option>
                                 <option value="Α+">A+</option>
                                 <option value="Α-">A-</option>
                                 <option value="Β-">Β-</option>
@@ -616,6 +619,38 @@
                 </div>
             </div>
         </form>
+
+        <div class="container-fluid message-container mt-5 " style=" align-content: center;">
+            <div class="row ">
+
+                <div class="col-2 ">
+                    <button onclick="show_doc_id_select()"  type="button"  id="show-messages-but">Show Messages</button>
+                </div>
+                <div class="col-2 d-none" id="doc-id-messages">
+                    <input type="number" id="doc_id_msg_but" onchange="spawn_messages_on_change()" name="doctor_id" placeholder="Doctor ID"> 
+                </div>
+                <div class="col-10 "></div>
+                <div class="col-6 " style="text-align: center">
+                    <div id="doctor-mes-label" class="d-none" >Doctor Messages</div>
+                    <div id="doctor-messages"></div>
+                </div>
+                <div style="text-align: center" class="col-6 ">
+
+                    <div id="user-ans-label" class="d-none">User Answer</div>
+                    <form id="user-answers">
+                    </form>
+
+                    <div class="col-2 ">
+                        <div id="store-response"></div>
+
+                        <button onclick="store_messages()"  type="button" class="d-none"  id="store-messages">Store Answers</button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </body>
 
 </html>

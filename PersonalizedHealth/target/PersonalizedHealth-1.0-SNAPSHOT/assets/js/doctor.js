@@ -36,7 +36,7 @@ function update_doctor_data(e) {
         height: $("#height").val(),
         weight: $("#weight").val(),
         blooddonor: blood_donor,
-        bloodtype: $("#blood-type").val(),
+        bloodtype: $("#blood-type-doc").val(),
         specialty: get_doctor_specialty(),
         doctor_info: get_doctor_info()
 
@@ -327,7 +327,7 @@ function call_back_error_update_data(response)
 }
 
 function fill_doctor_info(responseData) {
-    console.log(responseData)
+    console.log(responseData.bloodtype)
     $("#dc-speciality").val(responseData.specialty).change()
     $("#doctor-text-area").val(responseData.doctor_info)
     $("#username").val(responseData.username)
@@ -336,10 +336,12 @@ function fill_doctor_info(responseData) {
     $("#firstname").val(responseData.firstname)
     $("#surname").val(responseData.lastname)
     $("#birth-date").val(responseData.birthdate)
-    if (responseData.gender === "Male")
+    if (responseData.gender === "male")
         $("#man").prop("checked", true);
-    else
+    else if (responseData.gender === "female")
         $("#woman").prop("checked", true);
+    else
+        $("#other").prop("checked", true);
 
     if (responseData.blooddonor === "1")
         $("#blood-giver").prop("checked", true);
@@ -354,7 +356,7 @@ function fill_doctor_info(responseData) {
     $("#telephone").val(responseData.telephone)
     $("#height").val(responseData.height)
     $("#weight").val(responseData.weight)
-    $("#blood-type").val(responseData.bloodtype).change()
+    $("#blood-type-doc").val(responseData.bloodtype)
 }
 
 let doctorData;
@@ -364,8 +366,8 @@ function get_doctor_data()
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const responseData = JSON.parse(xhr.responseText);
-            fill_doctor_info(responseData)
-            doctorData = responseData
+            fill_doctor_info(responseData);
+            doctorData = responseData;
         } else if (xhr.status !== 200) {
         }
     };

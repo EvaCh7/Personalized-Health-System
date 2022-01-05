@@ -63,9 +63,9 @@ function fill_user_info(responseData) {
     $("#birth-date").val(responseData.birthdate)
     if (responseData.gender === "male")
         $("#man").prop("checked", true);
-    else if(responseData.gender === "female")
+    else if (responseData.gender === "female")
         $("#woman").prop("checked", true);
-    else 
+    else
         $("#other").prop("checked", true);
 
     if (responseData.blooddonor === "1")
@@ -89,12 +89,15 @@ function fill_user_info(responseData) {
 //    console.log(select_blood)
 //    $(select_blood).attr('selected', 'selected');
 }
+
+let userData;
 function get_data() {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const responseData = JSON.parse(xhr.responseText);
-            fill_user_info(responseData)
+            fill_user_info(responseData);
+            userData = responseData;
         } else if (xhr.status !== 200) {
         }
     };
