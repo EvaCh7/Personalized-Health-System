@@ -101,6 +101,7 @@ public class DoctorsLoc {
             item.put("Distance(in kilometers)", distance_calc);
             item.put("First Name", jo.get("firstname").getAsString());
             item.put("Last Name", jo.get("lastname").getAsString());
+            item.put("Doctor ID", jo.get("doctor_id").getAsInt());
 
             resJson.add(item);
         }
@@ -131,6 +132,7 @@ public class DoctorsLoc {
             item.put("lon", jo.get("lon").getAsDouble());
             item.put("First Name", jo.get("firstname").getAsString());
             item.put("Last Name", jo.get("lastname").getAsString());
+            item.put("Doctor ID", jo.get("doctor_id").getAsInt());
 
             resJson.add(item);
         }

@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import database.tables.EditDoctorTable;
 import database.tables.EditRandevouzTable;
+import database.tables.EditSimpleUserTable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -76,6 +77,58 @@ public class Randevouzs {
     private boolean isRandevouzMoreThan30Minutes(String time) {
         LocalTime _time = LocalTime.parse(time);
         return false;
+    }
+
+    @Path("/reserveRandevouz/{randevouz_id}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response reserveRandevouz(@PathParam("randevouz_id") int randevouz_id) throws SQLException, ClassNotFoundException {
+        Response.Status status = Response.Status.BAD_REQUEST;
+        String response = "{\"response\": \"Error: Randevouz wasn't reserved.\" }";
+
+        try {
+            EditRandevouzTable.reserveRandevouz(randevouz_id);
+            status = Response.Status.OK;
+            response = "{\"response\": \"Randevouz was reserved succesfully.\" }";
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return Response.status(status).type("application/json").entity(response).build();
+    }
+
+    @Path("/showAllRandevouz/{username}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response showRandevouz(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
+        JSONArray resJson = new JSONArray();
+        Response.Status status = Response.Status.OK;
+
+        int id = EditSimpleUserTable.getIDfromUsername(username);
+
+        if (id == 0) {
+            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"Given username doesn't exist\"}").build();
+        }
+
+        ArrayList<Randevouz> res = EditRandevouzTable.showRandevouzOfID(id);
+        
+        if (res.isEmpty()) {
+            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+        }
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditRandevouzTable.randevouzToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            resJson.add(jo);
+        }
+
+        String json = new Gson().toJson(resJson);
+        return Response.status(status).type("application/json").entity(json).build();
     }
 
     @Path("/updateRandevouz")
@@ -179,7 +232,7 @@ public class Randevouzs {
 
     }
 
-    public static  boolean hasUserAndDocADoneRandevouz(int doctor_id, int user_id) {
+    public static boolean hasUserAndDocADoneRandevouz(int doctor_id, int user_id) {
         try {
             JsonArray array = EditRandevouzTable.getDoctosDoneRandevouz(doctor_id);
             for (JsonElement js : array) {
@@ -337,6 +390,7 @@ public class Randevouzs {
             item.put("Last name", jo_name.get("lastname").getAsString());
             item.put("Price", jo.get("price").getAsInt());
             item.put("Doctor Info", jo.get("doctor_info").getAsString());
+            item.put("Doctor ID", jo.get("doctor_id").getAsInt());
 
             resJson.add(item);
         }
@@ -441,7 +495,7 @@ public class Randevouzs {
         try {
 
             if (rand_utils.cancelRandevouz(id)) {
-                response = "{\"response\": \"Randevouz cancelled succesfuly\" }";
+                response = "{\"response\": \"Randevouz cancelled successfully\" }";
                 status = Response.Status.OK;
                 return Response.status(status).type("application/json").entity(response).build();
 

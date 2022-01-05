@@ -61,10 +61,12 @@ function fill_user_info(responseData) {
     $("#firstname").val(responseData.firstname)
     $("#surname").val(responseData.lastname)
     $("#birth-date").val(responseData.birthdate)
-    if (responseData.gender === "Male")
+    if (responseData.gender === "male")
         $("#man").prop("checked", true);
-    else
+    else if(responseData.gender === "female")
         $("#woman").prop("checked", true);
+    else 
+        $("#other").prop("checked", true);
 
     if (responseData.blooddonor === "1")
         $("#blood-giver").prop("checked", true);

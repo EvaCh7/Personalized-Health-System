@@ -90,6 +90,23 @@ public class EditSimpleUserTable {
         }
     }
 
+    public static int getIDfromUsername(String username) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT user_id FROM users WHERE username = '" + username + "'");
+            while (rs.next()) {
+                return rs.getInt("user_id");
+            }
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return 0;
+    }
+
     public SimpleUser databaseToSimpleUser(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
