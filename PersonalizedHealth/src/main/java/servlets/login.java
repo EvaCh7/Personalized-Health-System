@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import mainClasses.Doctor;
+import mainClasses.SimpleUser;
 import mainClasses.Utils;
 
 /**
@@ -43,10 +44,11 @@ public class login extends HttpServlet {
         if (session.getAttribute("loggedIn") != null) {
             response.setStatus(200);
 
-            String json = "{ \"username\":\"" + session.getAttribute("loggedIn").toString() + "\", \"type\":\"" + session.getAttribute("type").toString() + "\"}";
+            String json = "{ \"username\":\"" + session.getAttribute("loggedIn").toString() + "\", \"type\":\"" + session.getAttribute("type").toString() + "\"  ,\"id\":\"" + session.getAttribute("id").toString() + "\"  }";
+
             response.getWriter().write(json);
         } else {
-            response.setStatus(403);
+            response.setStatus(500);
         }
 
     }
@@ -71,11 +73,15 @@ public class login extends HttpServlet {
         String password = user_json.get("password").getAsString();
         HttpSession session = request.getSession(true);
         Doctor dc;
+        SimpleUser user;
         EditDoctorTable doctor_table_utils = new EditDoctorTable();
         try {
-            if (simple_user_utils.databaseToSimpleUser(username, password) != null) {
+            if ((user = simple_user_utils.databaseToSimpleUser(username, password)) != null) {
+
                 session.setAttribute("loggedIn", username);
                 session.setAttribute("password", password);
+                session.setAttribute("id", user.getUser_id());
+
                 if (username.equals("admin")) {
                     session.setAttribute("type", "admin");
 
@@ -94,16 +100,20 @@ public class login extends HttpServlet {
                 }
                 session.setAttribute("loggedIn", username);
                 session.setAttribute("password", password);
+                session.setAttribute("id", dc.getDoctor_id());
+
             } else {
                 session.setAttribute("type", "doesn't exist");
                 return;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(login.class
+                    .getName()).log(Level.SEVERE, null, ex);
             response.setStatus(403);
             return;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(login.class
+                    .getName()).log(Level.SEVERE, null, ex);
             response.setStatus(403);
             return;
         }

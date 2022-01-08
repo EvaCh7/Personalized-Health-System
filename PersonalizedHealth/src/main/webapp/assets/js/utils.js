@@ -83,7 +83,6 @@ function fill_empty_with_null(data, key, value)
         data[key] = null;
     } else
     {
-        console.log(key)
         data[key] = value
     }
 }
@@ -92,7 +91,7 @@ function get_form_data_to_json(form_id)
     let myForm = document.getElementById(form_id);
     const formData = new FormData(myForm);
     const data = {};
-    
+
     formData.forEach((value, key) => (fill_empty_with_null(data, key, value)));
     return data;
 

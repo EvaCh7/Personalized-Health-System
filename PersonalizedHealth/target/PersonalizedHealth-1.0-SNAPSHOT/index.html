@@ -21,6 +21,10 @@
         crossorigin="anonymous"></script>
         <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
         <script src="assets/js/index.js"></script>
+        <script src="assets/js/requests_api.js"></script>
+
+        <script src="assets/js/doctor_notifications.js"></script>
+
 
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
@@ -44,6 +48,9 @@
                     </a>
                     <a class="navbar-brand" href="#">
                         <button class="button" onclick="ShowVisitorPage()">Visitor</button>
+                    </a>
+                    <a class="navbar-brand" href="#">
+                        <button onclick="button_clicked()" type="button" class="btn btn-lg btn-danger"  id="notifcations"   data-placement="bottom" data-bs-toggle="popover" title="Notifications" data-bs-content="">Notifications</button>
                     </a>
 
                 </div>

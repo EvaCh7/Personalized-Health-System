@@ -44,6 +44,30 @@ public class EditMessageTable {
         return json;
     }
 
+    public static JsonArray GetBloodDonationMessages(int user_id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        JsonArray array = new JsonArray();
+
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM message WHERE user_id=" + user_id + " AND blood_donation=1");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                JsonElement bt = gson.fromJson(json, JsonElement.class);
+                array.add(bt);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        stmt.close();
+        con.close();
+        return array;
+    }
+
     public static JsonArray SelectMessagesOfDoctorWithPatient(int user_id, int doctor_id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -63,6 +87,8 @@ public class EditMessageTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return array;
     }
 
@@ -89,6 +115,7 @@ public class EditMessageTable {
             con.close();
         } catch (SQLException ex) {
             Logger.getLogger(EditMessageTable.class.getName()).log(Level.SEVERE, null, ex);
+
             return false;
 
         } catch (ClassNotFoundException ex) {
@@ -96,6 +123,7 @@ public class EditMessageTable {
             return false;
 
         }
+
         return true;
 
     }
@@ -116,6 +144,8 @@ public class EditMessageTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return null;
     }
 

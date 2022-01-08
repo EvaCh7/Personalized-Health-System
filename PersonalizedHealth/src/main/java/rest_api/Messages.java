@@ -64,22 +64,26 @@ public class Messages {
 
     @Path("/sendMessageToBloodDonors")
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response sendMessageToBloodDonors(String json
     ) {
         String response = "{\"response\": \"error couldn't send the messages\" }";
         Response.Status status;
         status = Response.Status.BAD_GATEWAY;
+        System.err.println(json);
+
         JsonObject js = new Gson().fromJson(json, JsonObject.class);
         String bloodType = js.get("bloodtype").getAsString();
         String message = js.get("message").getAsString();
+        System.err.println(js);
         try {
             ArrayList<SimpleUser> users = new EditSimpleUserTable().databaseToUser();
+
             for (SimpleUser user : users) {
-                System.out.println(bloodType);
-                if (user.getBloodtype() != null && user.getBloodtype().equals(bloodType)) {
+                System.out.println("use blood type: " + user.getBloodtype());
+                if (user.getBloodtype() != null && user.getBloodtype().equals(bloodType) && user.getBlooddonor() == 1) {
                     Message msg = new Message();
-                    System.out.println("lalala2");
 
                     msg.setBlood_donation(1);
                     msg.setBloodtype(bloodType);
@@ -88,7 +92,6 @@ public class Messages {
                     msg.setSender("doctor");
                     msg.setUser_id(user.getUser_id());
                     msg.setDate_time(js.get("date_time").getAsString());
-                    System.out.println("lalala3");
 
                     new EditMessageTable().createNewMessage(msg);
                 }

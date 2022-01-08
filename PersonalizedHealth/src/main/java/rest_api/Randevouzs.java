@@ -21,7 +21,9 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import database.tables.EditBloodTestTable;
 import database.tables.EditDoctorTable;
+import database.tables.EditMessageTable;
 import database.tables.EditRandevouzTable;
 import database.tables.EditSimpleUserTable;
 import java.io.File;
@@ -115,7 +117,7 @@ public class Randevouzs {
         }
 
         ArrayList<Randevouz> res = EditRandevouzTable.showRandevouzOfID(id);
-        
+
         if (res.isEmpty()) {
             return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
         }
@@ -265,7 +267,6 @@ public class Randevouzs {
             try {
                 status = Response.Status.OK;
                 JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
-                System.out.println(array.toString());
 
                 return Response.status(status).type("application/json").entity(array.toString()).build();
             } catch (SQLException ex) {
@@ -300,6 +301,29 @@ public class Randevouzs {
             return Response.status(status).type("application/json").entity(response).build();
         }
 
+    }
+
+    @Path("/getBloodDonationRandevouz/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBloodDonationRandevouz(
+            @PathParam("id") int id
+    ) {
+
+        String response = "{\"response\": \"error invalid ID or Server error\" }";
+        Response.Status status;
+        try {
+            JsonArray blood_donation_messages = EditMessageTable.GetBloodDonationMessages(id);
+            return Response.ok().type("application/json").entity(blood_donation_messages.toString()).build();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        status = Response.Status.BAD_GATEWAY;
+
+        return Response.status(status).type("application/json").entity(response).build();
     }
 
     private void addTableData(PdfPTable table, JsonArray array) {
@@ -341,9 +365,11 @@ public class Randevouzs {
         try {
             PdfWriter.getInstance(document, new FileOutputStream(fileName));
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Randevouzs.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
-            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Randevouzs.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         document.open();
@@ -355,7 +381,8 @@ public class Randevouzs {
         try {
             document.add(table);
         } catch (DocumentException ex) {
-            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Randevouzs.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         document.close();
         return document;
@@ -421,9 +448,11 @@ public class Randevouzs {
                         .build();
 
             } catch (SQLException ex) {
-                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Randevouzs.class
+                        .getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Randevouzs.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
             status = Response.Status.BAD_REQUEST;
 
@@ -446,9 +475,11 @@ public class Randevouzs {
                         .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"") //optional
                         .build();
             } catch (SQLException ex) {
-                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Randevouzs.class
+                        .getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Randevouzs.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
             status = Response.Status.BAD_REQUEST;
 
@@ -474,9 +505,11 @@ public class Randevouzs {
             return Response.status(status).type("application/json").entity(array.toString()).build();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Randevouzs.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Randevouzs.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return Response.status(status).type("application/json").entity(response).build();
 
@@ -502,9 +535,11 @@ public class Randevouzs {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(Randevouz.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Randevouz.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Randevouz.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Randevouz.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         status = Response.Status.BAD_REQUEST;
 

@@ -72,7 +72,7 @@ function store_messages() {
             data[index]["doctor_id"] = doctorData.doctor_id
             data[index]["user_id"] = $("#user_id_msg_but").val()
             data[index]["sender"] = "doctor"
-            data[index]["blood_donation"] = doctorData.blooddonor
+            data[index]["blood_donation"] = 0
             data[index]["bloodtype"] = doctorData.bloodtype
             data[index]["date_time"] = get_date_time();
         }

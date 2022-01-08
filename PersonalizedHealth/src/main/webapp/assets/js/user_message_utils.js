@@ -76,7 +76,7 @@ function store_messages() {
             data[index]["doctor_id"] = $("#doc_id_msg_but").val();
             data[index]["user_id"] = userData.user_id;
             data[index]["sender"] = "user";
-            data[index]["blood_donation"] = userData.blooddonor;
+            data[index]["blood_donation"] = 0;
             data[index]["bloodtype"] = userData.bloodtype;
             data[index]["date_time"] = get_date_time();
         }

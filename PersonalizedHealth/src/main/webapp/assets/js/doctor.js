@@ -356,7 +356,7 @@ function fill_doctor_info(responseData) {
     $("#telephone").val(responseData.telephone)
     $("#height").val(responseData.height)
     $("#weight").val(responseData.weight)
-    $("#blood-type-doc").val(responseData.bloodtype)
+    $("#blood-type").val(responseData.bloodtype)
 }
 
 let doctorData;

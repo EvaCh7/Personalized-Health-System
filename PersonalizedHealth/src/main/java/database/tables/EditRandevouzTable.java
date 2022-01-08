@@ -47,6 +47,8 @@ public class EditRandevouzTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return js_arr;
     }
 
@@ -68,6 +70,8 @@ public class EditRandevouzTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return js_arr;
     }
 
@@ -89,6 +93,8 @@ public class EditRandevouzTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return js_arr;
     }
 
@@ -111,6 +117,8 @@ public class EditRandevouzTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return null;
     }
 
@@ -130,6 +138,8 @@ public class EditRandevouzTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return null;
     }
 
@@ -197,7 +207,7 @@ public class EditRandevouzTable {
         }
         return null;
     }
-    
+
     public static ArrayList<Randevouz> showRandevouzOfID(int user_id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
