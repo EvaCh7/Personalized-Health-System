@@ -103,6 +103,10 @@ createCompareTable(data) {
     for (var i = 0; i < Object.keys(data).length; i++) {
         html += "<td>" + data[i].test_date + "</td>";
     }
+    html += "</tr><tr><td>Blood Test ID</td>";
+    for (var i = 0; i < Object.keys(data).length; i++) {
+        html += "<td>" + data[i].bloodtest_id + "</td>";
+    }
     html += "</tr><tr><td>Blood Sugar</td>";
     for (var i = 0; i < Object.keys(data).length; i++) {
         html += "<td>" + data[i].blood_sugar + "</td>";

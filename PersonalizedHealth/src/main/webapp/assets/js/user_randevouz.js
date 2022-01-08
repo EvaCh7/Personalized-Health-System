@@ -47,7 +47,10 @@ function print_all_randevouz(response) {
 
     document.getElementById("show_Randevouz").innerHTML = "";
     for (id in jsonArray) {
-        document.getElementById("show_Randevouz").innerHTML += createTable(jsonArray[id]);
+        if (jsonArray[id]["status"] === "selected") {
+            document.getElementById("show_Randevouz").innerHTML += createTable(jsonArray[id]);
+        } else
+            continue;
     }
     if (document.getElementById("show_Randevouz").innerHTML === "") {
         document.getElementById("show_Randevouz").innerHTML = "There are no available randevouz.";
