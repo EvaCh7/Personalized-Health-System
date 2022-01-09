@@ -1,5 +1,3 @@
-var lat = 0
-var lon = 0
 function update_doctor_data(e) {
     var gender
     if ($('#man').is(':checked')) {
@@ -30,8 +28,8 @@ function update_doctor_data(e) {
         country: $("#country").val(),
         city: $("#city").val(),
         address: $("#address").val(),
-        lat: lat,
-        lon: lon,
+        lat: $("#lat").val(),
+        lon: $("#lon").val(),
         telephone: $("#telephone").val(),
         height: $("#height").val(),
         weight: $("#weight").val(),
@@ -88,27 +86,25 @@ function create_randevouz_element(rand_obj)
 `
     return element
 }
-let proc_date_bit = true;
-function spawn_process_date() {
-    if (proc_date_bit) {
-        $("#process-date-class").removeClass("d-none")
-        proc_date_bit = false
-        console.log("xaxa")
-    } else
-    {
-        $("#process-date-class").addClass("d-none")
-        proc_date_bit = true
 
-        $("#process-randevouz-form").html('')
-        $("#save-rand-but").addClass("d-none")
-        $("#download-rand-but").addClass("d-none")
+function close_div_doc_3() {
+    $("#process-date-class").addClass("d-none")
+    document.getElementById("close_div_doc_but_3").style.display = "none";
 
-
-
-    }
+    $("#process-randevouz-form").html('')
+    $("#save-rand-but").addClass("d-none")
+    $("#download-rand-but").addClass("d-none")
 }
+
+function spawn_process_date() {
+    document.getElementById("close_div_doc_but_3").style.display = "block";
+    $("#process-date-class").removeClass("d-none")
+}
+
 function spawn_randevouz()
 {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
 
     $("#save-rand-but").removeClass("d-none")
     $("#download-rand-but").removeClass("d-none")
@@ -201,30 +197,26 @@ function call_back_error_get_randevouz(response)
 
 }
 
-var show_add_randev_form = true
-function show_add_randevouz()
-{
-    if (show_add_randev_form)
-    {
-        $("#add-randevuz-form").removeClass("d-none")
-        show_add_randev_form = false
-    } else {
-        $("#add-randevuz-form").addClass("d-none")
-        show_add_randev_form = true
-    }
+function close_div_doc_1() {
+    document.getElementById("close_div_doc_but_1").style.display = "none";
+    $("#add-randevuz-form").addClass("d-none")
 }
 
-var show_delete_randev_form = true
+function show_add_randevouz()
+{
+    document.getElementById("close_div_doc_but_1").style.display = "block";
+    $("#add-randevuz-form").removeClass("d-none")
+}
+
+function close_div_doc_2() {
+    document.getElementById("close_div_doc_but_2").style.display = "none";
+    $("#delete-randevouz-form").addClass("d-none")
+}
+
 function show_delete_randevouz()
 {
-    if (show_delete_randev_form)
-    {
-        $("#delete-randevouz-form").removeClass("d-none")
-        show_delete_randev_form = false
-    } else {
-        $("#delete-randevouz-form").addClass("d-none")
-        show_delete_randev_form = true
-    }
+    document.getElementById("close_div_doc_but_2").style.display = "block";
+    $("#delete-randevouz-form").removeClass("d-none")
 }
 
 function delete_randevouz()
@@ -234,6 +226,9 @@ function delete_randevouz()
     sendXmlDeleteRequest(url, call_back_cancel_randevouz, call_back_error_cancel_randevouz)
 }
 function download_randevouz() {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
+
     var date = $("#process-date").val()
     url = "examinations/randevouz/getRandevouzPDF" + "/" + doctorData.doctor_id + "?date=" + date
     var request = new XMLHttpRequest();
@@ -277,6 +272,9 @@ function call_back_error_cancel_randevouz(_response)
 
 function send_new_randevouz()
 {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
+
     data = get_form_data_to_json("add-randevuz-form")
     data["status"] = "free"
     console.log(doctorData)
@@ -354,12 +352,13 @@ function fill_doctor_info(responseData) {
     $("#city").val(responseData.city)
     $("#address").val(responseData.address)
     $("#telephone").val(responseData.telephone)
+    $("#lat").val(responseData.lat)
+    $("#lon").val(responseData.lon)
     $("#height").val(responseData.height)
     $("#weight").val(responseData.weight)
     $("#blood-type").val(responseData.bloodtype)
 }
 
-let doctorData;
 function get_doctor_data()
 {
     var xhr = new XMLHttpRequest();
@@ -367,7 +366,7 @@ function get_doctor_data()
         if (xhr.readyState === 4 && xhr.status === 200) {
             const responseData = JSON.parse(xhr.responseText);
             fill_doctor_info(responseData);
-            doctorData = responseData;
+            window.localStorage.setItem('doctorData', JSON.stringify(responseData));
         } else if (xhr.status !== 200) {
         }
     };

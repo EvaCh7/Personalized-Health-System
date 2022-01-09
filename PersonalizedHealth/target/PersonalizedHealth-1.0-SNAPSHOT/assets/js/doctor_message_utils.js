@@ -19,7 +19,6 @@ function spawn_answers(messages_array) {
             str += ` <input type="text"  class="form-control" name="stored_msg" placeholder="Answer" value="` + messages_array[i].message + `"
                          disabled      >`
             --count_user_msgs;
-
         }
 
     }
@@ -48,10 +47,10 @@ function spawn_patient_messages(messages_array) {
 
 
 function store_messages() {
-    console.log("before before", data)
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
 
     var data = get_form_data_to_json_array("doctor-answers")
-    console.log("before", data)
     for (var index in data) {
 
         if (!data[index].message) {
@@ -63,7 +62,7 @@ function store_messages() {
     if (data.length === 0) {
         data = null;
     }
-    //var data = $('form').serializeArray("doctor-answers")
+//var data = $('form').serializeArray("doctor-answers")
 
     for (var index in data) {
 
@@ -109,9 +108,11 @@ function call_back_error_store_msgs(response) {
     }
 }
 function spawn_messages_on_change() {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
 
     var user_id = $("#user_id_msg_but").val()
-    var url = "examinations/Messages/getDoctorMessages/" + doctorData.doctor_id + "/" + user_id
+    var url = "examinations/Messages/getDoctorMessages/" + doctorData.doctor_id + "/" + user_id;
     sendXmlGetRequest(url, call_back_spawn_messages, call_back_error_spawn_messages)
 
     $("#store-messages").removeClass("d-none")
@@ -124,13 +125,10 @@ function call_back_spawn_messages(response) {
 }
 function hide_element(id) {
     id = "#" + id
-    console.log(id)
     $(id).addClass("d-none")
 }
 function show_element(id) {
     id = "#" + id
-    console.log(id)
-
     $(id).removeClass("d-none")
 
 }
@@ -138,32 +136,28 @@ function call_back_error_spawn_messages(response) {
     var json = JSON.parse(response)
     $("#patient-messages").html(json.response)
     $("#doctor-answers").html(json.response)
-    console.log(json.response)
 }
 
-var bit_user_select = true
+function close_div_9() {
+    document.getElementById("close_div_but_9").style.display = "none";
+    $("#user-id-messages").addClass("d-none")
+    $("#patient-messages").html("")
+    $("#doctor-answers").html("")
+    $("#store-messages").addClass("d-none")
+
+    hide_element("patient-msg-label")
+    hide_element("doctor-ans-label")
+    hide_element("store-response")
+}
+
 function show_user_id_select() {
-
-    if (bit_user_select) {
-        $("#user-id-messages").removeClass("d-none")
-        bit_user_select = false
-        if ($("#user_id_msg_but").val()) {
-            spawn_messages_on_change()
-        }
-        show_element("patient-msg-label")
-        show_element("doctor-ans-label")
-
-
-    } else {
-        $("#user-id-messages").addClass("d-none")
-        bit_user_select = true
-        $("#patient-messages").html("")
-        $("#doctor-answers").html("")
-        $("#store-messages").addClass("d-none")
-
-        hide_element("patient-msg-label")
-        hide_element("doctor-ans-label")
-        hide_element("store-response")
-
+    document.getElementById("close_div_but_9").style.display = "block";
+    $("#user-id-messages").removeClass("d-none")
+    bit_user_select = false
+    if ($("#user_id_msg_but").val()) {
+        spawn_messages_on_change()
     }
+    show_element("patient-msg-label")
+    show_element("doctor-ans-label")
+
 }

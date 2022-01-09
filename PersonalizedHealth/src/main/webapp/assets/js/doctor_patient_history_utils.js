@@ -40,19 +40,21 @@ function create_table_from_json_array(json, table_id)
 
     }
 }
-var show_done = true
-function show_done_randevouz() {
-    if (show_done) {
-        show_done = false;
-        var url = "examinations/randevouz/getDoneRandevouz/" + doctorData.doctor_id
-        sendXmlGetRequest(url, call_back_show_done_rand, call_back_error_show_done_rand)
-    } else {
-        $("#done-rand-table tr").remove();
 
-        show_done = true;
-
-    }
+function close_div_doc_4() {
+    $("#done-rand-table tr").remove();
+    document.getElementById("close_div_doc_but_4").style.display = "none";
 }
+
+function show_done_randevouz() {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
+    document.getElementById("close_div_doc_but_4").style.display = "block";
+
+    var url = "examinations/randevouz/getDoneRandevouz/" + doctorData.doctor_id
+    sendXmlGetRequest(url, call_back_show_done_rand, call_back_error_show_done_rand)
+}
+
 function call_back_show_done_rand(response) {
     json = JSON.parse(response)
     console.log(json)
@@ -63,22 +65,27 @@ function call_back_error_show_done_rand(response) {
     json = JSON.parse(response)
     console.log(json.response)
 }
-var compare_bit = true
-function compare() {
-    if (compare_bit) {
-        var user_id = $("#compare-user-id").val()
-        var doctor_id = doctorData.doctor_id
-        compare_exams(doctor_id, user_id)
-        compare_bit = false
-    } else
-    {
-        document.getElementById("content").innerHTML = ""
-        compare_bit = true
 
-    }
-
-
+function close_div_doc_5() {
+    document.getElementById("content").innerHTML = "";
+    $("#content").addClass("d-none");
+    document.getElementById("close_div_doc_but_5").style.display = "none";
+    document.getElementById("compare-user-id").value = "";
 }
+
+function compare() {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
+
+    document.getElementById("close_div_doc_but_5").style.display = "block";
+    $("#content").removeClass("d-none");
+
+    var user_id = $("#compare-user-id").val()
+    var doctor_id = doctorData.doctor_id
+    compare_exams(doctor_id, user_id)
+    compare_bit = false
+}
+
 function compare_exams(doctor_id, user_id)
 {
     const xhr = new XMLHttpRequest();
@@ -150,21 +157,25 @@ function
     html += "</tr></table><br>";
     return html;
 }
-var draw_chart_bit = true
-function click_draw_chart() {
-    if (draw_chart_bit) {
 
-        var user_id = $("#compare-user-id").val()
-        var doctor_id = doctorData.doctor_id
-        drawChartFunc(doctor_id, user_id)
-        draw_chart_bit = false
-
-    } else {
-        $("#chart_3d").html("");
-        draw_chart_bit = true
-    }
-
+function close_div_doc_6() {
+    $("#chart_3d").html("");
+    $("#chart_3d").addClass("d-none");
+    document.getElementById("close_div_doc_but_6").style.display = "none";
 }
+
+function click_draw_chart() {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
+
+    $("#chart_3d").removeClass("d-none");
+    document.getElementById("close_div_doc_but_6").style.display = "block";
+
+    var user_id = $("#compare-user-id").val()
+    var doctor_id = doctorData.doctor_id
+    drawChartFunc(doctor_id, user_id)
+}
+
 function drawChartFunc(doctor_id, user_id) {
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareUsersDoneExams/" + doctor_id + "/" + user_id;
     sendXmlGetRequest(URL, draw_chart, call_back_error);
@@ -204,49 +215,56 @@ function call_back_error(response)
     console.log(response)
 }
 
+function close_div_doc_7() {
+    $("#therapy_div").html("")
 
-let show_therapies_bit = true
-function show_therapies() {
-    if (show_therapies_bit) {
-
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const obj = JSON.parse(xhr.responseText);
-                var i = 1;
-                var count = Object.keys(obj).length;
-                for (id in obj) {
-                    document.getElementById("therapy_div").innerHTML += createTreatmentTable(obj[id], i);
-                    i++;
-                }
-                show_therapies_bit = false
-
-
-            } else if (xhr.status !== 200) {
-                document.getElementById('therapy_div')
-                        .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
-                        + JSON.stringify(xhr.responseText);
-                show_therapies_bit = false
-
-            }
-        };
-
-        var user_id = $("#compare-user-id").val()
-
-        var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showTreatmentsDone/" + doctorData.doctor_id + "/" + user_id;
-
-        xhr.open("GET", URL);
-        xhr.setRequestHeader("Accept", "application/json");
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send();
-    } else {
-        show_therapies_bit = true
-        $("#therapy_div").html("")
-
-    }
-
+    $("#therapy_div").addClass("d-none");
+    document.getElementById("close_div_doc_but_7").style.display = "none";
 }
+
+function show_therapies() {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
+
+    $("#therapy_div").removeClass("d-none");
+    document.getElementById("close_div_doc_but_7").style.display = "block";
+
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const obj = JSON.parse(xhr.responseText);
+            var i = 1;
+            var count = Object.keys(obj).length;
+            for (id in obj) {
+                document.getElementById("therapy_div").innerHTML += createTreatmentTable(obj[id], i);
+                i++;
+            }
+            show_therapies_bit = false
+
+
+        } else if (xhr.status !== 200) {
+            document.getElementById('therapy_div')
+                    .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
+                    + JSON.stringify(xhr.responseText);
+            show_therapies_bit = false
+
+        }
+    };
+
+    var user_id = $("#compare-user-id").val()
+
+    var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showTreatmentsDone/" + doctorData.doctor_id + "/" + user_id;
+
+    xhr.open("GET", URL);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+}
+
 function send_and_store_treatment() {
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
+
     var data = get_form_data_to_json("add_treat")
     data["doctor_id"] = doctorData.doctor_id
     url = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/addTreatment"
@@ -271,17 +289,15 @@ function createTreatmentTable(data, i) {
     html += "</table><br>";
     return html;
 }
-var bit_add_tret = true
+
+function close_div_doc_8() {
+    $("#add_treat").addClass("d-none")
+    document.getElementById("close_div_doc_but_8").style.display = "none";
+}
+
 function add_treatment() {
-    if (bit_add_tret) {
-        $("#add_treat").removeClass("d-none")
-        bit_add_tret = false
-    } else {
-        $("#add_treat").addClass("d-none")
-
-        bit_add_tret = true
-    }
-
+    $("#add_treat").removeClass("d-none")
+    document.getElementById("close_div_doc_but_8").style.display = "block";
 }
 
 

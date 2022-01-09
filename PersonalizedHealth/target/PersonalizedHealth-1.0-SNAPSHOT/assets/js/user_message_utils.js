@@ -145,13 +145,10 @@ function call_back_spawn_messages(response) {
 }
 function hide_element(id) {
     id = "#" + id;
-    console.log(id);
     $(id).addClass("d-none");
 }
 function show_element(id) {
     id = "#" + id;
-    console.log(id);
-
     $(id).removeClass("d-none");
 
 }
