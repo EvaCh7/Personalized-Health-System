@@ -166,10 +166,10 @@ public class EditRandevouzTable {
         con.close();
     }
 
-    public static void reserveRandevouz(int randevouzID) throws SQLException, ClassNotFoundException {
+    public static void reserveRandevouz(int randevouzID, int user_id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String updateQuery = "UPDATE randevouz SET status = \"selected\" WHERE randevouz_id = '" + randevouzID + "'";
+        String updateQuery = "UPDATE randevouz SET status = \"selected\", user_id = '" + user_id + "' WHERE randevouz_id = '" + randevouzID + "'";
         stmt.executeUpdate(updateQuery);
         System.out.println(updateQuery);
         stmt.close();

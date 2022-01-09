@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 
+function close_div_2() {
+    $("#print_docs").addClass("d-none");
+    document.getElementById("close_div_but_2").style.display = "none";
+}
+
 function see_doctors() {
     var option = document.userForm.options.value;
     if (option === "house_dist") {
@@ -25,6 +30,9 @@ function see_doctors() {
 }
 
 function print_docs(response) {
+    $("#print_docs").removeClass("d-none");
+    document.getElementById("close_div_but_2").style.display = "block";
+
     var jsonArray = JSON.parse(response);
     jsonArray.sort(GetSortOrder("Distance(in kilometers)"));
     document.getElementById("print_docs").innerHTML = "";
@@ -34,6 +42,9 @@ function print_docs(response) {
 }
 
 function print_ranked_byprice(response) {
+    $("#print_docs").removeClass("d-none");
+    document.getElementById("close_div_but_2").style.display = "block";
+
     var jsonArray = JSON.parse(response);
     jsonArray.sort(GetSortOrder("Price"));
     document.getElementById("print_docs").innerHTML = "";
@@ -51,6 +62,9 @@ function car_distance(response) {
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
+            $("#print_docs").removeClass("d-none");
+            document.getElementById("close_div_but_2").style.display = "block";
+
             var responseData = JSON.parse(xhr.responseText);
             let array = [];
             var count = Object.keys(jsonArray).length;

@@ -1,5 +1,3 @@
-var lat, lon;
-
 function update_data(e) {
     var gender
     if ($('#man').is(':checked')) {
@@ -90,14 +88,13 @@ function fill_user_info(responseData) {
 //    $(select_blood).attr('selected', 'selected');
 }
 
-let userData;
 function get_data() {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const responseData = JSON.parse(xhr.responseText);
             fill_user_info(responseData);
-            userData = responseData;
+            window.localStorage.setItem('userData', JSON.stringify(responseData));
         } else if (xhr.status !== 200) {
         }
     };
@@ -210,41 +207,29 @@ function load_doc_data_to_table(json)
     document.getElementById("cert-docs").disabled = true;
 }
 
-var counter_add = 0, counter_all = 0;
+
+function close_div() {
+    $("#content").addClass("d-none");
+    document.getElementById("close_div_but").style.display = "none";
+}
 
 function add_exams() {
-    if (counter_add === 0) {
-        var result = $("#content").load("new_blood_test.html",
-                function () {
-                    counter_add++;
-
-                    var amka = document.getElementById("amka").value;
-                    document.getElementById("amka_rest").value = amka;
-                });
-    } else if (counter_add % 2 !== 0) {
-        counter_add++;
-        $("#myForm").addClass("d-none");
-    } else if (counter_add % 2 === 0 && counter_add !== 0) {
-        counter_add++;
-        $("#myForm").removeClass("d-none");
-    }
+    var result = $("#content").load("new_blood_test.html",
+            function () {
+                document.getElementById("close_div_but").style.display = "block";
+                $("#content").removeClass("d-none");
+                var amka = document.getElementById("amka").value;
+                document.getElementById("amka_rest").value = amka;
+            });
 }
 
 
 function all_exams() {
-    if (counter_all === 0) {
-        var result = $("#content").load("get_blood_tests.html",
-                function () {
-                    counter_all++;
-
-                    var amka = document.getElementById("amka").value;
-                    document.getElementById("amka_rest").value = amka;
-                });
-    } else if (counter_all % 2 !== 0) {
-        counter_all++;
-        $("#myForm").addClass("d-none");
-    } else if (counter_all % 2 === 0 && counter_all !== 0) {
-        counter_all++;
-        $("#myForm").removeClass("d-none");
-    }
+    var result = $("#content").load("get_blood_tests.html",
+            function () {
+                document.getElementById("close_div_but").style.display = "block";
+                $("#content").removeClass("d-none");
+                var amka = document.getElementById("amka").value;
+                document.getElementById("amka_rest").value = amka;
+            });
 }

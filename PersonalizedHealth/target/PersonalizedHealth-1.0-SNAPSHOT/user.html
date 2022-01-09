@@ -544,7 +544,7 @@
                     <button type="button" onclick="all_exams();" id="all_exams_but">See All Exams</button>
                 </div>
                 <div class="col-sm-3">
-                    <button type="button" onclick="compare_exams();" id="comp_exams_but" >Compare Exams</button>
+                    <button type="button" onclick="compare_exams_user();" id="comp_exams_but" >Compare Exams</button>
                 </div>
                 <div class="col-sm-3">
                     <select name="measurement" id="measurement">
@@ -554,23 +554,33 @@
                         <option value="vitamin_d3">Vitamin D3</option>
                         <option value="vitamin_b12">Vitamin B12</option>
                     </select>
-                    <button type="button" onclick="drawChartFunc()" id="draw_chart_but">Compare Exams with Chart</button>
+                    <button type="button" onclick="drawChartFunc_user()" id="draw_chart_but">Compare Exams with Chart</button>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <div id="content"></div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-1">
+                    <button type="button" onclick="close_div()" id="close_div_but" style="display: none; color: red; border-radius: 50%;">X</button>
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" onclick="close_chart()" id="close_but" style="display: none; color: red; border-radius: 50%;">X</button>
+                </div>
+                <div class="col-sm-5" id="showchart">
                     <div id="chart_3d" style="width: auto; height: auto;"></div>
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-sm-3">
-                    <button type="button" onclick="show_therapies()" id="show_ther_but">Show Therapies</button>
+                    <button type="button" onclick="show_therapies_user()" id="show_ther_but">Show Therapies</button>
                 </div>
-                <div class="col-sm-9" id="therapy_div"></div>
+                <div class="col-sm-8" id="therapy_div_user"></div>
+                <div class="col-sm-1">
+                    <button type="button" onclick="close_div_1()" id="close_div_but_1" style="display: none; color: red; border-radius: 50%;">X</button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-3">
@@ -582,8 +592,10 @@
                     <button type="button" onclick="see_doctors()" id="see_doctors_but">See Doctors</button>
 
                 </div>
-                <div class="col-sm-9" id="print_docs">
-
+                <div class="col-sm-8" id="print_docs">
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" onclick="close_div_2()" id="close_div_but_2" style="display: none; color: red; border-radius: 50%;">X</button>
                 </div>
             </div>
 
@@ -597,11 +609,14 @@
                     <input type="number" id="getDoctorsID" placeholder="Insert Doctor's ID">
                 </div>
                 <div class="col-sm-4" id="print_avail_rand"></div>
-                <div class="col-sm-4" id="select_randevouz" style="display: none">
+                <div class="col-sm-3" id="select_randevouz" style="display: none">
                     <label>Select a randevouz ID:</label>
                     <input type="number" id="getRandevouzID" placeholder="Insert Randevouz's ID">
                     <button type="button" onclick="reserve_appointment()" id="reserve_appointment_but">Select the Appointment</button>
                     <div id="responseMess"></div>
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" onclick="close_div_3()" id="close_div_but_3" style="display: none; color: red; border-radius: 50%;">X</button>
                 </div>
             </div>
 
@@ -611,14 +626,19 @@
                     <button type="button" onclick="show_all_randevouz()" id="show_randevouz_but">Show all Randevouz</button>
                 </div>
                 <div class="col-sm-4" id="show_Randevouz"></div>
-                <div class="col-sm-4" id="cancel_randevouz" style="display: none">
+                <div class="col-sm-3" id="cancel_randevouz" style="display: none">
                     <label>Cancel a randevouz(ID):</label>
                     <input type="number" id="getRandevouzID_cancel" placeholder="Insert Randevouz's ID">
                     <button type="button" onclick="cancel_appointment()" id="cancel_appointment_but">Cancel the Appointment</button>
                     <div id="responseMessCancel"></div>
                 </div>
+                <div class="col-sm-1">
+                    <button type="button" onclick="close_div_4()" id="close_div_but_4" style="display: none; color: red; border-radius: 50%;">X</button>
+                </div>
             </div>
         </form>
+
+        <!-- Show messages -->
 
         <div class="container-fluid message-container mt-5 " style=" align-content: center;">
             <div class="row ">
@@ -630,11 +650,11 @@
                     <input type="number" id="doc_id_msg_but" onchange="spawn_messages_on_change()" name="doctor_id" placeholder="Doctor ID"> 
                 </div>
                 <div class="col-10 "></div>
-                <div class="col-6 " style="text-align: center">
+                <div class="col-6 " style="text-align: center" id="showdoc">
                     <div id="doctor-mes-label" class="d-none" >Doctor Messages</div>
                     <div id="doctor-messages"></div>
                 </div>
-                <div style="text-align: center" class="col-6 ">
+                <div style="text-align: center" class="col-6 " id="showuser">
 
                     <div id="user-ans-label" class="d-none">User Answer</div>
                     <form id="user-answers">
@@ -646,6 +666,9 @@
                         <button onclick="store_messages()"  type="button" class="d-none"  id="store-messages">Store Answers</button>
 
                     </div>
+                </div>
+                <div class="col-1">
+                    <button type="button" onclick="close_div_5()" id="close_div_but_5" style="display: none; color: red; border-radius: 50%;">X</button>
                 </div>
 
             </div>

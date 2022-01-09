@@ -3,7 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+function close_div_5() {
+    $("#doc-id-messages").addClass("d-none");
+    $("#doctor-messages").html("");
+    $("#user-answers").html("");
+    $("#store-messages").addClass("d-none");
 
+    hide_element("doctor-mes-label");
+    hide_element("user-ans-label");
+    hide_element("store-response");
+
+    document.getElementById("close_div_but_5").style.display = "none";
+}
 
 function spawn_answers(messages_array) {
     var str = "";
@@ -53,7 +64,8 @@ function spawn_doc_messages(messages_array) {
 
 function store_messages() {
     console.log("before before", data);
-
+    var userData = window.localStorage.getItem('userData');
+    userData = JSON.parse(userData);
     var data = get_form_data_to_json_array("user-answers");
     console.log("before", data);
     for (var index in data) {
@@ -113,6 +125,8 @@ function call_back_error_store_msgs(response) {
     }
 }
 function spawn_messages_on_change() {
+    var userData = window.localStorage.getItem('userData');
+    userData = JSON.parse(userData);
 
     var doctor_id = $("#doc_id_msg_but").val();
     var url = "examinations/Messages/getUserMessages/" + userData.user_id + "/" + doctor_id;
@@ -148,30 +162,13 @@ function call_back_error_spawn_messages(response) {
     console.log(json.response);
 }
 
-var bit_user_select = true;
-
 function show_doc_id_select() {
+    document.getElementById("close_div_but_5").style.display = "block";
 
-    if (bit_user_select) {
-        $("#doc-id-messages").removeClass("d-none");
-        bit_user_select = false;
-        if ($("#doc_id_msg_but").val()) {
-            spawn_messages_on_change();
-        }
-        show_element("doctor-mes-label");
-        show_element("user-ans-label");
-
-
-    } else {
-        $("#doc-id-messages").addClass("d-none");
-        bit_user_select = true;
-        $("#doctor-messages").html("");
-        $("#user-answers").html("");
-        $("#store-messages").addClass("d-none");
-
-        hide_element("doctor-mes-label");
-        hide_element("user-ans-label");
-        hide_element("store-response");
-
+    $("#doc-id-messages").removeClass("d-none");
+    if ($("#doc_id_msg_but").val()) {
+        spawn_messages_on_change();
     }
+    show_element("doctor-mes-label");
+    show_element("user-ans-label");
 }

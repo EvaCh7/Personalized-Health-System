@@ -74,14 +74,16 @@ function get_blood_tests()
 }
 
 
-function compare_exams()
+function compare_exams_user()
 {
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const obj = JSON.parse(xhr.responseText);
             document.getElementById("content").innerHTML = createCompareTable(obj);
+            $("#content").removeClass("d-none");
 
+            document.getElementById("close_div_but").style.display = "block";
         } else if (xhr.status !== 200) {
             document.getElementById('content').innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
                     + JSON.stringify(xhr.responseText);
@@ -96,8 +98,8 @@ function compare_exams()
     xhr.send();
 }
 
-function 
-createCompareTable(data) {
+function
+        createCompareTable(data) {
     var html = "<br><table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><td>Date</td>";
 
     for (var i = 0; i < Object.keys(data).length; i++) {
@@ -151,14 +153,21 @@ createCompareTable(data) {
     return html;
 }
 
-function drawChartFunc() {
+function drawChartFunc_user() {
     var amka = document.getElementById("amka").value;
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareExams/" + amka;
     sendXmlGetRequest(URL, draw_chart, call_back_error);
 }
 
+function close_chart() {
+    $("#showchart").addClass("d-none");
+    document.getElementById("close_but").style.display = "none";
+}
+
 function draw_chart(response) {
     var json = JSON.parse(response);
+    document.getElementById("close_but").style.display = "block";
+    $("#showchart").removeClass("d-none");
 
     google.charts.load("current", {packages: ["corechart"]});
     google.charts.setOnLoadCallback(drawChart);
@@ -193,21 +202,28 @@ function call_back_error()
         $("#error").html(text + " register error");
 }
 
-function show_therapies() {
-    
+function close_div_1() {
+    $("#therapy_div_user").addClass("d-none");
+    document.getElementById("close_div_but_1").style.display = "none";
+}
+
+function show_therapies_user() {
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const obj = JSON.parse(xhr.responseText);
+            document.getElementById("close_div_but_1").style.display = "block";
+            $("#therapy_div_user").removeClass("d-none");
+
             var i = 1;
             var count = Object.keys(obj).length;
             for (id in obj) {
-                document.getElementById("therapy_div").innerHTML = createTreatmentTable(obj[id], i);
+                document.getElementById("therapy_div_user").innerHTML = createTreatmentTable(obj[id], i);
                 i++;
             }
 
         } else if (xhr.status !== 200) {
-            document.getElementById('therapy_div')
+            document.getElementById('therapy_div_user')
                     .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
                     + JSON.stringify(xhr.responseText);
 

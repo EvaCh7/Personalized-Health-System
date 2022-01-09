@@ -1,16 +1,31 @@
+function close_div_3() {
+    $("#print_avail_rand").addClass("d-none");
+    $("#responseMess").addClass("d-none");
+    $("#select_randevouz").addClass("d-none");
+
+    document.getElementById("close_div_but_3").style.display = "none";
+    document.getElementById("getDoctorsID").value = "";
+}
+
 function make_appointment() {
     var id = document.getElementById("getDoctorsID").value;
+    document.getElementById("close_div_but_3").style.display = "block";
 
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/getRandevouz/" + id;
     sendXmlGetRequest(URL, print_free_randevouz, error);
 }
 
 function print_free_randevouz(response) {
+    $("#print_avail_rand").removeClass("d-none");
+    $("#responseMess").removeClass("d-none");
+    $("#select_randevouz").removeClass("d-none");
+
     var jsonArray = JSON.parse(response);
     document.getElementById("print_avail_rand").innerHTML = "";
-    console.log(jsonArray[0]["status"]);
     for (id in jsonArray) {
-        if (jsonArray[0]["status"] === "free")
+        console.log(jsonArray[id]);
+
+        if (jsonArray[id]["status"] === "free")
             document.getElementById("print_avail_rand").innerHTML += createTable(jsonArray[id]);
     }
     if (document.getElementById("print_avail_rand").innerHTML === "") {
@@ -22,8 +37,11 @@ function print_free_randevouz(response) {
 }
 
 function reserve_appointment() {
-    var id = document.getElementById("getRandevouzID").value;
-    var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/reserveRandevouz/" + id;
+    var rand_id = document.getElementById("getRandevouzID").value;
+    var data = window.localStorage.getItem('userData');
+    data = JSON.parse(data);
+    console.log(data["user_id"]);
+    var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/reserveRandevouz/" + rand_id + "/" + data["user_id"];
     sendXmlPutRequest(URL, reservation, error);
 }
 
@@ -36,13 +54,27 @@ function reservation(responseData) {
         document.getElementById("responseMess").innerHTML = "An error occured and your randevouz couldn't be reserved. Please try again.";
 }
 
+function close_div_4() {
+    $("#show_Randevouz").addClass("d-none");
+    $("#responseMessCancel").addClass("d-none");
+    $("#cancel_randevouz").addClass("d-none");
+
+    document.getElementById("close_div_but_4").style.display = "none";
+}
+
 function show_all_randevouz() {
     var username = document.getElementById("username").value;
+    document.getElementById("close_div_but_4").style.display = "block";
+
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/showAllRandevouz/" + username;
     sendXmlGetRequest(URL, print_all_randevouz, error);
 }
 
 function print_all_randevouz(response) {
+    $("#show_Randevouz").removeClass("d-none");
+    $("#responseMessCancel").removeClass("d-none");
+    $("#cancel_randevouz").removeClass("d-none");
+
     var jsonArray = JSON.parse(response);
 
     document.getElementById("show_Randevouz").innerHTML = "";

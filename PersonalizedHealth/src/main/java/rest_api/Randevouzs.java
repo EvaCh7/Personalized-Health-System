@@ -81,16 +81,16 @@ public class Randevouzs {
         return false;
     }
 
-    @Path("/reserveRandevouz/{randevouz_id}")
+    @Path("/reserveRandevouz/{randevouz_id}/{user_id}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response reserveRandevouz(@PathParam("randevouz_id") int randevouz_id) throws SQLException, ClassNotFoundException {
+    public Response reserveRandevouz(@PathParam("randevouz_id") int randevouz_id, @PathParam("user_id") int user_id) throws SQLException, ClassNotFoundException {
         Response.Status status = Response.Status.BAD_REQUEST;
         String response = "{\"response\": \"Error: Randevouz wasn't reserved.\" }";
 
         try {
-            EditRandevouzTable.reserveRandevouz(randevouz_id);
+            EditRandevouzTable.reserveRandevouz(randevouz_id, user_id);
             status = Response.Status.OK;
             response = "{\"response\": \"Randevouz was reserved succesfully.\" }";
 
