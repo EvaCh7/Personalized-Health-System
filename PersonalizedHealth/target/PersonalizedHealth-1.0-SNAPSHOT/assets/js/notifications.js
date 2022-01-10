@@ -32,6 +32,7 @@ function show_notifications_about_cacnceled_randevouz(response) {
     $('#notifcations').attr('data-bs-content', notif_str);
     update_notification_text()
 }
+
 function error_show_notifications_about_cacnceled_randevouz() {
 
 }
@@ -42,16 +43,16 @@ function handle_doctor_notifications(json) {
 
 }
 function handle_user_notifications(json) {
+    var URL = "examinations/randevouz/getRandevouzNotification/" + json.id;
+
+    sendXmlGetRequest(URL, show_randevouz_notification, error_show_randevouz_notification);
+
     var url = "examinations/randevouz/getBloodDonationRandevouz/" + json.id;
 
     sendXmlGetRequest(url, show_notifications_about_blood_donation_randevouz, error_show_notifications_about_blood_donation_randevouz)
-  
-    
-    //edw stelneis request gia to an exei 4 wres gia to rantebou 
-
 }
-function show_notifications_about_blood_donation_randevouz(response) {
 
+function show_notifications_about_blood_donation_randevouz(response) {
     var js = JSON.parse(response);
     console.log(js)
     var notif_str = ""
@@ -69,8 +70,19 @@ function error_show_notifications_about_blood_donation_randevouz() {
 
 }
 
+function show_randevouz_notification(response) {
+    var js = JSON.parse(response);
+    var notif_str = "";
+    for (index in js) {
+        var msg = "Attention! Don't forget that your randevouz is at: " + js[index].date_time;
+        notif_str += msg;
+    }
+    update_notification_text();
+    $('#notifcations').attr('data-bs-content', notif_str);
+    update_notification_text();
+}
 
-
+function error_show_randevouz_notification() {}
 
 
 
@@ -100,7 +112,7 @@ function isLoggedIn_notfications() {
 
 
         } else if (xhr.status !== 200) {
-            $('#notifcations').attr('data-bs-content', "you must be logged in to see notifcations");
+            $('#notifcations').attr('data-bs-content', "You must be logged in to see notifications");
             update_notification_text()
 
         }

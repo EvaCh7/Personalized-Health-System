@@ -7,7 +7,10 @@ package Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +44,7 @@ public class UtilsDate {
 
     }
 
-    public  static boolean isTimeBetween(String time, String from_time, String to_time) {
+    public static boolean isTimeBetween(String time, String from_time, String to_time) {
         LocalTime from = LocalTime.parse(from_time);
         LocalTime to = LocalTime.parse(to_time);
         LocalTime _time = LocalTime.parse(time);
@@ -51,6 +54,24 @@ public class UtilsDate {
         }
         return false;
 
+    }
+
+    public static boolean is4Hours(String time) throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date_rand = formatter.parse(time);
+        Date date_now = new Date(System.currentTimeMillis());
+        System.out.println(date_now);
+
+        long difference_In_Time = date_rand.getTime() - date_now.getTime();
+        long hours = (difference_In_Time / (1000 * 60 * 60)) % 24;
+        long minutes = (difference_In_Time / (1000 * 60)) % 60;
+
+        if ((hours == 4 && minutes == 0) || (hours < 4)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

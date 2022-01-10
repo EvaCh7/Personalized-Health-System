@@ -306,10 +306,8 @@ public class Randevouzs {
     @Path("/getBloodDonationRandevouz/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBloodDonationRandevouz(
-            @PathParam("id") int id
-    ) {
-
+    public Response getBloodDonationRandevouz(@PathParam("id") int id)
+            throws ParseException {
         String response = "{\"response\": \"error invalid ID or Server error\" }";
         Response.Status status;
         try {
@@ -320,6 +318,40 @@ public class Randevouzs {
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        status = Response.Status.BAD_GATEWAY;
+
+        return Response.status(status).type("application/json").entity(response).build();
+    }
+
+    @Path("/getRandevouzNotification/{user_id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRandevouzNotification(@PathParam("user_id") int user_id)
+            throws ParseException, SQLException, ClassNotFoundException {
+        ArrayList<Randevouz> res = EditRandevouzTable.getDateOfRandevouz(user_id);
+
+        String response = "{\"response\": \"error invalid ID or Server error\" }";
+        Response.Status status;
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditRandevouzTable.randevouzToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            JSONObject item = new JSONObject();
+
+            String date = jo.get("date_time").getAsString();
+            System.out.println(date);
+
+            if (UtilsDate.is4Hours(date)) {
+                System.out.println("edw eimaste");
+
+                String json = new Gson().toJson(res);
+                System.out.println("res: "+json);
+                return Response.ok().type("application/json").entity(json).build();
+            } else {
+                continue;
+            }
         }
         status = Response.Status.BAD_GATEWAY;
 
