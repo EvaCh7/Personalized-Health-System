@@ -85,12 +85,17 @@ public class Randevouzs {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response reserveRandevouz(@PathParam("randevouz_id") int randevouz_id, @PathParam("user_id") int user_id) throws SQLException, ClassNotFoundException {
+    public Response reserveRandevouz(@PathParam("randevouz_id") int randevouz_id, @PathParam("user_id") int user_id, @QueryParam("user_info") String user_info)
+            throws SQLException, ClassNotFoundException {
         Response.Status status = Response.Status.BAD_REQUEST;
         String response = "{\"response\": \"Error: Randevouz wasn't reserved.\" }";
 
         try {
             EditRandevouzTable.reserveRandevouz(randevouz_id, user_id);
+
+            if (user_info != null) {
+                EditRandevouzTable.updateUserMessageRandevouz(randevouz_id, user_info);
+            }
             status = Response.Status.OK;
             response = "{\"response\": \"Randevouz was reserved succesfully.\" }";
 
@@ -347,7 +352,7 @@ public class Randevouzs {
                 System.out.println("edw eimaste");
 
                 String json = new Gson().toJson(res);
-                System.out.println("res: "+json);
+                System.out.println("res: " + json);
                 return Response.ok().type("application/json").entity(json).build();
             } else {
                 continue;

@@ -37,11 +37,13 @@ function print_free_randevouz(response) {
 }
 
 function reserve_appointment() {
+    var user_info = document.getElementById("user_text_randevouz").value;
+    console.log(user_info);
     var rand_id = document.getElementById("getRandevouzID").value;
     var data = window.localStorage.getItem('userData');
     data = JSON.parse(data);
-    console.log(data["user_id"]);
-    var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/reserveRandevouz/" + rand_id + "/" + data["user_id"];
+
+    var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/reserveRandevouz/" + rand_id + "/" + data["user_id"] + "?user_info=" + user_info;
     sendXmlPutRequest(URL, reservation, error);
 }
 
