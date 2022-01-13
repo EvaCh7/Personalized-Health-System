@@ -103,7 +103,7 @@ public class InitDatabase {
         String jsonDoctor = "{\"username\":\"papadakis\",\"email\":\"papadakis@doctor.gr\",\"password\":\"doctor12*\","
                 + "\"firstname\":\"Nikos\",\"lastname\":\"Papadakis\",\"birthdate\":\"1982-10-03\",\"gender\":\"Male\","
                 + "\"amka\":\"03108200123\",\"country\":\"Greece\",\"city\":\"Heraklion\",\"address\":\"Evans 83\",\"lat\":\"35.3361866\","
-                + "\"lon\":\"25.1342504\",\"telephone\":\"2810123456\",\"height\":\"182\",\"weight\":\"80.0\",\"blooddonor\":\"1\","
+                + "\"lon\":\"25.1342504\",\"telephone\":\"2810123456\",\"height\":\"182\",\"weight\":\"80.0\",\"rating\":\"5\",\"blooddonor\":\"1\","
                 + "\"bloodtype\":\"A+\","
                 + "\"specialty\":\"GeneralDoctor\","
                 + "\"doctor_info\":\"Exei megali empiria se axiologisi emvoliwn.\","
@@ -177,7 +177,7 @@ public class InitDatabase {
         //Randevouz
         String randevouzJSON = "{\"doctor_id\":\"1\",\"date_time\":\"2021-10-29 15:00:00\","
                 + "\"price\":\"50\","
-                + "\"doctor_info\":\"Krata covid pass\", \"status\":\"free\"}";
+                + "\"doctor_info\":\"Krata covid pass\", \"status\":\"free\", \"rating\":\"5\"}";
         EditRandevouzTable er = new EditRandevouzTable();
         er.addRandevouzFromJSON(randevouzJSON);
 

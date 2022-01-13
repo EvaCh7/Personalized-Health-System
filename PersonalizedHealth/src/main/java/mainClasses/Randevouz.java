@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mainClasses;
 
 /**
@@ -11,8 +10,9 @@ package mainClasses;
  * @author Mike
  */
 public class Randevouz {
-    int randevouz_id,doctor_id,user_id,price;
-    String date_time, doctor_info,user_info,status;
+    int randevouz_id, doctor_id, user_id, price;
+    String date_time, doctor_info, user_info, status;
+    double rating;
 
     public int getRandevouz_id() {
         return randevouz_id;
@@ -38,7 +38,6 @@ public class Randevouz {
         this.user_id = user_id;
     }
 
-    
     public int getPrice() {
         return price;
     }
@@ -79,7 +78,12 @@ public class Randevouz {
         this.status = status;
     }
 
+    public double getRating() {
+        return rating;
+    }
 
-    
-    
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
 }

@@ -147,7 +147,7 @@ public class EditRandevouzTable {
         return null;
     }
 
-    public Randevouz databaseToRandevouz(int id) throws SQLException, ClassNotFoundException {
+    public static Randevouz databaseToRandevouz(int id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
@@ -200,7 +200,17 @@ public class EditRandevouzTable {
         stmt.close();
         con.close();
     }
-    
+
+    public static void rateRandevouz(int randevouzID, int rating) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        String updateQuery = "UPDATE randevouz SET rating = '" + rating + "' WHERE randevouz_id = '" + randevouzID + "'";
+        stmt.executeUpdate(updateQuery);
+        System.out.println(updateQuery);
+        stmt.close();
+        con.close();
+    }
+
     public static void updateUserMessageRandevouz(int randevouzID, String data) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -256,12 +266,42 @@ public class EditRandevouzTable {
                 Randevouz rand = gson.fromJson(json, Randevouz.class);
                 randevouz.add(rand);
             }
+            stmt.close();
+            con.close();
             return randevouz;
 
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();    
+        return null;
+    }
+
+    public static ArrayList<Randevouz> showRandevouzOfDocID(int doctor_id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id = '" + doctor_id + "'");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Randevouz rand = gson.fromJson(json, Randevouz.class);
+                randevouz.add(rand);
+            }
+            stmt.close();
+            con.close();
+            return randevouz;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        stmt.close();
+        con.close();
         return null;
     }
 
@@ -286,6 +326,7 @@ public class EditRandevouzTable {
                 + " price INTEGER  not NULL, "
                 + " doctor_info VARCHAR(500),"
                 + " user_info VARCHAR(500),"
+                + " rating INTEGER,"
                 + " status VARCHAR(15) not null,"
                 + "FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id), "
                 + " PRIMARY KEY ( randevouz_id  ))";
@@ -308,7 +349,7 @@ public class EditRandevouzTable {
             Statement stmt = con.createStatement();
 
             String insertQuery = "INSERT INTO "
-                    + " randevouz (doctor_id,user_id,date_time,price,doctor_info,user_info,status)"
+                    + " randevouz (doctor_id,user_id,date_time,price,doctor_info,user_info,rating,status)"
                     + " VALUES ("
                     + "'" + rand.getDoctor_id() + "',"
                     + "'" + rand.getUser_id() + "',"
@@ -316,6 +357,7 @@ public class EditRandevouzTable {
                     + "'" + rand.getPrice() + "',"
                     + "'" + rand.getDoctor_info() + "',"
                     + "'" + rand.getUser_info() + "',"
+                    + "'" + rand.getRating() + "',"
                     + "'" + rand.getStatus() + "'"
                     + ")";
             //stmt.execute(table);

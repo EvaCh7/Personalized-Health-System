@@ -25,6 +25,9 @@ function see_doctors() {
     } else if (option === "price_rank") {
         var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/rankedRandevouz";
         sendXmlGetRequest(URL, print_ranked_byprice, error);
+    } else if (option === "popularity") {
+        var URL = "http://localhost:8080/PersonalizedHealth/examinations/docs/rankedDocPopularity";
+        sendXmlGetRequest(URL, print_ranked_bypopularity, error);
     }
 
 }
@@ -47,6 +50,18 @@ function print_ranked_byprice(response) {
 
     var jsonArray = JSON.parse(response);
     jsonArray.sort(GetSortOrder("Price"));
+    document.getElementById("print_docs").innerHTML = "";
+    for (id in jsonArray) {
+        document.getElementById("print_docs").innerHTML += createTable(jsonArray[id]);
+    }
+}
+
+function print_ranked_bypopularity(response) {
+    $("#print_docs").removeClass("d-none");
+    document.getElementById("close_div_but_2").style.display = "block";
+    
+    var jsonArray = JSON.parse(response);
+    jsonArray.sort(GetSortDescOrder("Rate"));
     document.getElementById("print_docs").innerHTML = "";
     for (id in jsonArray) {
         document.getElementById("print_docs").innerHTML += createTable(jsonArray[id]);
@@ -140,6 +155,17 @@ function GetSortOrder(prop) {
         if (a[prop] > b[prop]) {
             return 1;
         } else if (a[prop] < b[prop]) {
+            return -1;
+        }
+        return 0;
+    }
+}
+
+function GetSortDescOrder(prop) {
+    return function (a, b) {
+        if (a[prop] < b[prop]) {
+            return 1;
+        } else if (a[prop] > b[prop]) {
             return -1;
         }
         return 0;

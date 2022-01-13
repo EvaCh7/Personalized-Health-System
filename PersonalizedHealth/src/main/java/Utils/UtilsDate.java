@@ -61,7 +61,6 @@ public class UtilsDate {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_rand = formatter.parse(time);
         Date date_now = new Date(System.currentTimeMillis());
-        System.out.println(date_now);
 
         long difference_In_Time = date_rand.getTime() - date_now.getTime();
         long hours = (difference_In_Time / (1000 * 60 * 60)) % 24;

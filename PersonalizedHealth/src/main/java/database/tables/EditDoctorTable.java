@@ -49,6 +49,13 @@ public class EditDoctorTable {
         String update = "UPDATE doctors SET height='" + height + "' WHERE username = '" + username + "'";
         stmt.executeUpdate(update);
     }
+    
+    public static void updateRating(int doctor_id, double rating) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        String update = "UPDATE doctors SET rating = '" + rating + "' WHERE doctor_id = '" + doctor_id + "'";
+        stmt.executeUpdate(update);
+    }
 
     public void updateDoctorInfo(Doctor doc) throws SQLException, ClassNotFoundException {
         try {
@@ -238,6 +245,7 @@ public class EditDoctorTable {
                 + "    telephone VARCHAR(14) not null,"
                 + "    height INTEGER,"
                 + "    weight DOUBLE,"
+                + "    rating DOUBLE,"
                 + "   blooddonor BOOLEAN,"
                 + "   bloodtype VARCHAR(7) not null,"
                 + "   specialty VARCHAR(30) not null,"
@@ -261,7 +269,7 @@ public class EditDoctorTable {
 
             String insertQuery = "INSERT INTO "
                     + " doctors (username,email,password,firstname,lastname,birthdate,gender,amka,country,city,address,"
-                    + "lat,lon,telephone,height,weight,blooddonor,bloodtype,specialty,doctor_info,certified)"
+                    + "lat,lon,telephone,height,weight,rating,blooddonor,bloodtype,specialty,doctor_info,certified)"
                     + " VALUES ("
                     + "'" + doc.getUsername() + "',"
                     + "'" + doc.getEmail() + "',"
@@ -279,6 +287,7 @@ public class EditDoctorTable {
                     + "'" + doc.getTelephone() + "',"
                     + "'" + doc.getHeight() + "',"
                     + "'" + doc.getWeight() + "',"
+                    + "'" + doc.getRating()+ "',"
                     + "'" + doc.isBloodDonor() + "',"
                     + "'" + doc.getBloodtype() + "',"
                     + "'" + doc.getSpecialty() + "',"

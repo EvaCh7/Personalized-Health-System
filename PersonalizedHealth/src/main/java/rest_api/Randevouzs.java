@@ -111,7 +111,7 @@ public class Randevouzs {
     @Path("/showAllRandevouz/{username}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response showRandevouz(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
+    public Response showAllRandevouz(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
         JSONArray resJson = new JSONArray();
         Response.Status status = Response.Status.OK;
 
@@ -170,6 +170,43 @@ public class Randevouzs {
         }
         return Response.status(status).type("application/json").entity(response).build();
 
+    }
+
+    @Path("/rateRandevouz/{randevouz_id}/{rating}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response rateRandevouz(@PathParam("randevouz_id") int randevouz_id, @PathParam("rating") int rating)
+            throws SQLException, ClassNotFoundException {
+        String response = "{\"response\": \"Error, couldn't rate randevouz.\" }";
+        Response.Status status;
+        JSONObject resJson = new JSONObject();
+
+        try {
+            EditRandevouzTable.rateRandevouz(randevouz_id, rating);
+            Randevouz randevouz = EditRandevouzTable.databaseToRandevouz(randevouz_id);
+            String res = EditRandevouzTable.randevouzToJSON(randevouz);
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(res);
+            JSONObject item = new JSONObject();
+
+            item.put("doctor_id", jo.get("doctor_id").getAsInt());
+
+            String json = new Gson().toJson(item);
+
+            response = "{\"response\": \"Randevouz rated successfully!\" }";
+            status = Response.Status.OK;
+
+            return Response.status(status).type("application/json").entity(json).build();
+        } catch (SQLException ex) {
+            status = Response.Status.BAD_REQUEST;
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            status = Response.Status.BAD_REQUEST;
+            Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return Response.status(status).type("application/json").entity(response).build();
     }
 
     @Path("/addRandevouz/")
@@ -349,10 +386,8 @@ public class Randevouzs {
             System.out.println(date);
 
             if (UtilsDate.is4Hours(date)) {
-                System.out.println("edw eimaste");
-
                 String json = new Gson().toJson(res);
-                System.out.println("res: " + json);
+
                 return Response.ok().type("application/json").entity(json).build();
             } else {
                 continue;
@@ -449,7 +484,6 @@ public class Randevouzs {
             String name = EditDoctorTable.doctorToJSON(doctorInfo);
             JsonObject jo_name = (JsonObject) jsonParser.parse(name);
 
-            System.out.println(name);
             item.put("First name", jo_name.get("firstname").getAsString());
             item.put("Last name", jo_name.get("lastname").getAsString());
             item.put("Price", jo.get("price").getAsInt());
