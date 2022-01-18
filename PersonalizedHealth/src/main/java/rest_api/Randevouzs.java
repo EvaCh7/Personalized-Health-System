@@ -155,9 +155,7 @@ public class Randevouzs {
         for (JsonElement jso : js_array) {
             JsonObject js = jso.getAsJsonObject();
             try {
-                System.out.println("randevouz: " + js.get("randevouz_id").getAsInt() + " user id: " + js.get("user_id").getAsInt() + js.get("user_info").getAsString());
-                System.out.println(js.get("status").getAsString());
-                rand_obj.updateRandevouz(js.get("randevouz_id").getAsInt(), js.get("user_id").getAsInt(), js.get("user_info").getAsString(), js.get("status").getAsString());
+                rand_obj.updateRandevouzByDoctor(js.get("randevouz_id").getAsInt(), js.get("doctor_info").getAsString(), js.get("status").getAsString());
                 response = "{\"response\": \"randevouzs updated succesfully\" }";
 
                 status = Response.Status.OK;
@@ -218,15 +216,17 @@ public class Randevouzs {
 
         String response = "{\"response\": \"error didn't add new randevouz\" }";
         Response.Status status;
-        status = Response.Status.BAD_REQUEST;
+        status = Response.Status.BAD_GATEWAY;
         Gson gson = new Gson();
         JsonObject js = gson.fromJson(json, JsonObject.class);
         String date_time = js.get("date_time").getAsString();
         String date = UtilsDate.getDate(date_time);
         String _time = UtilsDate.getTime(date_time);
 
-        if (!UtilsDate.isFutureDate(date)) {
+        if (!UtilsDate.isFutureDate(date_time)) {
+
             response = "{\"response\": \"error invalid date, not from future\" }";
+
             return Response.status(status).type("application/json").entity(response).build();
 
         }

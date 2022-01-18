@@ -144,7 +144,7 @@ public class Examinations {
             }
         }
         if (!found) {
-            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"given ID hasn't any done randevouz\"}").build();
+            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"given ID hasn't any done randevouz\"}").build();
 
         }
         JSONArray resJson = new JSONArray();
@@ -159,7 +159,7 @@ public class Examinations {
 
         ArrayList<BloodTest> res = EditBloodTestTable.getBTsByDate(amka);
         if (res.isEmpty()) {
-            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
         }
 
         List<String> dateArray = new ArrayList<String>();

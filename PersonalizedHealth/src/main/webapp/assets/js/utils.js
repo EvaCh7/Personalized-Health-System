@@ -76,23 +76,29 @@ function get_doctor_info()
     return null;
 
 }
-function fill_empty_with_null(data, key, value)
-{
-    if (value == "")
-    {
-        data[key] = null;
-    } else
-    {
-        data[key] = value
-    }
-}
+
 function get_form_data_to_json(form_id)
 {
     let myForm = document.getElementById(form_id);
     const formData = new FormData(myForm);
-    const data = {};
+    let  data = {};
 
-    formData.forEach((value, key) => (fill_empty_with_null(data, key, value)));
+    formData.forEach((value, key) =>
+    {
+        if (value == "")
+        {
+            data[key] = null;
+        } else
+        {
+            data[key] = value
+        }
+    }
+
+    //fill_empty_with_null(data, key, value))
+
+
+
+    );
     return data;
 
 }

@@ -71,12 +71,10 @@ public class Messages {
         String response = "{\"response\": \"error couldn't send the messages\" }";
         Response.Status status;
         status = Response.Status.BAD_GATEWAY;
-        System.err.println(json);
 
         JsonObject js = new Gson().fromJson(json, JsonObject.class);
         String bloodType = js.get("bloodtype").getAsString();
         String message = js.get("message").getAsString();
-        System.err.println(js);
         try {
             ArrayList<SimpleUser> users = new EditSimpleUserTable().databaseToUser();
 

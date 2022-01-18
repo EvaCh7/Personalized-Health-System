@@ -25,13 +25,14 @@ public class UtilsDate {
 
     public static boolean isFutureDate(String pDateString) {
         try {
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(pDateString);
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(pDateString);
             return new Date().before(date);
         } catch (ParseException ex) {
             Logger.getLogger(Randevouz.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }
+    
 
     public static String getDate(String date_time) {
         String[] str = date_time.split(" ");

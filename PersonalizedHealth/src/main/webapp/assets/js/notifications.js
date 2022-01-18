@@ -3,17 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 setInterval(function () {
     isLoggedIn_notfications()
 
-}, 5000);
+
+}, 3000);
 
 $(document).ready(function () {
-    $('#notifcations').popover({
-        container: 'body',
-        content: ' ',
-        html: true
+
+   
+
+ $('#notifcations').popover({
+        animation: true,
+        html: true,
+        title: 'Notifications',
+        placement: 'bottom',
+
     })
+
 
 });
 
@@ -28,9 +37,11 @@ function show_notifications_about_cacnceled_randevouz(response) {
 
         }
     }
-    update_notification_text()
-    $('#notifcations').attr('data-bs-content', notif_str);
-    update_notification_text()
+
+    if ($('#notifcations').attr('data-bs-content') !== notif_str) {
+        $('#notifcations').attr('data-bs-content', "");
+        $('#notifcations').attr('data-bs-content', notif_str);
+    }
 }
 
 function error_show_notifications_about_cacnceled_randevouz() {
@@ -52,9 +63,10 @@ function handle_user_notifications(json) {
     sendXmlGetRequest(url, show_notifications_about_blood_donation_randevouz, error_show_notifications_about_blood_donation_randevouz)
 }
 
+
 function show_notifications_about_blood_donation_randevouz(response) {
+
     var js = JSON.parse(response);
-    console.log(js)
     var notif_str = ""
     for (index in js) {
 
@@ -62,11 +74,33 @@ function show_notifications_about_blood_donation_randevouz(response) {
         notif_str += msg
 
     }
-    update_notification_text()
-    $('#notifcations').attr('data-bs-content', notif_str);
-    update_notification_text()
+    if ($('#notifcations').attr('data-bs-content') !== notif_str) {
+        $('#notifcations').attr('data-bs-content', "");
+        $('#notifcations').attr('data-bs-content', notif_str);
+    }
 }
-function error_show_notifications_about_blood_donation_randevouz() {
+
+
+
+function show_notifications_about_cacnceled_randevouz(response) {
+    var js = JSON.parse(response)
+    var notif_str = ""
+    for (index in js) {
+
+        if (js[index].status == "cancelled") {
+            var msg = "Randevouz with patient: " + js[index].user_id + " got cancelled for date: " + js[index].date_time + "<br>"
+            notif_str += msg
+
+        }
+    }
+    if ($('#notifcations').attr('data-bs-content') !== notif_str) {
+        console.log("show doctor notif")
+        $('#notifcations').attr('data-bs-content', "");
+        $('#notifcations').attr('data-bs-content', notif_str);
+    }
+}
+
+function error_show_randevouz_notification() {
 
 }
 
@@ -77,25 +111,16 @@ function show_randevouz_notification(response) {
         var msg = "Attention! Don't forget that your randevouz is at: " + js[index].date_time;
         notif_str += msg;
     }
-    update_notification_text();
     $('#notifcations').attr('data-bs-content', notif_str);
-    update_notification_text();
+
+    if ($('#notifcations').attr('data-bs-content') !== notif_str) {
+        $('#notifcations').attr('data-bs-content', "");
+        $('#notifcations').attr('data-bs-content', notif_str);
+    }
 }
 
-function error_show_randevouz_notification() {}
-
-
-
 function update_notification_text() {
-    if (isNotificationClicked) {
 
-        $('#notifcations').popover("show");
-
-
-    } else {
-        $('#notifcations').popover("hide");
-
-    }
 }
 function isLoggedIn_notfications() {
     var xhr = new XMLHttpRequest();
@@ -112,8 +137,11 @@ function isLoggedIn_notfications() {
 
 
         } else if (xhr.status !== 200) {
-            $('#notifcations').attr('data-bs-content', "You must be logged in to see notifications");
-            update_notification_text()
+            if ($('#notifcations').attr('data-bs-content') !== "you must be logged in to see notifcations") {
+                $('#notifcations').attr('data-bs-content', "");
+                $('#notifcations').attr('data-bs-content', "you must be logged in to see notifcations");
+
+            }
 
         }
     };
@@ -121,15 +149,3 @@ function isLoggedIn_notfications() {
     xhr.send();
 }
 
-
-let isNotificationClicked = false;
-function button_clicked() {
-    if (isNotificationClicked)
-    {
-        isNotificationClicked = false
-
-    } else {
-        isNotificationClicked = true
-
-    }
-}

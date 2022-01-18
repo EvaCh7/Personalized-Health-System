@@ -7,12 +7,13 @@
 
 
 function send_massive_msg() {
+    
+    var doctorData = window.localStorage.getItem('doctorData');
+    doctorData = JSON.parse(doctorData);
     var data = get_form_data_to_json("blood_donation_form")
     data["doctor_id"] = doctorData.doctor_id
-    console.log(data["bloodtype"])
 
-    data["bloodtype"] = data["bloodtype"].replace('P', '+')
-    data["bloodtype"] = data["bloodtype"].replace('N', '-')
+    
 
     console.log(data["bloodtype"])
 
@@ -28,11 +29,14 @@ function send_massive_msg() {
 
 function call_back_send_massive_msg(response) {
     var json = JSON.parse(response)
-    $("blod-don-msg-response").html(json.response)
+    console.log(json)
+    $("#blood-don-msg-response").html(json.response)
 
 }
 function call_back_error_send_massive_msg(response) {
     var json = JSON.parse(response)
-    $("blod-don-msg-response").html(json.response)
+        console.log(json)
+
+    $("#blood-don-msg-response").html(json.response)
 
 }

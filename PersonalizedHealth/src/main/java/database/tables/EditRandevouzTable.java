@@ -58,7 +58,7 @@ public class EditRandevouzTable {
         JsonArray js_arr = new JsonArray();
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id=" + id + " AND status=\'done\'");
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id=" + id + " AND status=" +"\"done\""+""  );
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();
@@ -180,7 +180,15 @@ public class EditRandevouzTable {
         String json = gson.toJson(r, Randevouz.class);
         return json;
     }
-
+    public void updateRandevouzByDoctor(int randevouzID,  String info, String status) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        String updateQuery = "UPDATE randevouz SET status='" + status + "',doctor_info='" + info + "' WHERE randevouz_id = '" + randevouzID + "'";
+        stmt.executeUpdate(updateQuery);
+        System.out.println(updateQuery);
+        stmt.close();
+        con.close();
+    }
     public void updateRandevouz(int randevouzID, int userID, String info, String status) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();

@@ -64,8 +64,11 @@ public class Treatments {
         Response.Status status = Response.Status.BAD_GATEWAY;
         String response = "{\"response\": \"Didn't add Treatment\" }";
         EditTreatmentTable treat_table_utils = new EditTreatmentTable();
+        System.out.println(json);
         Treatment treatment = treat_table_utils.jsonToTreatment(json);
         try {
+        System.out.println(treatment.getUser_id());
+
             ArrayList<BloodTest> blood_tests = getAllBloodTestsById(treatment.getUser_id());
             if (blood_tests.size() > 0) {
 

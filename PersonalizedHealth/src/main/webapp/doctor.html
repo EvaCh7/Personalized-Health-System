@@ -594,6 +594,8 @@
 
                             <button onclick="save_randevouz()"  type="button" class="process-randevuz" > Save Randevouz</button>
                         </div>
+                        <div class="col-2  d-none" id="save-randev-resp">
+                        </div>
                         <div class="col-2  d-none"  id="download-rand-but">
 
                             <button onclick="download_randevouz()"  type="button" class="download-randevuz" > Download Randevouz</button>
@@ -746,23 +748,24 @@
 
                     </div>
                     <div class="col-2 dropdown">
-                        <select  id="blood-type-doc" name="bloodtype" required>
+                        <select  id="blood-type-massive" name="bloodtype" required>
                             <option value="" disabled>Blood Type</option>
-                            <option value='AP'>A+</option>
-                            <option value='AN'>A-</option>
-                            <option value=  'BN'        >Β-</option>
-                            <option value='BN'        >Β+</option>
-                            <option value='ABN'  >AΒ-</option>
-                            <option value='ABP'      >AΒ+</option>
-                            <option value='0N'       >0-</option>
-                            <option value='0P'       >0+</option>
+                            <option value='A+'>A+</option>
+                            <option value='A-'>A-</option>
+                            <option value=  'B-'        >Β-</option>
+                            <option value='B+'        >Β+</option>
+                            <option value='AB-'  >AΒ-</option>
+                            <option value='AB+'      >AΒ+</option>
+                            <option value='0-'       >0-</option>
+                            <option value='0+'       >0+</option>
                             <option value="Unknown"         >Unknown</option>
                         </select>
                     </div>
                     <div class="col-2 ">
-                        <div id="blod-don-msg-response"></div>
 
                         <button onclick="send_massive_msg()"  type="button" id="blood_donation_msg">Send Message</button>
+                         <div id="blood-don-msg-response"></div>
+
 
                     </div>
                 </form>

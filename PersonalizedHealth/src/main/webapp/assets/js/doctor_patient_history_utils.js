@@ -16,6 +16,7 @@
 function create_table_from_json_array(json, table_id)
 {
     var table = document.getElementById(table_id);
+    table.innerHTML=""
     var total = json.length;
     var cell = new Array();
     //add header
@@ -92,15 +93,14 @@ function compare_exams(doctor_id, user_id)
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const obj = JSON.parse(xhr.responseText);
-            document.getElementById("content").innerHTML += createCompareTable(obj);
+            document.getElementById("content").innerHTML = createCompareTable(obj);
 
         } else if (xhr.status !== 200) {
             document.getElementById('content').innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
-                    + JSON.stringify(xhr.responseText);
+                    +JSON.stringify(xhr.responseText);
         }
     };
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareUsersDoneExams/" + doctor_id + "/" + user_id;
-
     xhr.open("GET", URL);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -233,6 +233,7 @@ function show_therapies() {
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const obj = JSON.parse(xhr.responseText);
+            document.getElementById("therapy_div").innerHTML=""
             var i = 1;
             var count = Object.keys(obj).length;
             for (id in obj) {
@@ -267,6 +268,7 @@ function send_and_store_treatment() {
 
     var data = get_form_data_to_json("add_treat")
     data["doctor_id"] = doctorData.doctor_id
+    console.log(data)
     url = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/addTreatment"
     sendXmlPostRequest(url, data, call_back_send_treatment, call_back_error_send_treatment)
 }

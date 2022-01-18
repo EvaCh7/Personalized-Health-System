@@ -34,13 +34,12 @@ function update_doctor_data(e) {
         height: $("#height").val(),
         weight: $("#weight").val(),
         blooddonor: blood_donor,
-        bloodtype: $("#blood-type-doc").val(),
+        bloodtype: $("#blood-type").val(),
         specialty: get_doctor_specialty(),
         doctor_info: get_doctor_info()
 
     };
     e.preventDefault();
-
     console.log(data)
     sendXmlPostRequest("/PersonalizedHealth/doctor", data, call_back_update_data, call_back_error_update_data);
 }
@@ -51,27 +50,40 @@ function create_randevouz_element(rand_obj)
 
                                                 <div class=" mt-5 container form-card row">
 
-                        <div class="col-1">
+                        <div class="col-2">
+                            <label for="randevouz_id">Randevouz ID</label><br>
 
                             <input type="number" id="randevouz_id" value=` + rand_obj.randevouz_id + ` name="randevouz_id" class="form-control" placeholder="Randevouz ID">
                         </div>
 
+
+ 
+    <div class="col-1">
+                                <label for="doctor_id">Doctor  ID</label><br>
+
+                            <input type="number" id="doctor_id" name="doctor_id" value=` + rand_obj.doctor_id + ` class="form-control" placeholder="Doctor ID">
+                        </div>
                         <div class="col-1">
+                                    <label for="user_id">User  ID</label><br>
+
                             <input type="number" id="user_id" name="user_id" value=` + rand_obj.user_id + ` class="form-control" placeholder="User ID">
                         </div>
+   
                      
                  
                     
 
                     <div class="col-2">
-    
+                                    <label for="doctor_info">Doctor  Info</label><br>
 
-    <input type="text" class="form-control" id="user_info" name="user_info" placeholder="User Info"
 
-               value="` + rand_obj.user_info + `"   >  
+    <input type="text" class="form-control" id="doctor_info" name="doctor_info" placeholder="Doctor Info"
+
+               value="` + rand_obj.doctor_info + `"   >  
 </div>
       <div class="col-2">
-    
+                                    <label for="status">Status </label><br>
+
 
     <input type="text" class="form-control" id="status" name="status" placeholder="status"  value="`
 
@@ -79,6 +91,7 @@ function create_randevouz_element(rand_obj)
 </div>
 
                     <div class="col-2">
+                                <label for="date_time">Date & Time  </label><br>
 
     <input type="text" id="date_time" name="date_time" class="form-control" value="` + rand_obj.date_time + `"  required disabled>
 </div> </div>
@@ -90,8 +103,9 @@ function create_randevouz_element(rand_obj)
 function close_div_doc_3() {
     $("#process-date-class").addClass("d-none")
     document.getElementById("close_div_doc_but_3").style.display = "none";
-
     $("#process-randevouz-form").html('')
+            $("#save-randev-resp").addClass("d-none")
+
     $("#save-rand-but").addClass("d-none")
     $("#download-rand-but").addClass("d-none")
 }
@@ -105,7 +119,6 @@ function spawn_randevouz()
 {
     var doctorData = window.localStorage.getItem('doctorData');
     doctorData = JSON.parse(doctorData);
-
     $("#save-rand-but").removeClass("d-none")
     $("#download-rand-but").removeClass("d-none")
 
@@ -122,6 +135,7 @@ function spawn_randevouz()
 
 function call_back_get_randevouz(response)
 {
+
     var json = JSON.parse(response)
     console.log(json)
     for (let x in json) {
@@ -129,72 +143,67 @@ function call_back_get_randevouz(response)
         prev_html += create_randevouz_element(json[x])
         $("#process-randevouz-form").html(prev_html)
     }
-    var array = window.localStorage.getItem(array).split();
-    var data = JSON.parse(window.localStorage.getItem(data));
 
-    get_form_data_to_json_array("process-randevouz-form");
-    array.push(data);
 
 }
 
 function save_randevouz() {
     url = "examinations/randevouz/updateRandevouz";
-    var array = window.localStorage.getItem(array).split();
-    var data = JSON.parse(window.localStorage.getItem(data));
-    
-    get_form_data_to_json_array("process-randevouz-form");
-
-    array.push(data);
-    console.log(JSON.stringify(array));
-
-    sendXmlPutRequestJsonData(url, array, call_back_save_randevouz, call_back_error_save_randevouz)
+    var form_data = get_form_data_to_json_array("process-randevouz-form");
+    console.log(JSON.stringify(form_data));
+    sendXmlPutRequestJsonData(url, form_data, call_back_save_randevouz, call_back_error_save_randevouz)
 
 }
 function call_back_save_randevouz(response) {
     js = JSON.parse(response)
+        $("#save-randev-resp").removeClass("d-none")
+
+    $("#save-randev-resp").html(js.response)
     console.log(js.response)
 
 }
 function call_back_error_save_randevouz(response) {
     js = JSON.parse(response)
+            $("#save-randev-resp").removeClass("d-none")
+
+      $("#save-randev-resp").html(js.response)
+
     console.log(js.response)
 
 }
-function fill_array(key, value)
-{
-    var array = window.localStorage.getItem(array).split();
-    var data = JSON.parse(window.localStorage.getItem(data));
 
-    if (key in data) {
-        array.push(data)
-        console.log("inserted data:", data)
-        data = {};
-    }
-    if (value === "")
-    {
-        data[key] = null;
-    } else
-    {
-        data[key] = value
-    }
-}
 
 function get_form_data_to_json_array(form_id)
 {
-    window.localStorage.setItem(data, '');
-    window.localStorage.setItem(array, array.toString());
-    var array = window.localStorage.getItem(array).split();
-    var data = JSON.parse(window.localStorage.getItem(data));
+    //window.localStorage.setItem('data', JSON.stringify("{}"));
+    // window.localStorage.setItem('array',JSON.stringify("[]"));
 
+
+    let data = {};
+    let array = new Array();
     let myForm = document.getElementById(form_id);
     const formData = new FormData(myForm);
+    
+    formData.forEach((value, key) => {
+        //    fill_array(key, value,data,array))
 
-    formData.forEach((value, key) => (fill_array(key, value)));
+        if (key in data) {
+            array.push(data)
+            data = {};
+        }
+        if (value === "")
+        {
+            data[key] = null;
+        } else
+        {
+            data[key] = value
+        }
 
-    array.push(data);
-    console.log("inserted data on end :", data);
+    });
+    array.push(data)
+    console.log("array: "  , array)
 
-    return JSON.parse(JSON.stringify(array));
+    return array
 
 }
 function call_back_error_get_randevouz(response)
@@ -235,14 +244,12 @@ function delete_randevouz()
 function download_randevouz() {
     var doctorData = window.localStorage.getItem('doctorData');
     doctorData = JSON.parse(doctorData);
-
     var date = $("#process-date").val()
     url = "examinations/randevouz/getRandevouzPDF" + "/" + doctorData.doctor_id + "?date=" + date
     var request = new XMLHttpRequest();
     request.open("GET", url, true);
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.responseType = 'blob';
-
     request.onreadystatechange = function () {
         if (this.readyState === 4 && (this.status >= 200 && this.status < 300)) {
             var a = document.createElement('a');
@@ -257,7 +264,6 @@ function download_randevouz() {
         }
     };
     request.send();
-
 }
 
 
@@ -281,8 +287,7 @@ function send_new_randevouz()
 {
     var doctorData = window.localStorage.getItem('doctorData');
     doctorData = JSON.parse(doctorData);
-
-    data = get_form_data_to_json("add-randevuz-form")
+    var data = get_form_data_to_json("add-randevuz-form")
     data["status"] = "free"
     console.log(doctorData)
     data["doctor_id"] = doctorData.doctor_id
@@ -347,12 +352,10 @@ function fill_doctor_info(responseData) {
         $("#woman").prop("checked", true);
     else
         $("#other").prop("checked", true);
-
     if (responseData.blooddonor === "1")
         $("#blood-giver").prop("checked", true);
     else
         $("#no").prop("checked", true);
-
     $("#birth-date").val(responseData.birthdate)
     $("#doc-amka").val(responseData.amka)
     $("#country").val(responseData.country)
@@ -393,15 +396,12 @@ $(document).ready(function () {
     })
 
 });
-
 function calculate_and_display_bmi()
 
 {
     const data = null;
-
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
-
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
             var json = JSON.parse(this.responseText)
@@ -415,17 +415,14 @@ function calculate_and_display_bmi()
     xhr.open("GET", "https://fitness-calculator.p.rapidapi.com/bmi?age=25&weight=" + weight + "&height=" + height);
     xhr.setRequestHeader("x-rapidapi-host", "fitness-calculator.p.rapidapi.com");
     xhr.setRequestHeader("x-rapidapi-key", "59dd881c7cmsh891f1f8f669b670p125db3jsn78f61fef5840");
-
     xhr.send(data);
 }
 
 
 function calculate_and_display_ideal_weight() {
     const data = null;
-
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
-
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
 
@@ -442,7 +439,6 @@ function calculate_and_display_ideal_weight() {
     xhr.open("GET", "https://fitness-calculator.p.rapidapi.com/idealweight?gender=" + gender + "&height=" + height);
     xhr.setRequestHeader("x-rapidapi-host", "fitness-calculator.p.rapidapi.com");
     xhr.setRequestHeader("x-rapidapi-key", "59dd881c7cmsh891f1f8f669b670p125db3jsn78f61fef5840");
-
     xhr.send(data);
 }
 
