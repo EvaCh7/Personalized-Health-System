@@ -12,8 +12,8 @@ function certifyDocFunc() {
     };
     var id = document.getElementById("certThisDoc").value;
 
-    xhr.open('PUT', 'http://localhost:8080/PersonalizedHealth/examinations/Certify/' + id);
-    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.open('PUT', 'http://localhost:8080/PersonalizedHealth/examinations/docs/Certify/' + id);
+//    xhr.setRequestHeader("Content-type", "application/json");
     xhr.send();
 }
 
@@ -44,8 +44,9 @@ function get_uncertified_doctors()
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
+            console.log(this.responseText);
             document.getElementById("uncert_docs_but").disabled = true;
-            var json = JSON.parse(this.responseText)
+            var json = JSON.parse(this.responseText);
             uncert_docs_table(json);
         }
     });

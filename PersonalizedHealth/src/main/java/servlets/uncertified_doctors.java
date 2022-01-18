@@ -46,7 +46,7 @@ public class uncertified_doctors extends HttpServlet {
         EditDoctorTable doctor_utils = new EditDoctorTable();
         try {
 
-            ArrayList<Doctor> doctors = doctor_utils.databaseToDoctorArray();
+            ArrayList<Doctor> doctors = doctor_utils.allDoctorsArray();
             for (Doctor doc : doctors) {
                 if (doc.getCertified() == 0) {
                     String json_str = doctor_utils.doctorToJSON(doc);

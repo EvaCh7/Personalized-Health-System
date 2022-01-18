@@ -129,20 +129,23 @@ function call_back_get_randevouz(response)
         prev_html += create_randevouz_element(json[x])
         $("#process-randevouz-form").html(prev_html)
     }
+    var array = window.localStorage.getItem(array).split();
+    var data = JSON.parse(window.localStorage.getItem(data));
 
-    get_form_data_to_json_array("process-randevouz-form")
-    array.push(data)
+    get_form_data_to_json_array("process-randevouz-form");
+    array.push(data);
 
 }
 
 function save_randevouz() {
-    url = "examinations/randevouz/updateRandevouz"
-    data = {}
-    array = []
-    get_form_data_to_json_array("process-randevouz-form")
+    url = "examinations/randevouz/updateRandevouz";
+    var array = window.localStorage.getItem(array).split();
+    var data = JSON.parse(window.localStorage.getItem(data));
+    
+    get_form_data_to_json_array("process-randevouz-form");
 
-    array.push(data)
-    console.log(JSON.stringify(array))
+    array.push(data);
+    console.log(JSON.stringify(array));
 
     sendXmlPutRequestJsonData(url, array, call_back_save_randevouz, call_back_error_save_randevouz)
 
@@ -159,12 +162,15 @@ function call_back_error_save_randevouz(response) {
 }
 function fill_array(key, value)
 {
+    var array = window.localStorage.getItem(array).split();
+    var data = JSON.parse(window.localStorage.getItem(data));
+
     if (key in data) {
         array.push(data)
         console.log("inserted data:", data)
-        data = {}
+        data = {};
     }
-    if (value == "")
+    if (value === "")
     {
         data[key] = null;
     } else
@@ -172,20 +178,21 @@ function fill_array(key, value)
         data[key] = value
     }
 }
-let array = new Array();
-let data = {};
 
 function get_form_data_to_json_array(form_id)
 {
-    data = {}
-    array = new Array();
+    window.localStorage.setItem(data, '');
+    window.localStorage.setItem(array, array.toString());
+    var array = window.localStorage.getItem(array).split();
+    var data = JSON.parse(window.localStorage.getItem(data));
+
     let myForm = document.getElementById(form_id);
     const formData = new FormData(myForm);
 
     formData.forEach((value, key) => (fill_array(key, value)));
 
-    array.push(data)
-    console.log("inserted data on end :", data)
+    array.push(data);
+    console.log("inserted data on end :", data);
 
     return JSON.parse(JSON.stringify(array));
 
