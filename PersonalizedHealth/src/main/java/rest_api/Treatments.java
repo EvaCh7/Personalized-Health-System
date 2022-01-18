@@ -5,6 +5,7 @@
  */
 package rest_api;
 
+import Utils.UtilsDate;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -15,8 +16,12 @@ import static database.tables.EditBloodTestTable.getAllBloodTestsById;
 import database.tables.EditRandevouzTable;
 import database.tables.EditTreatmentTable;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,7 +117,49 @@ public class Treatments {
                 resJson.add(tr);
             }
         }
+        String json = new Gson().toJson(resJson);
+        return Response.status(status).type("application/json").entity(json).build();
+    }
 
+    @GET
+    @Path("/showCurrentTreatments/{amka}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response showCurrentTreatments(@PathParam("amka") String amka)
+            throws SQLException, ClassNotFoundException, ParseException {
+        Response.Status status = Response.Status.OK;
+
+        JSONArray resJson = new JSONArray();
+        ArrayList<BloodTest> res = EditBloodTestTable.getAllBloodTests(amka);
+
+        if (res.isEmpty()) {
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String current_date = formatter.format(date);
+        System.out.println("cur date: " + current_date);
+
+        for (int i = 0; i < res.size(); i++) {
+            String jsonElems = EditBloodTestTable.bloodTestToJSON(res.get(i));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            int id = jo.get("bloodtest_id").getAsInt();
+            Treatment tr = EditTreatmentTable.databaseToTreatmentBT(id);
+
+            String jsonElemensTr = EditTreatmentTable.treatmentToJSON(tr);
+            JsonObject jo_tr = (JsonObject) jsonParser.parse(jsonElemensTr);
+
+            String from_date = jo_tr.get("start_date").getAsString();
+            String to_date = jo_tr.get("end_date").getAsString();
+
+            boolean isBetween = UtilsDate.isDateBetween(current_date, from_date, to_date);
+            if (tr == null) {
+                continue;
+            } else if(isBetween){
+                resJson.add(tr);
+            }
+        }
         String json = new Gson().toJson(resJson);
         return Response.status(status).type("application/json").entity(json).build();
     }

@@ -5,6 +5,7 @@
  */
 package Utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -51,6 +52,19 @@ public class UtilsDate {
         if (_time.isAfter(from) && _time.isBefore(to)) {
             return true;
 
+        }
+        return false;
+
+    }
+
+    public static boolean isDateBetween(String curDate, String fromDate, String toDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date current_date = sdf.parse(curDate);
+        Date from_date = sdf.parse(fromDate);
+        Date to_date = sdf.parse(toDate);
+
+        if (current_date.after(from_date) && current_date.before(to_date)) {
+            return true;
         }
         return false;
 

@@ -214,11 +214,12 @@ function show_therapies_user() {
             const obj = JSON.parse(xhr.responseText);
             document.getElementById("close_div_but_1").style.display = "block";
             $("#therapy_div_user").removeClass("d-none");
+            document.getElementById("therapy_div_user").innerHTML = "";
 
             var i = 1;
             var count = Object.keys(obj).length;
             for (id in obj) {
-                document.getElementById("therapy_div_user").innerHTML = createTreatmentTable(obj[id], i);
+                document.getElementById("therapy_div_user").innerHTML += createTreatmentTable(obj[id], i);
                 i++;
             }
 
@@ -232,6 +233,40 @@ function show_therapies_user() {
 
     var amka = document.getElementById("amka").value;
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showTreatments/" + amka;
+
+    xhr.open("GET", URL);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+}
+
+
+function show_curr_therapies() {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const obj = JSON.parse(xhr.responseText);
+            document.getElementById("close_div_but_1").style.display = "block";
+            $("#therapy_div_user").removeClass("d-none");
+            document.getElementById("therapy_div_user").innerHTML = "";
+
+            var i = 1;
+            var count = Object.keys(obj).length;
+            for (id in obj) {
+                document.getElementById("therapy_div_user").innerHTML += createTreatmentTable(obj[id], i);
+                i++;
+            }
+
+        } else if (xhr.status !== 200) {
+            document.getElementById('therapy_div_user')
+                    .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
+                    + JSON.stringify(xhr.responseText);
+
+        }
+    };
+
+    var amka = document.getElementById("amka").value;
+    var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showCurrentTreatments/" + amka;
 
     xhr.open("GET", URL);
     xhr.setRequestHeader("Accept", "application/json");

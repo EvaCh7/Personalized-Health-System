@@ -29,7 +29,7 @@ public class EditTreatmentTable {
          Treatment msg=jsonToTreatment(json);
          createNewTreatment(msg);
     }
-    public String treatmentToJSON(Treatment tr) {
+    public static String treatmentToJSON(Treatment tr) {
         Gson gson = new Gson();
 
         String json = gson.toJson(tr, Treatment.class);
