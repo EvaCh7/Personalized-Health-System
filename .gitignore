@@ -1,3 +1,5 @@
 *.class
 pom.properties
 *.wav
+PersonalizedHealth/target/classes/database/tables/EditDoctorTable.class
+*.class
