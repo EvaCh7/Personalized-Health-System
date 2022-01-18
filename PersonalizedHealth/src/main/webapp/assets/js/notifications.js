@@ -18,7 +18,6 @@ $(document).ready(function () {
  $('#notifcations').popover({
         animation: true,
         html: true,
-        title: 'Notifications',
         placement: 'bottom',
 
     })
