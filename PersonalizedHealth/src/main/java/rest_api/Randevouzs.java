@@ -518,8 +518,8 @@ public class Randevouzs {
             try {
                 status = Response.Status.OK;
                 JsonArray array = EditRandevouzTable.getDoctosrandevouz(id);
-                Document document = JsonArrayToPDF(array, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
-                File file = new File("C:\\Users\\kokol\\Documents\\randevouz.pdf");
+                Document document = JsonArrayToPDF(array, "randevouz.pdf");
+                File file = new File("randevouz.pdf");
                 return Response.ok(file, MediaType.APPLICATION_OCTET_STREAM)
                         .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"") //optional
                         .build();
@@ -546,8 +546,8 @@ public class Randevouzs {
                         array_return.add(_js);
                     }
                 }
-                Document document = JsonArrayToPDF(array_return, "C:\\Users\\kokol\\Documents\\randevouz.pdf");
-                File file = new File("C:\\Users\\kokol\\Documents\\randevouz.pdf");
+                Document document = JsonArrayToPDF(array_return, "randevouz.pdf");
+                File file = new File("randevouz.pdf");
                 return Response.ok(file, MediaType.APPLICATION_OCTET_STREAM)
                         .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"") //optional
                         .build();
