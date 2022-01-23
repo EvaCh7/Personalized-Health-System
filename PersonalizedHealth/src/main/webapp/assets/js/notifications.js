@@ -70,11 +70,11 @@ function handle_user_notifications(json) {
 function show_notifications_about_blood_donation_randevouz(response) {
 
     var js = JSON.parse(response);
-    var notif_str = ""
+    var notif_str = "";
     for (index in js) {
 
-        var msg = " dear blood donator doctor says: " + js[index].message
-        notif_str += msg
+        var msg = " dear blood donator doctor says: " + js[index].message + " <br>";
+        notif_str += msg;
 
     }
     if ($('#notifcations').attr('data-bs-content') !== notif_str) {
