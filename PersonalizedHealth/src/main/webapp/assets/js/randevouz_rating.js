@@ -7,7 +7,7 @@
 function rate_randevouz() {
     var username = document.getElementById("username").value;
     document.getElementById("rating_div").style.display = "block";
-    document.getElementById("close_div_but_4").style.display = "block";
+    document.getElementById("close_div_but_6").style.display = "block";
 
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/randevouz/showAllRandevouz/" + username;
     sendXmlGetRequest(URL, print_done_rand, error);
@@ -16,7 +16,9 @@ function rate_randevouz() {
 function print_done_rand(response) {
     var jsonArray = JSON.parse(response);
 
+    document.getElementById("show_rating").style.display = "block";
     document.getElementById("show_done_Randevouz").innerHTML = "";
+
     for (id in jsonArray) {
         if (jsonArray[id]["status"] === "done" && jsonArray[id]["rating"] === 0) {
             document.getElementById("show_done_Randevouz").innerHTML += createTable(jsonArray[id]);
@@ -25,6 +27,7 @@ function print_done_rand(response) {
     }
     if (document.getElementById("show_done_Randevouz").innerHTML === "") {
         document.getElementById("show_done_Randevouz").innerHTML = "You haven't attended any randevouz.";
+        document.getElementById("show_rating").style.display = "none";
     }
 }
 
@@ -55,7 +58,7 @@ function give_rating_to_randevouz(responseData) {
 
 function calc_doctors_rate(responseData) {
     var response = JSON.parse(responseData);
-    
+
     if (response["success"] === "Successful submition of rating.")
         document.getElementById("responseMessRand").innerHTML = "Your review was submitted successfully!";
     else
@@ -64,8 +67,10 @@ function calc_doctors_rate(responseData) {
 }
 
 function close_div_6() {
+    document.getElementById("rating_div").innerHTML = "";
     document.getElementById("rating_div").style.display = "none";
-    document.getElementById("close_div_but_4").style.display = "none";
+    
+    document.getElementById("close_div_but_6").style.display = "none";
 }
 
 function error() {}

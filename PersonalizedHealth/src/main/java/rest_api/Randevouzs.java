@@ -142,7 +142,7 @@ public class Randevouzs {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateRandevouz(String json) {
+        public Response updateRandevouz(String json) {
 
         String response = "{\"response\": \"error didn't add new randevouz\" }";
         Response.Status status;

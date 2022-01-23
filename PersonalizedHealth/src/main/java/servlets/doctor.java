@@ -48,12 +48,7 @@ public class doctor extends HttpServlet {
             EditDoctorTable doctor_utils = new EditDoctorTable();
             String doctor_info = "";
             try {
-                System.out.println("username: " + username);
-                System.out.println("password: " + password);
-
                 doctor_info = doctor_utils.databaseToJSON(username, password);
-                System.out.println(doctor_info);
-
             } catch (SQLException ex) {
                 Logger.getLogger(user.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {

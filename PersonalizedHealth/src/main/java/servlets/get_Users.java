@@ -63,7 +63,6 @@ public class get_Users extends HttpServlet {
                 JsonObject user_json = JsonParser.parseString(json_str).getAsJsonObject();
                 json_array.add(user_json);
             }
-            System.out.println(json_array);
             ArrayList<SimpleUser> res_user = EditSimpleUserTable.databaseToUser();
 
             for (SimpleUser us : res_user) {
