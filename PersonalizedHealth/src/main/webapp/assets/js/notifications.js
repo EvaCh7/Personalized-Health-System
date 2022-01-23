@@ -79,7 +79,7 @@ function show_notifications_about_blood_donation_randevouz(response) {
     }
 }
 
-
+function error_show_notifications_about_blood_donation_randevouz() {}
 
 function show_notifications_about_cacnceled_randevouz(response) {
     var js = JSON.parse(response)
@@ -105,9 +105,10 @@ function error_show_randevouz_notification() {
 
 function show_randevouz_notification(response) {
     var js = JSON.parse(response);
+    console.log(js);
     var notif_str = "";
     for (index in js) {
-        var msg = "Attention! Don't forget that your randevouz is at: " + js[index].date_time;
+        var msg = "Attention! Don't forget that your randevouz is at: " + js[index].date_time + "<br>";
         notif_str += msg;
     }
     $('#notifcations').attr('data-bs-content', notif_str);

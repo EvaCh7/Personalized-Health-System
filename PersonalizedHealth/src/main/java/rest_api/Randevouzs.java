@@ -372,6 +372,7 @@ public class Randevouzs {
     public Response getRandevouzNotification(@PathParam("user_id") int user_id)
             throws ParseException, SQLException, ClassNotFoundException {
         ArrayList<Randevouz> res = EditRandevouzTable.getDateOfRandevouz(user_id);
+        JSONArray resJson = new JSONArray();
 
         String response = "{\"response\": \"error invalid ID or Server error\" }";
         Response.Status status;
@@ -386,12 +387,14 @@ public class Randevouzs {
             System.out.println(date);
 
             if (UtilsDate.is4Hours(date)) {
-                String json = new Gson().toJson(res);
-
-                return Response.ok().type("application/json").entity(json).build();
+                resJson.add(res.get(i));
             } else {
                 continue;
             }
+            String json_res = new Gson().toJson(resJson);
+
+            return Response.ok().type("application/json").entity(json_res).build();
+
         }
         status = Response.Status.BAD_GATEWAY;
 

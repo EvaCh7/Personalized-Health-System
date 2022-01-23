@@ -284,7 +284,6 @@ public class Messages {
         }
         try {
             json_arr = EditMessageTable.SelectMessagesOfDoctorWithPatient(user_id, doctor_id);
-            System.out.println(json_arr.toString());
 
             return Response.ok().type("application/json").entity(json_arr.toString()).build();
 

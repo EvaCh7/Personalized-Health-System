@@ -32,7 +32,6 @@ public class UtilsDate {
             return false;
         }
     }
-    
 
     public static String getDate(String date_time) {
         String[] str = date_time.split(" ");
@@ -71,17 +70,21 @@ public class UtilsDate {
 
     }
 
-    public static boolean is4Hours(String time) throws ParseException {
+    public static boolean is4Hours(String datetime) throws ParseException {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date_rand = formatter.parse(time);
+        SimpleDateFormat formatter_date = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date_randevouz = formatter.parse(datetime);
         Date date_now = new Date(System.currentTimeMillis());
 
-        long difference_In_Time = date_rand.getTime() - date_now.getTime();
-        long hours = (difference_In_Time / (1000 * 60 * 60)) % 24;
-        long minutes = (difference_In_Time / (1000 * 60)) % 60;
+        String date_randevouz_s = formatter_date.format(date_randevouz);
+        String date_now_s = formatter_date.format(date_now);
 
-        if ((hours == 4 && minutes == 0) || (hours < 4)) {
+        long difference_In_Time = date_randevouz.getTime() - date_now.getTime();
+        long hours = (difference_In_Time / (1000 * 60 * 60)) % 24;
+
+        if (date_randevouz_s.equals(date_now_s) && (hours>=0 && hours <= 4)) {
             return true;
         } else {
             return false;
