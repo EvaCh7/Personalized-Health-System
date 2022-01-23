@@ -67,7 +67,7 @@ public class Treatments {
         System.out.println(json);
         Treatment treatment = treat_table_utils.jsonToTreatment(json);
         try {
-        System.out.println(treatment.getUser_id());
+            System.out.println(treatment.getUser_id());
 
             ArrayList<BloodTest> blood_tests = getAllBloodTestsById(treatment.getUser_id());
             if (blood_tests.size() > 0) {
@@ -112,7 +112,6 @@ public class Treatments {
             JsonParser jsonParser = new JsonParser();
             JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
             int id = jo.get("bloodtest_id").getAsInt();
-            System.out.println(id);
             Treatment tr = EditTreatmentTable.databaseToTreatmentBT(id);
             if (tr == null) {
                 continue;
@@ -145,22 +144,26 @@ public class Treatments {
 
         for (int i = 0; i < res.size(); i++) {
             String jsonElems = EditBloodTestTable.bloodTestToJSON(res.get(i));
+            System.out.println(jsonElems);
             JsonParser jsonParser = new JsonParser();
             JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
+            
             int id = jo.get("bloodtest_id").getAsInt();
             Treatment tr = EditTreatmentTable.databaseToTreatmentBT(id);
-
-            String jsonElemensTr = EditTreatmentTable.treatmentToJSON(tr);
-            JsonObject jo_tr = (JsonObject) jsonParser.parse(jsonElemensTr);
-
-            String from_date = jo_tr.get("start_date").getAsString();
-            String to_date = jo_tr.get("end_date").getAsString();
-
-            boolean isBetween = UtilsDate.isDateBetween(current_date, from_date, to_date);
+            
             if (tr == null) {
                 continue;
-            } else if(isBetween){
-                resJson.add(tr);
+            } else {
+                String jsonElemensTr = EditTreatmentTable.treatmentToJSON(tr);
+                JsonObject jo_tr = (JsonObject) jsonParser.parse(jsonElemensTr);
+
+                String from_date = jo_tr.get("start_date").getAsString();
+                String to_date = jo_tr.get("end_date").getAsString();
+
+                boolean isBetween = UtilsDate.isDateBetween(current_date, from_date, to_date);
+                if (isBetween) {
+                    resJson.add(tr);
+                }
             }
         }
         String json = new Gson().toJson(resJson);
@@ -224,6 +227,7 @@ public class Treatments {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
+    public void putJson(String content
+    ) {
     }
 }
