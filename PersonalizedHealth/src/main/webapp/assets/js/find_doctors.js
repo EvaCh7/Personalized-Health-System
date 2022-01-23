@@ -50,6 +50,20 @@ function print_ranked_byprice(response) {
 
     var jsonArray = JSON.parse(response);
     jsonArray.sort(GetSortOrder("Price"));
+    
+    
+    for(obj  in jsonArray){
+        var doctor_id=jsonArray[obj]["Doctor ID"]
+
+        var i=0
+        for (obj2 in jsonArray){
+            if(obj != obj2 && doctor_id == jsonArray[i]["Doctor ID"]){
+                delete jsonArray[i]
+            }
+            ++i
+        }
+    }
+
     document.getElementById("print_docs").innerHTML = "";
     for (id in jsonArray) {
         document.getElementById("print_docs").innerHTML += createTable(jsonArray[id]);

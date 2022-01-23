@@ -142,7 +142,7 @@ public class Randevouzs {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-        public Response updateRandevouz(String json) {
+    public Response updateRandevouz(String json) {
 
         String response = "{\"response\": \"error didn't add new randevouz\" }";
         Response.Status status;
@@ -222,7 +222,7 @@ public class Randevouzs {
         String date_time = js.get("date_time").getAsString();
         String date = UtilsDate.getDate(date_time);
         String _time = UtilsDate.getTime(date_time);
-
+        System.out.println(date_time);
         if (!UtilsDate.isFutureDate(date_time)) {
 
             response = "{\"response\": \"error invalid date, not from future\" }";

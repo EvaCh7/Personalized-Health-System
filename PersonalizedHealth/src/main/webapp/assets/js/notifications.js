@@ -13,9 +13,9 @@ setInterval(function () {
 
 $(document).ready(function () {
 
-   
 
- $('#notifcations').popover({
+
+    $('#notifcations').popover({
         animation: true,
         html: true,
         placement: 'bottom',
@@ -24,6 +24,10 @@ $(document).ready(function () {
 
 
 });
+
+
+
+
 
 function show_notifications_about_cacnceled_randevouz(response) {
     var js = JSON.parse(response)
@@ -83,6 +87,7 @@ function error_show_notifications_about_blood_donation_randevouz() {}
 
 function show_notifications_about_cacnceled_randevouz(response) {
     var js = JSON.parse(response)
+
     var notif_str = ""
     for (index in js) {
 
