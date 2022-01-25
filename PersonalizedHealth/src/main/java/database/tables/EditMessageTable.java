@@ -60,6 +60,8 @@ public class EditMessageTable {
             }
 
         } catch (Exception e) {
+                stmt.close();
+        con.close();
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }

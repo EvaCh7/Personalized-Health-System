@@ -23,6 +23,11 @@ $(document).ready(function () {
     })
 
 
+
+
+
+
+
 });
 
 
@@ -77,9 +82,18 @@ function show_notifications_about_blood_donation_randevouz(response) {
         notif_str += msg;
 
     }
-    if ($('#notifcations').attr('data-bs-content') !== notif_str) {
+    if (!$('#notifcations').attr('data-bs-content').includes(notif_str)) {
+        var prev_notif = $('#notifcations').attr('data-bs-content')
+        if (prev_notif.includes("you must be logged in to see notifcations")) {
+            prev_notif = prev_notif.replace("you must be logged in to see notifcations", ' ')
+
+        }
+        if (prev_notif.includes("empty")) {
+            prev_notif = prev_notif.replace("empty ", ' ')
+
+        }
         $('#notifcations').attr('data-bs-content', "");
-        $('#notifcations').attr('data-bs-content', notif_str);
+        $('#notifcations').attr('data-bs-content', prev_notif + notif_str);
     }
 }
 
@@ -108,6 +122,7 @@ function error_show_randevouz_notification() {
 
 }
 
+
 function show_randevouz_notification(response) {
     var js = JSON.parse(response);
     console.log(js);
@@ -116,11 +131,24 @@ function show_randevouz_notification(response) {
         var msg = "Attention! Don't forget that your randevouz is at: " + js[index].date_time + "<br>";
         notif_str += msg;
     }
-    $('#notifcations').attr('data-bs-content', notif_str);
+    console.log(notif_str)
+    // $('#notifcations').attr('data-bs-content', notif_str);
 
-    if ($('#notifcations').attr('data-bs-content') !== notif_str) {
+    if (!$('#notifcations').attr('data-bs-content').includes(notif_str)) {
+
+        var prev_notif = $('#notifcations').attr('data-bs-content')
+        if (prev_notif.includes("you must be logged in to see notifcations")) {
+            console.log("includes it")
+            prev_notif = prev_notif.replace("you must be logged in to see notifcations", ' ')
+        }
+         if (prev_notif.includes("empty")) {
+            prev_notif = prev_notif.replace("empty", ' ')
+
+        }
+
         $('#notifcations').attr('data-bs-content', "");
-        $('#notifcations').attr('data-bs-content', notif_str);
+
+        $('#notifcations').attr('data-bs-content', prev_notif + notif_str);
     }
 }
 
