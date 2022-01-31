@@ -44,22 +44,18 @@ function get_blood_tests()
             for (id in obj) {
                 document.getElementById("msg").innerHTML += createTableFromJSON(obj[id], i);
                 i++;
-
             }
 
         } else if (xhr.status !== 200) {
             document.getElementById('msg')
                     .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
                     + JSON.stringify(xhr.responseText);
-
         }
     };
-
     var amka = document.getElementById("amka_rest").value;
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/bloodTests/" + amka;
     var fD = document.getElementById("fromDate").value;
     var tD = document.getElementById("toDate").value;
-
     if (fD !== "" && tD === "") {
         URL += "?fromDate=" + fD;
     } else if (fD === "" && tD !== "") {
@@ -82,7 +78,6 @@ function compare_exams_user()
             const obj = JSON.parse(xhr.responseText);
             document.getElementById("content").innerHTML = createCompareTable(obj);
             $("#content").removeClass("d-none");
-
             document.getElementById("close_div_but").style.display = "block";
         } else if (xhr.status !== 200) {
             document.getElementById('content').innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
@@ -91,7 +86,6 @@ function compare_exams_user()
     };
     var amka = document.getElementById("amka").value;
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/compareExams/" + amka;
-
     xhr.open("GET", URL);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -101,7 +95,6 @@ function compare_exams_user()
 function
         createCompareTable(data) {
     var html = "<br><table style='border:2px solid white; background-color: rgb(51, 83, 109);'><tr><td>Date</td>";
-
     for (var i = 0; i < Object.keys(data).length; i++) {
         html += "<td>" + data[i].test_date + "</td>";
     }
@@ -168,10 +161,8 @@ function draw_chart(response) {
     var json = JSON.parse(response);
     document.getElementById("close_but").style.display = "block";
     $("#showchart").removeClass("d-none");
-
     google.charts.load("current", {packages: ["corechart"]});
     google.charts.setOnLoadCallback(drawChart);
-
     var meas = document.userForm.measurement.value;
     function drawChart() {
         var data = [];
@@ -189,7 +180,6 @@ function draw_chart(response) {
             title: 'Exams',
             is3D: true
         };
-
         var chart = new google.visualization.BarChart(document.getElementById('chart_3d'));
         chart.draw(chartdata, options);
     }
@@ -215,7 +205,6 @@ function show_therapies_user() {
             document.getElementById("close_div_but_1").style.display = "block";
             $("#therapy_div_user").removeClass("d-none");
             document.getElementById("therapy_div_user").innerHTML = "";
-
             var i = 1;
             var count = Object.keys(obj).length;
             for (id in obj) {
@@ -223,17 +212,18 @@ function show_therapies_user() {
                 i++;
             }
 
+            if (document.getElementById("therapy_div_user").innerHTML === "") {
+                document.getElementById("therapy_div_user").innerHTML = "There aren't any therapies.";
+            }
+
         } else if (xhr.status !== 200) {
             document.getElementById('therapy_div_user')
                     .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
                     + JSON.stringify(xhr.responseText);
-
         }
     };
-
     var amka = document.getElementById("amka").value;
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showTreatments/" + amka;
-
     xhr.open("GET", URL);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -249,7 +239,6 @@ function show_curr_therapies() {
             document.getElementById("close_div_but_1").style.display = "block";
             $("#therapy_div_user").removeClass("d-none");
             document.getElementById("therapy_div_user").innerHTML = "";
-
             var i = 1;
             var count = Object.keys(obj).length;
             for (id in obj) {
@@ -257,17 +246,18 @@ function show_curr_therapies() {
                 i++;
             }
 
+            if (document.getElementById("therapy_div_user").innerHTML === "") {
+                document.getElementById("therapy_div_user").innerHTML = "There aren't any current therapies.";
+            }
+
         } else if (xhr.status !== 200) {
             document.getElementById('therapy_div_user')
                     .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
                     + JSON.stringify(xhr.responseText);
-
         }
     };
-
     var amka = document.getElementById("amka").value;
     var URL = "http://localhost:8080/PersonalizedHealth/examinations/Treatments/showCurrentTreatments/" + amka;
-
     xhr.open("GET", URL);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");

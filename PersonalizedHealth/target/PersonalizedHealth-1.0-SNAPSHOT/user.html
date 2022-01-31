@@ -609,11 +609,11 @@
             <!-- reserve randevouz -->
 
             <div class="row">
-                <div class="col-sm-2">
-                    <button type="button" onclick="make_appointment()" id="make_appointment_but">Make An Appointment</button>
-                </div>
                 <div class='col-sm-2'>
                     <input type="number" id="getDoctorsID" placeholder="Insert Doctor's ID">
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" onclick="make_appointment()" id="make_appointment_but">Make An Appointment</button>
                 </div>
                 <div class="col-sm-4" id="print_avail_rand"></div>
                 <div class="col-sm-3" id="select_randevouz" style="display: none">
@@ -651,7 +651,7 @@
                     <button type="button" onclick="rate_randevouz()" id="rate_randevouz_but">Please leave a review!</button>
                 </div>
                 <div class="col-sm-9" id="rating_div" style="display: none">
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <label>Your completed randevouz:</label>
                         <div id="show_done_Randevouz"></div>
                     </div>
@@ -694,12 +694,12 @@
                 </div>
                 <div class="col-10 "></div>
                 <div class="col-6 " style="text-align: center" id="showdoc">
-                    <div id="doctor-mes-label" class="d-none" >Doctor Messages</div>
+                    <div id="doctor-mes-label" class="d-none" >Doctor Answers</div>
                     <div id="doctor-messages"></div>
                 </div>
                 <div style="text-align: center" class="col-6 " id="showuser">
 
-                    <div id="user-ans-label" class="d-none">User Answer</div>
+                    <div id="user-ans-label" class="d-none">User Message</div>
                     <form id="user-answers">
                     </form>
 
