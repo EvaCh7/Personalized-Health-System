@@ -236,18 +236,18 @@ function show_therapies() {
             document.getElementById("therapy_div").innerHTML=""
             var i = 1;
             var count = Object.keys(obj).length;
+            console.log(obj)
             for (id in obj) {
                 document.getElementById("therapy_div").innerHTML += createTreatmentTable(obj[id], i);
                 i++;
             }
-            show_therapies_bit = false
 
 
         } else if (xhr.status !== 200) {
-            document.getElementById('therapy_div')
-                    .innerHTML = 'Request failed. Returned status of ' + xhr.status + "<br>"
-                    + JSON.stringify(xhr.responseText);
-            show_therapies_bit = false
+            
+            console.log(xhr.responseText)
+            js = JSON.parse(xhr.responseText)
+            document.getElementById('therapy_div').innerHTML = js.response
 
         }
     };

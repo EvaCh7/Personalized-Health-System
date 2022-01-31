@@ -99,14 +99,14 @@ public class Examinations {
                 if (given_date.after(from_date)) {
                     resJson.add(jo);
                 } else {
-                    Response.status(Response.Status.BAD_REQUEST).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
+                    Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
                 }
             } else if (fromDate == null && toDate != null) {
                 to_date = formatter.parse(toDate);
                 if (given_date.before(to_date)) {
                     resJson.add(jo);
                 } else {
-                    Response.status(Response.Status.BAD_REQUEST).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
+                    Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
                 }
             } else if (fromDate != null && toDate != null) {
                 from_date = formatter.parse(fromDate);
@@ -114,7 +114,7 @@ public class Examinations {
 
                 if (from_date.after(to_date)) {
                     System.out.println("error");
-                    Response.status(Response.Status.BAD_REQUEST).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
+                    Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"From Date is after Final Date\"}").build();
                 } else {
                     if (given_date.after(from_date) && given_date.before(to_date)) {
                         resJson.add(jo);
@@ -144,7 +144,7 @@ public class Examinations {
             }
         }
         if (!found) {
-            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"given ID hasn't any done randevouz\"}").build();
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"given ID hasn't any done randevouz\"}").build();
 
         }
         JSONArray resJson = new JSONArray();
@@ -159,7 +159,7 @@ public class Examinations {
 
         ArrayList<BloodTest> res = EditBloodTestTable.getBTsByDate(amka);
         if (res.isEmpty()) {
-            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
         }
 
         List<String> dateArray = new ArrayList<String>();

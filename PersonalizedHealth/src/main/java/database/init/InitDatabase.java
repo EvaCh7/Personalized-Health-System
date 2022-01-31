@@ -46,7 +46,7 @@ public class InitDatabase {
     public void dropDatabase() throws SQLException, ClassNotFoundException {
         Connection conn = getInitialConnection();
         Statement stmt = conn.createStatement();
-        stmt.execute("DROP DATABASE HY359");
+        stmt.execute("DROP DATABASE hy359");
         stmt.close();
         conn.close();
     }

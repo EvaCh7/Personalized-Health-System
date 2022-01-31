@@ -56,12 +56,16 @@ public class EditSimpleUserTable {
                 SimpleUser doc = gson.fromJson(json, SimpleUser.class);
                 users.add(doc);
             }
+            stmt.close();
+            con.close();
             return users;
 
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return null;
     }
 
@@ -70,6 +74,8 @@ public class EditSimpleUserTable {
         Statement stmt = con.createStatement();
         String update = "UPDATE users SET weight='" + weight + "' WHERE username = '" + username + "'";
         stmt.executeUpdate(update);
+        stmt.close();
+        con.close();
     }
 
     public void printSimpleUserDetails(String username, String password) throws SQLException, ClassNotFoundException {
@@ -88,6 +94,8 @@ public class EditSimpleUserTable {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
     }
 
     public static int getIDfromUsername(String username) throws SQLException, ClassNotFoundException {
@@ -98,12 +106,17 @@ public class EditSimpleUserTable {
         try {
             rs = stmt.executeQuery("SELECT user_id FROM users WHERE username = '" + username + "'");
             while (rs.next()) {
-                return rs.getInt("user_id");
+                int id = rs.getInt("user_id");
+                stmt.close();
+                con.close();
+                return id;
             }
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return 0;
     }
 
@@ -118,11 +131,15 @@ public class EditSimpleUserTable {
             String json = DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             SimpleUser user = gson.fromJson(json, SimpleUser.class);
+            stmt.close();
+            con.close();
             return user;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return null;
     }
 
@@ -135,11 +152,15 @@ public class EditSimpleUserTable {
             rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='" + password + "'");
             rs.next();
             String json = DB_Connection.getResultsToJSON(rs);
+            stmt.close();
+            con.close();
             return json;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+        stmt.close();
+        con.close();
         return null;
     }
 
@@ -170,7 +191,9 @@ public class EditSimpleUserTable {
                 + "   bloodtype VARCHAR(7) not null,"
                 + " PRIMARY KEY ( user_id))";
         stmt.execute(query);
+
         stmt.close();
+        con.close();
     }
 
     /**
@@ -214,6 +237,7 @@ public class EditSimpleUserTable {
 
             /* Get the member id from the database and set it to the member */
             stmt.close();
+            con.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(EditSimpleUserTable.class.getName()).log(Level.SEVERE, null, ex);

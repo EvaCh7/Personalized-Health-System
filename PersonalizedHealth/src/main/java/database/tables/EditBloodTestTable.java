@@ -60,11 +60,15 @@ public class EditBloodTestTable {
                 json_array.add(blood_test_json);
             }
             System.out.println(json_array.toString());
+             stmt.close();
+            con.close();
             return json_array;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+         stmt.close();
+            con.close();
         return null;
     }
 
@@ -82,16 +86,22 @@ public class EditBloodTestTable {
                 JsonObject blood_test_json = parser.parse(json).getAsJsonObject();
                 json_array.add(blood_test_json);
             }
+             stmt.close();
+            con.close();
             return json_array;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+         stmt.close();
+            con.close();
         return null;
     }
 
     public static String getAmkaByUserId(int user_id) {
         Connection con = null;
+                Statement stmt = null;
+
         try {
             con = DB_Connection.getConnection();
         } catch (SQLException ex) {
@@ -99,7 +109,6 @@ public class EditBloodTestTable {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(EditBloodTestTable.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Statement stmt = null;
         try {
             stmt = con.createStatement();
         } catch (SQLException ex) {
@@ -108,13 +117,18 @@ public class EditBloodTestTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT amka FROM users WHERE user_id= '" + user_id + "'");
-            while (rs.next()) {
-                return rs.getString("amka");
+            if (rs.next()) {
+                String amka= rs.getString("amka");
+                stmt.close();
+                con.close();
+                return amka ;
             }
         } catch (Exception e) {
+ 
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+  
         return null;
     }
 
@@ -133,11 +147,15 @@ public class EditBloodTestTable {
                 BloodTest bt = gson.fromJson(json, BloodTest.class);
                 btl.add(bt);
             }
+             stmt.close();
+            con.close();
             return btl;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
+         stmt.close();
+            con.close();
         return null;
     }
 
@@ -202,6 +220,8 @@ public class EditBloodTestTable {
             String json = DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             BloodTest bt = gson.fromJson(json, BloodTest.class);
+             stmt.close();
+            con.close();
             return bt;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
@@ -219,6 +239,8 @@ public class EditBloodTestTable {
         try {
             rs = stmt.executeQuery("SELECT bloodtest_id FROM bloodtest WHERE bloodtest_id= '" + id + "'");
             if (rs.next()) {
+                 stmt.close();
+            con.close();
                 return true;
             }
         } catch (SQLException ex) {
@@ -260,6 +282,9 @@ public class EditBloodTestTable {
         }
         System.out.println(update);
         stmt.executeUpdate(update);
+        
+         stmt.close();
+            con.close();
     }
 
     public void deleteBloodTest(int bloodtestid) throws SQLException, ClassNotFoundException {
@@ -330,8 +355,11 @@ public class EditBloodTestTable {
             stmt.executeUpdate(insertQuery);
             System.out.println("# The bloodtest was successfully added in the database.");
 
+            
+            
+             stmt.close();
+            con.close();
             /* Get the member id from the database and set it to the member */
-            stmt.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(EditBloodTestTable.class.getName()).log(Level.SEVERE, null, ex);

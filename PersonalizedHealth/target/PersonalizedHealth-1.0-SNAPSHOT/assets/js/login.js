@@ -1,21 +1,21 @@
 function send_login() {
 
-    register_url = "/PersonalizedHealth/login"
+    login_url = "login"
     var data = {
         username: $("#username").val(),
         password: $("#pswd").val()
 
     };
-    sendXmlPostRequest(register_url, data, call_back_login, call_back_error_login);
+    sendXmlPostRequest(login_url, data, call_back_login, call_back_error_login);
     return false
 
 }
 
 function call_back_login(response) {
+        console.log("succesful login")
 
     json = JSON.parse(response)
     console.log(json)
-    console.log("succesful login")
 
     $("#error").html('')
     if (json.type === "admin") {
@@ -31,6 +31,7 @@ function call_back_login(response) {
 }
 
 function call_back_error_login() {
+    
     console.log("failed to login")
     $("#error").html("Wrong Credentials");
 
@@ -62,6 +63,7 @@ function isLoggedIn() {
             }
 
         } else if (xhr.status !== 200) {
+            
         }
     };
     xhr.open('GET', 'login');

@@ -60,8 +60,8 @@ public class EditMessageTable {
             }
 
         } catch (Exception e) {
-                stmt.close();
-        con.close();
+            stmt.close();
+            con.close();
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
@@ -201,6 +201,7 @@ public class EditMessageTable {
 
             /* Get the member id from the database and set it to the member */
             stmt.close();
+            con.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(EditBloodTestTable.class.getName()).log(Level.SEVERE, null, ex);

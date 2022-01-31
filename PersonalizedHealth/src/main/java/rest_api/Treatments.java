@@ -61,7 +61,7 @@ public class Treatments {
     @Path("/addTreatment")
     @Produces({MediaType.APPLICATION_JSON})
     public Response addTreatment(String json) {
-        Response.Status status = Response.Status.BAD_GATEWAY;
+        Response.Status status = Response.Status.FORBIDDEN;
         String response = "{\"response\": \"Didn't add Treatment\" }";
         EditTreatmentTable treat_table_utils = new EditTreatmentTable();
         System.out.println(json);
@@ -74,7 +74,6 @@ public class Treatments {
 
                 int blood_test_id = blood_tests.get(blood_tests.size() - 1).getBloodtest_id();
                 treatment.setBloodtest_id(blood_test_id);
-                System.out.println(treatment);
                 treat_table_utils.createNewTreatment(treatment);
                 response = "{\"response\": \"Treatment added succesfully\" }";
                 return Response.ok().type("application/json").entity(response).build();
@@ -147,10 +146,10 @@ public class Treatments {
             System.out.println(jsonElems);
             JsonParser jsonParser = new JsonParser();
             JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
-            
+
             int id = jo.get("bloodtest_id").getAsInt();
             Treatment tr = EditTreatmentTable.databaseToTreatmentBT(id);
-            
+
             if (tr == null) {
                 continue;
             } else {
@@ -186,13 +185,14 @@ public class Treatments {
             }
         }
         if (!found) {
-            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"given ID hasn't any done randevouz\"}").build();
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"response\":\"given ID hasn't any done randevouz\"}").build();
 
         }
         JSONArray resJson = new JSONArray();
         ArrayList<BloodTest> res = EditBloodTestTable.getAllBloodTestsById(user_id);
+
         if (res.isEmpty()) {
-            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given ID doesn't have treatments\"}").build();
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"response\":\"Given ID doesn't have treatments\"}").build();
         }
 
         for (int i = 0; i < res.size(); i++) {
@@ -200,7 +200,7 @@ public class Treatments {
             JsonParser jsonParser = new JsonParser();
             JsonObject jo = (JsonObject) jsonParser.parse(jsonElems);
             int id = jo.get("bloodtest_id").getAsInt();
-            System.out.println(id);
+            System.out.println("blood test id: " + id);
             Treatment tr = EditTreatmentTable.databaseToTreatmentBT(id);
             if (tr == null) {
                 continue;
@@ -209,7 +209,9 @@ public class Treatments {
             }
         }
 
+
         String json = new Gson().toJson(resJson);
+
         return Response.status(status).type("application/json").entity(json).build();
     }
 

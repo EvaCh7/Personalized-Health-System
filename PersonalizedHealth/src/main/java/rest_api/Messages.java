@@ -70,7 +70,7 @@ public class Messages {
     ) {
         String response = "{\"response\": \"error couldn't send the messages\" }";
         Response.Status status;
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
 
         JsonObject js = new Gson().fromJson(json, JsonObject.class);
         String bloodType = js.get("bloodtype").getAsString();
@@ -113,7 +113,7 @@ public class Messages {
     ) {
         String response = "{\"response\": \"error There's not a succesful randevouz between this patient and doctor\" }";
         Response.Status status;
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
         System.out.println(json);
         if (json == null || json.equals("null")) {
             response = "{\"response\": \"error: no new messages added\" }";
@@ -126,7 +126,7 @@ public class Messages {
         json_arr = new Gson().fromJson(json, JsonArray.class);
         JsonObject js_obj = json_arr.get(0).getAsJsonObject();
         if (!Randevouzs.hasUserAndDocADoneRandevouz(js_obj.get("doctor_id").getAsInt(), js_obj.get("user_id").getAsInt())) {
-            status = Response.Status.BAD_GATEWAY;
+            status = Response.Status.FORBIDDEN;
             return Response.status(status).type("application/json").entity(response).build();
 
         }
@@ -157,7 +157,7 @@ public class Messages {
     ) {
         String response = "{\"response\": \"error There's not a succesful randevouz between this patient and doctor\" }";
         Response.Status status;
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
         System.out.println(json);
         if (json == null || json.equals("null")) {
             response = "{\"response\": \"error: no new messages added\" }";
@@ -170,7 +170,7 @@ public class Messages {
         json_arr = new Gson().fromJson(json, JsonArray.class);
         JsonObject js_obj = json_arr.get(0).getAsJsonObject();
         if (!Randevouzs.hasUserAndDocADoneRandevouz(js_obj.get("doctor_id").getAsInt(), js_obj.get("user_id").getAsInt())) {
-            status = Response.Status.BAD_GATEWAY;
+            status = Response.Status.FORBIDDEN;
             return Response.status(status).type("application/json").entity(response).build();
 
         }
@@ -201,7 +201,7 @@ public class Messages {
     ) {
         String response = "{\"response\": \"error There's not a succesful randevouz between this patient and doctor\" }";
         Response.Status status;
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
         JsonArray json_arr = new JsonArray();
 
         EditRandevouzTable rand_obj = new EditRandevouzTable();
@@ -209,7 +209,7 @@ public class Messages {
         JsonObject js_obj = new Gson().fromJson(json_arr.get(0), JsonObject.class);
 
         if (!Randevouzs.hasUserAndDocADoneRandevouz(js_obj.get("doctor_id").getAsInt(), js_obj.get("user_id").getAsInt())) {
-            status = Response.Status.BAD_GATEWAY;
+            status = Response.Status.FORBIDDEN;
             return Response.status(status).type("application/json").entity(response).build();
 
         }
@@ -232,7 +232,7 @@ public class Messages {
         JsonObject js_obj = new Gson().fromJson(json_arr.get(0), JsonObject.class);
 
         if (Randevouzs.hasUserAndDocADoneRandevouz(js_obj.get("doctor_id").getAsInt(), js_obj.get("user_id").getAsInt())) {
-            status = Response.Status.BAD_GATEWAY;
+            status = Response.Status.FORBIDDEN;
             return Response.status(status).type("application/json").entity(response).build();
 
         }
@@ -248,10 +248,10 @@ public class Messages {
     ) {
         String response = "{\"response\": \"error There's not a succesful randevouz between this patient and doctor\" }";
         Response.Status status;
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
         JsonArray json_arr = new JsonArray();
         if (!Randevouzs.hasUserAndDocADoneRandevouz(doctor_id, user_id)) {
-            status = Response.Status.BAD_GATEWAY;
+            status = Response.Status.FORBIDDEN;
             return Response.status(status).type("application/json").entity(response).build();
 
         }
@@ -275,10 +275,10 @@ public class Messages {
     ) {
         String response = "{\"response\": \"error There's not a succesful randevouz between this patient and doctor\" }";
         Response.Status status;
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
         JsonArray json_arr = new JsonArray();
         if (!Randevouzs.hasUserAndDocADoneRandevouz(doctor_id, user_id)) {
-            status = Response.Status.BAD_GATEWAY;
+            status = Response.Status.FORBIDDEN;
             return Response.status(status).type("application/json").entity(response).build();
 
         }

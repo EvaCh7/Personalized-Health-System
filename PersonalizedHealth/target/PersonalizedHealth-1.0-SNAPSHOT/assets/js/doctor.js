@@ -53,7 +53,7 @@ function create_randevouz_element(rand_obj)
                         <div class="col-2">
                             <label for="randevouz_id">Randevouz ID</label><br>
 
-                            <input type="number" id="randevouz_id" value=` + rand_obj.randevouz_id + ` name="randevouz_id" class="form-control" placeholder="Randevouz ID">
+                            <input type="number" id="randevouz_id" value=` + rand_obj.randevouz_id + ` name="randevouz_id" class="form-control" placeholder="Randevouz ID" readonly>
                         </div>
 
 
@@ -61,7 +61,7 @@ function create_randevouz_element(rand_obj)
     <div class="col-1">
                                 <label for="doctor_id">Doctor  ID</label><br>
 
-                            <input type="number" id="doctor_id" name="doctor_id" value=` + rand_obj.doctor_id + ` class="form-control" placeholder="Doctor ID">
+                            <input type="number" id="doctor_id" name="doctor_id" value=` + rand_obj.doctor_id + ` class="form-control" placeholder="Doctor ID" readonly>
                         </div>
                         <div class="col-1">
                                     <label for="user_id">User  ID</label><br>
@@ -274,9 +274,10 @@ function call_back_cancel_randevouz(_response)
 
 }
 
-function call_back_error_cancel_randevouz(_response)
+function call_back_error_cancel_randevouz(response)
 {
-    var json = JSON.parse(_response)
+    
+    var json = JSON.parse( (    response))
     $("#del_rand_response").html(json.response)
 
 

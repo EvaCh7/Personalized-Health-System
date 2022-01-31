@@ -87,7 +87,7 @@ public class Randevouzs {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response reserveRandevouz(@PathParam("randevouz_id") int randevouz_id, @PathParam("user_id") int user_id, @QueryParam("user_info") String user_info)
             throws SQLException, ClassNotFoundException {
-        Response.Status status = Response.Status.BAD_REQUEST;
+        Response.Status status = Response.Status.FORBIDDEN;
         String response = "{\"response\": \"Error: Randevouz wasn't reserved.\" }";
 
         try {
@@ -118,13 +118,13 @@ public class Randevouzs {
         int id = EditSimpleUserTable.getIDfromUsername(username);
 
         if (id == 0) {
-            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"Given username doesn't exist\"}").build();
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given username doesn't exist\"}").build();
         }
 
         ArrayList<Randevouz> res = EditRandevouzTable.showRandevouzOfID(id);
 
         if (res.isEmpty()) {
-            return Response.status(Response.Status.BAD_GATEWAY).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
+            return Response.status(Response.Status.FORBIDDEN).type("application/json").entity("{\"error\":\"Given amka doesn't exist\"}").build();
         }
 
         for (int i = 0; i < res.size(); i++) {
@@ -135,6 +135,7 @@ public class Randevouzs {
         }
 
         String json = new Gson().toJson(resJson);
+        System.out.println("randevouz: "+ json);
         return Response.status(status).type("application/json").entity(json).build();
     }
 
@@ -142,11 +143,11 @@ public class Randevouzs {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-        public Response updateRandevouz(String json) {
+    public Response updateRandevouz(String json) {
 
         String response = "{\"response\": \"error didn't add new randevouz\" }";
         Response.Status status;
-        status = Response.Status.BAD_REQUEST;
+        status = Response.Status.FORBIDDEN;
 
         Gson gson = new Gson();
         JsonArray js_array = gson.fromJson(json, JsonArray.class);
@@ -155,7 +156,7 @@ public class Randevouzs {
         for (JsonElement jso : js_array) {
             JsonObject js = jso.getAsJsonObject();
             try {
-                rand_obj.updateRandevouzByDoctor(js.get("randevouz_id").getAsInt(), js.get("doctor_info").getAsString(), js.get("status").getAsString());
+                rand_obj.updateRandevouzByDoctor(js.get("randevouz_id").getAsInt(), js.get("user_id").getAsInt(), js.get("doctor_info").getAsString(), js.get("status").getAsString());
                 response = "{\"response\": \"randevouzs updated succesfully\" }";
 
                 status = Response.Status.OK;
@@ -197,10 +198,10 @@ public class Randevouzs {
 
             return Response.status(status).type("application/json").entity(json).build();
         } catch (SQLException ex) {
-            status = Response.Status.BAD_REQUEST;
+            status = Response.Status.FORBIDDEN;
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            status = Response.Status.BAD_REQUEST;
+            status = Response.Status.FORBIDDEN;
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -216,7 +217,7 @@ public class Randevouzs {
 
         String response = "{\"response\": \"error didn't add new randevouz\" }";
         Response.Status status;
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
         Gson gson = new Gson();
         JsonObject js = gson.fromJson(json, JsonObject.class);
         String date_time = js.get("date_time").getAsString();
@@ -242,7 +243,7 @@ public class Randevouzs {
             ArrayList<Randevouz> randev_list = EditRandevouzTable.getAllrandevouz();
 
             for (Randevouz randev : randev_list) {
-                if (date.equals(UtilsDate.getDate(randev.getDate_time()))) {
+                if (!randev.getStatus().equals("cancelled")  && date.equals(UtilsDate.getDate(randev.getDate_time()))) {
 
                     LocalTime time2 = LocalTime.parse(UtilsDate.getTime(randev.getDate_time()));
                     long hours = ChronoUnit.HOURS.between(time1, time2);
@@ -319,7 +320,7 @@ public class Randevouzs {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
             }
-            status = Response.Status.BAD_REQUEST;
+            status = Response.Status.FORBIDDEN;
 
             return Response.status(status).type("application/json").entity(response).build();
         } else { //date given as input
@@ -341,7 +342,7 @@ public class Randevouzs {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
             }
-            status = Response.Status.BAD_REQUEST;
+            status = Response.Status.FORBIDDEN;
 
             return Response.status(status).type("application/json").entity(response).build();
         }
@@ -364,7 +365,7 @@ public class Randevouzs {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Randevouzs.class.getName()).log(Level.SEVERE, null, ex);
         }
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
 
         return Response.status(status).type("application/json").entity(response).build();
     }
@@ -399,7 +400,7 @@ public class Randevouzs {
             return Response.ok().type("application/json").entity(json_res).build();
 
         }
-        status = Response.Status.BAD_GATEWAY;
+        status = Response.Status.FORBIDDEN;
 
         return Response.status(status).type("application/json").entity(response).build();
     }
@@ -531,7 +532,7 @@ public class Randevouzs {
                 Logger.getLogger(Randevouzs.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
-            status = Response.Status.BAD_REQUEST;
+            status = Response.Status.FORBIDDEN;
 
             return Response.status(status).type("application/json").entity(response).build();
         } else { //date given as input
@@ -558,7 +559,7 @@ public class Randevouzs {
                 Logger.getLogger(Randevouzs.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
-            status = Response.Status.BAD_REQUEST;
+            status = Response.Status.FORBIDDEN;
 
             return Response.status(status).type("application/json").entity(response).build();
         }
@@ -573,7 +574,7 @@ public class Randevouzs {
     ) {
         String response = "{\"response\": \"error couldn't get done randevouz\" }";
         Response.Status status;
-        status = Response.Status.BAD_REQUEST;
+        status = Response.Status.FORBIDDEN;
 
         try {
             status = Response.Status.OK;
@@ -599,7 +600,7 @@ public class Randevouzs {
     public Response CancelRandevouz(
             @PathParam("id") int id
     ) {
-        String response = "{\"response\": \"error cancel wasn't succesful\" }";
+        String response = "{\"response\": \"Randevouz  wasn't cancelled successfully\" }";
         Response.Status status;
         EditRandevouzTable rand_utils = new EditRandevouzTable();
         try {
@@ -617,10 +618,11 @@ public class Randevouzs {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Randevouz.class
                     .getName()).log(Level.SEVERE, null, ex);
-        }
-        status = Response.Status.BAD_REQUEST;
+        } finally {
+            status = Response.Status.FORBIDDEN;
 
-        return Response.status(status).type("application/json").entity(response).build();
+            return Response.status(status).type("application/json").entity(response).build();
+        }
 
     }
 

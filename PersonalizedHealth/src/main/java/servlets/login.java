@@ -48,7 +48,7 @@ public class login extends HttpServlet {
 
             response.getWriter().write(json);
         } else {
-            response.setStatus(500);
+            response.setStatus(403);
         }
 
     }
@@ -75,6 +75,8 @@ public class login extends HttpServlet {
         Doctor dc;
         SimpleUser user;
         EditDoctorTable doctor_table_utils = new EditDoctorTable();
+        String json = "{\"error\":\"no type\"}";
+
         try {
             if ((user = simple_user_utils.databaseToSimpleUser(username, password)) != null) {
 
@@ -103,21 +105,29 @@ public class login extends HttpServlet {
                 session.setAttribute("id", dc.getDoctor_id());
 
             } else {
+                json = "{\"error\":\"doesn exist\"}";
+                response.setStatus(403);
+                response.getWriter().write(json);
                 session.setAttribute("type", "doesn't exist");
                 return;
             }
         } catch (SQLException ex) {
+            json = "{\"error\":\"doesn exist\"}";
+            response.setStatus(403);
+            response.getWriter().write(json);
             Logger.getLogger(login.class
                     .getName()).log(Level.SEVERE, null, ex);
             response.setStatus(403);
             return;
         } catch (ClassNotFoundException ex) {
+            json = "{\"error\":\"doesn exist\"}";
+            response.setStatus(403);
+            response.getWriter().write(json);
             Logger.getLogger(login.class
                     .getName()).log(Level.SEVERE, null, ex);
             response.setStatus(403);
             return;
         }
-        String json = "{\"error\":\"no type\"}";
         if (session.getAttribute("type") != null) {
             json = "{\"type\":\"" + session.getAttribute("type").toString() + "\"}";
         }
